@@ -1,0 +1,6 @@
+@WDPR_2024_HostAddress = http://localhost:5184
+
+GET {{WDPR_2024_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
