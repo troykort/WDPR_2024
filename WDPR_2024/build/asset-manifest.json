@@ -1,12 +1,14 @@
 {
   "files": {
-    "main.css": "/WDPR_2024/static/css/main.31d6cfe0.css",
-    "main.js": "/WDPR_2024/static/js/main.3e4b8425.js",
-    "index.html": "/WDPR_2024/index.html",
-    "main.3e4b8425.js.map": "/WDPR_2024/static/js/main.3e4b8425.js.map"
+    "main.css": "/static/css/main.89cd55cf.css",
+    "main.js": "/static/js/main.70190998.js",
+    "static/media/Logo.png": "/static/media/Logo.43d1383c784f1170a62a.png",
+    "index.html": "/index.html",
+    "main.89cd55cf.css.map": "/static/css/main.89cd55cf.css.map",
+    "main.70190998.js.map": "/static/js/main.70190998.js.map"
   },
   "entrypoints": [
-    "static/css/main.31d6cfe0.css",
-    "static/js/main.3e4b8425.js"
+    "static/css/main.89cd55cf.css",
+    "static/js/main.70190998.js"
   ]
 }
