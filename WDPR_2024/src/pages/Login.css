@@ -1,0 +1,203 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: white; /* Dark purple background */
+}
+
+/* Full-page layout */
+.login-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Top Bar */
+.top-bar {
+    background-color: #4d0026;
+    padding: 20px;
+    text-align: center;
+}
+
+.logo-img {
+    height: 50px;
+    width: auto;
+}
+
+/* Login Section */
+.login-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centers vertically */
+    background-color: antiquewhite; /* Dark purple background */
+    padding: 20px;
+}
+
+/* White login box */
+.login-box {
+    background-color: #4d0026;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds depth */
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+    .login-box h1 {
+        margin-bottom: 30px;
+        font-size: 28px;
+        color: white;
+    }
+
+/* Form styles */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+    .form-group label {
+        font-size: 14px;
+        color: #4d0026;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+/* Button styles */
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.back-btn {
+    background-color: #006400;
+    color: white;
+}
+
+.login-btn {
+    background-color: #800000;
+    color: white;
+}
+
+/* Footer */
+.footer {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: #4d0026;
+    padding: 20px;
+}
+
+.footer-btn {
+    background-color: #fff5cc;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+    .login-box {
+        max-width: 500px; /* Wider box for larger screens */
+    }
+}
+
+.logo-img {
+    height: 50px; /* Adjust based on your design */
+    width: auto; /* Maintain aspect ratio */
+    display: block;
+    margin: 0 auto; /* Center the logo horizontally */
+}
+/* Full-page layout */
+.register-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Register Section */
+.register-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Centers vertically */
+    background-color: antiquewhite; /* Light background for contrast */
+    padding: 20px;
+}
+
+/* White register box */
+.register-box {
+    background-color: #4d0026; /* White background for visibility */
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+}
+
+    .register-box h1 {
+        margin-bottom: 30px;
+        font-size: 28px;
+        color: white; /* Match theme */
+    }
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+    .form-group label {
+        font-size: 14px;
+        color: white;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+/* Button styles */
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.back-btn {
+    background-color: #006400;
+    color: white;
+}
+
+/* Button colors */
+.register-btn {
+    background-color: #800000;
+    color: white;
+}
