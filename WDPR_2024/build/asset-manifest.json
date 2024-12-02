@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.css": "/WDPR_2024/static/css/main.31d6cfe0.css",
+    "main.js": "/WDPR_2024/static/js/main.3e4b8425.js",
+    "index.html": "/WDPR_2024/index.html",
+    "main.3e4b8425.js.map": "/WDPR_2024/static/js/main.3e4b8425.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.31d6cfe0.css",
+    "static/js/main.3e4b8425.js"
+  ]
+}
