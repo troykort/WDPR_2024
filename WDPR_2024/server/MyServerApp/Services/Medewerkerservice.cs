@@ -2,6 +2,10 @@
 using WDPR_2024.server.MyServerApp.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace WDPR_2024.server.MyServerApp.Services
 {
@@ -10,12 +14,14 @@ namespace WDPR_2024.server.MyServerApp.Services
         private readonly AppDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly EmailService _emailService; 
 
-        public MedewerkerService(AppDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public MedewerkerService(AppDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, EmailService emailService)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _emailService = emailService; // Initialiseer EmailService
         }
 
         // Haal alle medewerkers op
@@ -44,6 +50,11 @@ namespace WDPR_2024.server.MyServerApp.Services
             {
                 await _userManager.AddToRoleAsync(user, rol);
             }
+
+            // Verstuur welkomstmail naar de nieuwe medewerker
+            var subject = "Welkom bij het team!";
+            var body = $"Hallo {nieuweMedewerker.Naam},\n\nJe bent succesvol toegevoegd als {rol}.\nWelkom!";
+            await _emailService.SendEmailAsync(nieuweMedewerker.Email, subject, body);
         }
 
         // Wijzig de rol van een medewerker
@@ -75,6 +86,11 @@ namespace WDPR_2024.server.MyServerApp.Services
             // Werk de rol van de medewerker bij in de Medewerkers tabel
             medewerker.Rol = nieuweRol;
             await _context.SaveChangesAsync();
+
+            // Verstuur e-mail naar de medewerker over de rolwijziging
+            var subject = "Je rol is gewijzigd!";
+            var body = $"Hallo {medewerker.Naam},\n\nJe rol is succesvol gewijzigd naar {nieuweRol}.";
+            await _emailService.SendEmailAsync(medewerker.Email, subject, body);
         }
 
         // Verwijder een medewerker
@@ -91,6 +107,11 @@ namespace WDPR_2024.server.MyServerApp.Services
 
             _context.Medewerkers.Remove(medewerker);
             await _context.SaveChangesAsync();
+
+            // Verstuur een e-mail naar de medewerker als ze zijn verwijderd (optioneel)
+            var subject = "Je account is verwijderd";
+            var body = $"Hallo {medewerker.Naam},\n\nJe account is verwijderd uit ons systeem.";
+            await _emailService.SendEmailAsync(medewerker.Email, subject, body);
         }
     }
 }

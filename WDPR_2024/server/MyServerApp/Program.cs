@@ -3,43 +3,58 @@ using WDPR_2024.server.MyServerApp.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using WDPR_2024.server.MyServerApp.Services;
+using Microsoft.AspNetCore.Identity;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace WDPR_2024.server.MyServerApp
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddDbContext<YourDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            // Voeg de services toe aan de container
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<YourDbContext>()
-    .AddDefaultTokenProviders();
+            // Configureer Identity
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
 
-builder.Services.AddAuthorization();
-builder.Services.AddControllers();
-builder.Services.AddScoped<VoertuigService>();
-builder.Services.AddScoped<BedrijfService>();
-builder.Services.AddScoped<VerhuurAanvraagService>();
-builder.Services.AddScoped<KlantService>();
-builder.Services.AddScoped<AbonnementService>();
-builder.Services.AddScoped<SchademeldingService>();
-builder.Services.AddScoped<NotificatieService>();
-builder.Services.AddSingleton(new EmailService(
-smtpServer: "smtp.example.com", // Bijvoorbeeld: smtp.gmail.com
-smtpPort: 587, // Meestal 587 voor TLS of 465 voor SSL
-smtpUser: "your-email@example.com", // Jouw e-mailadres
-smtpPassword: "your-email-password" // Wachtwoord voor de SMTP-server
-)); // twijfel situatie maar we komen er wel later uit. 
+            // Voeg de benodigde services toe voor je applicatie
+            builder.Services.AddAuthorization();
+            builder.Services.AddControllers();
 
+            // Voeg alle andere services toe
+            builder.Services.AddScoped<VoertuigService>();
+            builder.Services.AddScoped<BedrijfService>();
+            builder.Services.AddScoped<VerhuurAanvraagService>();
+            builder.Services.AddScoped<KlantService>();
+            builder.Services.AddScoped<AbonnementService>();
+            builder.Services.AddScoped<SchademeldingService>();
+            builder.Services.AddScoped<NotificatieService>();
 
+            // Voeg EmailService toe (bijvoorbeeld voor SMTP)
+            builder.Services.AddSingleton(new EmailService(
+                smtpServer: "smtp.example.com", // SMTP server zoals smtp.gmail.com
+                smtpPort: 587, // Meestal 587 voor TLS, of 465 voor SSL
+                smtpUser: "your-email@example.com", // Gebruik jouw e-mailadres
+                smtpPassword: "your-email-password" // Het wachtwoord voor je SMTP-server
+            ));
 
-var app = builder.Build();
+            var app = builder.Build();
 
-// Middleware
-app.UseHttpsRedirection();
-app.UseRouting();
-app.UseAuthentication();
-app.UseAuthorization();
+            // Middleware configureren
+            app.UseHttpsRedirection();
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-app.MapControllers(); // Alleen API endpoints
+            // Map de controllers naar de juiste endpoints
+            app.MapControllers(); // Alleen API endpoints
 
-app.Run();
+            app.Run();
+        }
+    }
+}

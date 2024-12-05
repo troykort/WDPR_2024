@@ -1,13 +1,16 @@
-﻿using WDPR_2024.server.MyServerApp.Models;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-
+using WDPR_2024.server.MyServerApp.Models;
 
 namespace WDPR_2024.server.MyServerApp.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser> // IdentityDbContext voor gebruikersbeheer
     {
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
 
-        // DbSets voor de modellen
+        // DbSets voor de verschillende modellen
         public DbSet<Klant> Klanten { get; set; }
         public DbSet<Bedrijf> Bedrijven { get; set; }
         public DbSet<Abonnement> Abonnementen { get; set; }
@@ -95,4 +98,3 @@ namespace WDPR_2024.server.MyServerApp.Data
         }
     }
 }
-

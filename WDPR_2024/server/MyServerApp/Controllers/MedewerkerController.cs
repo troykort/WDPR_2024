@@ -28,7 +28,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
 
         // 2. POST: Voeg een nieuwe medewerker toe
         [HttpPost]
-        public async Task<IActionResult> CreateMedewerker(Klant nieuweMedewerker, [FromQuery] string rol)
+        public async Task<IActionResult> CreateMedewerker(Medewerker nieuweMedewerker, [FromQuery] string rol)
         {
             try
             {
@@ -71,7 +71,5 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             }
         }
     }
-
-}
 
 }

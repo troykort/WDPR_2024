@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WDPR_2024.server.MyServerApp.Models;
 using WDPR_2024.server.MyServerApp.Services;
+using System.Threading.Tasks;
+using System;
 
 namespace WDPR_2024.server.MyServerApp.Controllers
 {
@@ -16,10 +12,12 @@ namespace WDPR_2024.server.MyServerApp.Controllers
     public class VerhuurAanvraagController : ControllerBase
     {
         private readonly VerhuurAanvraagService _aanvraagService;
+        private readonly EmailService _emailService; 
 
-        public VerhuurAanvraagController(VerhuurAanvraagService aanvraagService)
+        public VerhuurAanvraagController(VerhuurAanvraagService aanvraagService, EmailService emailService)
         {
             _aanvraagService = aanvraagService;
+            _emailService = emailService; 
         }
 
         // 1. GET: Haal een specifieke aanvraag op
@@ -63,7 +61,26 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         {
             try
             {
+                var aanvraag = await _aanvraagService.GetAanvraagByIdAsync(id);
+
+                // Verwerk statusupdate
                 await _aanvraagService.UpdateAanvraagStatusAsync(id, nieuweStatus, opmerkingen);
+
+                // Verstuur een e-mail naar de klant als de aanvraag goedgekeurd is
+                if (nieuweStatus == "Goedgekeurd")
+                {
+                    var klantEmail = aanvraag.Klant.Email;
+                    var klantSubject = "Je verhuuraanvraag is goedgekeurd!";
+                    var klantBody = $"Je verhuuraanvraag is goedgekeurd! Je kunt het voertuig ophalen op de afgesproken datum. Bedankt voor je reservering!";
+                    await _emailService.SendEmailAsync(klantEmail, klantSubject, klantBody);
+
+                    // Verstuur een e-mail naar de backoffice om hen op de hoogte te stellen van de goedkeuring
+                    var backofficeEmail = "backoffice@carandall.com"; // Vervang dit door het e-mailadres van de backoffice
+                    var backofficeSubject = "Nieuwe goedgekeurde verhuuraanvraag";
+                    var backofficeBody = $"Er is een verhuuraanvraag goedgekeurd voor {aanvraag.Klant.Naam}. De aanvraag betreft het voertuig {aanvraag.Voertuig.Type}.";
+                    await _emailService.SendEmailAsync(backofficeEmail, backofficeSubject, backofficeBody);
+                }
+
                 return Ok($"Status succesvol bijgewerkt naar {nieuweStatus}.");
             }
             catch (Exception ex)

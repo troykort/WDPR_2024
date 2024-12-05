@@ -9,10 +9,12 @@ using WDPR_2024.server.MyServerApp.Models;
 public class NotificatieController : ControllerBase
 {
     private readonly NotificatieService _notificatieService;
+    private readonly EmailService _emailService;
 
-    public NotificatieController(NotificatieService notificatieService)
+    public NotificatieController(NotificatieService notificatieService, EmailService emailService)
     {
         _notificatieService = notificatieService;
+        _emailService = emailService;
     }
 
     // 1. GET: Haal een specifieke notificatie op
@@ -42,6 +44,11 @@ public class NotificatieController : ControllerBase
         try
         {
             await _notificatieService.AddNotificatieAsync(nieuweNotificatie);
+
+            var klantEmail = nieuweNotificatie.Klant.Email;
+            var subject = nieuweNotificatie.Titel;
+            var body = nieuweNotificatie.Bericht;
+            await _emailService.SendEmailAsync(klantEmail, subject, body);
             return Ok("Notificatie succesvol aangemaakt.");
         }
         catch (Exception ex)
