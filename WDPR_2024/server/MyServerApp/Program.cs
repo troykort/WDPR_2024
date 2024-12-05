@@ -1,41 +1,45 @@
+using WDPR_2024.server.MyServerApp.Models;
+using WDPR_2024.server.MyServerApp.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Builder;
+using WDPR_2024.server.MyServerApp.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddDbContext<YourDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<YourDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuthorization();
+builder.Services.AddControllers();
+builder.Services.AddScoped<VoertuigService>();
+builder.Services.AddScoped<BedrijfService>();
+builder.Services.AddScoped<VerhuurAanvraagService>();
+builder.Services.AddScoped<KlantService>();
+builder.Services.AddScoped<AbonnementService>();
+builder.Services.AddScoped<SchademeldingService>();
+builder.Services.AddScoped<NotificatieService>();
+builder.Services.AddSingleton(new EmailService(
+smtpServer: "smtp.example.com", // Bijvoorbeeld: smtp.gmail.com
+smtpPort: 587, // Meestal 587 voor TLS of 465 voor SSL
+smtpUser: "your-email@example.com", // Jouw e-mailadres
+smtpPassword: "your-email-password" // Wachtwoord voor de SMTP-server
+)); // twijfel situatie maar we komen er wel later uit. 
+
+
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
+// Middleware
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapControllers(); // Alleen API endpoints
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
