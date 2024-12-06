@@ -15,9 +15,9 @@ namespace WDPR_2024.server.MyServerApp.Models
         public int KlantID { get; set; }
         public Klant Klant { get; set; }
         public string Beschrijving { get; set; }
-        public string FotoPath { get; set; } // Optioneel: Foto van de schade
+        public string? FotoPath { get; set; } // Optioneel: Foto van de schade
         public DateTime Melddatum { get; set; }
-        public string Opmerkingen { get; set; }
+        public string? Opmerkingen { get; set; }
         public string Status { get; set; } // "In Behandeling", "Afgehandeld"
     }
 

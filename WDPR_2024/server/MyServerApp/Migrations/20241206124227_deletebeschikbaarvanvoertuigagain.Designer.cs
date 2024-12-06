@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WDPR_2024.server.MyServerApp.Data;
 
@@ -11,9 +12,11 @@ using WDPR_2024.server.MyServerApp.Data;
 namespace MyServerApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241206124227_deletebeschikbaarvanvoertuigagain")]
+    partial class deletebeschikbaarvanvoertuigagain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,7 +169,7 @@ namespace MyServerApp.Migrations
                     b.Property<decimal>("Kosten")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("MaxVoertuigenPerMedewerker")
+                    b.Property<int>("MaxVoertuigenPerMedewerker")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDatum")
@@ -413,6 +416,7 @@ namespace MyServerApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FotoPath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("KlantID")
@@ -422,6 +426,7 @@ namespace MyServerApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Opmerkingen")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
@@ -461,6 +466,7 @@ namespace MyServerApp.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Opmerkingen")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("StartDatum")
@@ -514,6 +520,7 @@ namespace MyServerApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Opmerkingen")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("PrijsPerDag")

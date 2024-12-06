@@ -33,7 +33,6 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         }
 
         // 2. GET: Haal een lijst van alle voertuigen op
-        [Authorize(Roles = "Backoffice")]
         [HttpGet]
         public async Task<IActionResult> GetAlleVoertuigen()
         {

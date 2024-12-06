@@ -19,7 +19,7 @@ namespace WDPR_2024.server.MyServerApp.Models
         public DateTime StartDatum { get; set; }
         public DateTime EindDatum { get; set; }
         public string Status { get; set; } // "In Behandeling", "Goedgekeurd", "Afgekeurd", "Uitgegeven"
-        public string Opmerkingen { get; set; } // Opmerkingen door frontoffice
+        public string? Opmerkingen { get; set; } // Opmerkingen door frontoffice
         public DateTime? Uitgiftedatum { get; set; } // Datum van uitgifte
 
         // Relaties

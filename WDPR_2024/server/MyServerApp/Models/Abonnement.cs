@@ -14,7 +14,7 @@ namespace WDPR_2024.server.MyServerApp.Models
         public DateTime StartDatum { get; set; }
         public DateTime EindDatum { get; set; }
         public string Status { get; set; } // "In Behandeling", "Actief", "Afgekeurd"
-        public int MaxVoertuigenPerMedewerker { get; set; } // Limiet per medewerker
+        public int? MaxVoertuigenPerMedewerker { get; set; } // Limiet per medewerker
 
         // Relatie naar Bedrijf
         public Bedrijf Bedrijf { get; set; }
