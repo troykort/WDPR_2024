@@ -29,7 +29,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes("your_secret_key_here");
+                var key = Encoding.ASCII.GetBytes("your_very_long_secret_key_here_32_bytes!");
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(new Claim[]
