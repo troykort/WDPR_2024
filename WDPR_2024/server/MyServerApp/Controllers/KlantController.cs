@@ -88,5 +88,26 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             }
         }
 
+[HttpPost("login")]
+public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+{
+    if (!ModelState.IsValid)
+    {
+        return BadRequest(ModelState);
+    }
+
+   try
+    {
+        var klant = await _klantService.AuthenticateKlantAsync(loginRequest.Email, loginRequest.Password);
+        return Ok(new { klant.KlantID, klant.Naam, klant.Email });
+    }
+    catch (UnauthorizedAccessException ex)
+    {
+        return Unauthorized(ex.Message);
+    }
+
+        
+
+
     }
 }

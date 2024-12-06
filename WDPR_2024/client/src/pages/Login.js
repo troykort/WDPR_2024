@@ -6,9 +6,31 @@ function Login() {
     // State for handling input fields
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-    const handleLogin = () => {
-        alert(`Email: ${email}, Password: ${password}`);
+
+    const handleLogin = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/api/klanten/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                alert(`Login failed: ${errorMessage}`);
+                return;
+            }
+
+            const data = await response.json();
+            alert(`Login successful. Welcome, ${data.name}`);
+            navigate('/dashboard'); // Navigate to dashboard or another page
+        } catch (error) {
+            alert('An error occurred during login: ' + error.message);
+        }
     };
 
     const handleBack = () => {

@@ -43,6 +43,8 @@ namespace WDPR_2024.server.MyServerApp
                 smtpUser: "your-email@example.com", // Gebruik jouw e-mailadres
                 smtpPassword: "your-email-password" // Het wachtwoord voor je SMTP-server
             ));
+            // builder.WebHost.UseUrls("http://localhost:5184");
+
 
             var app = builder.Build();
 
@@ -51,6 +53,14 @@ namespace WDPR_2024.server.MyServerApp
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+
+//
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+//
+            app.MapFallbackToFile("index.html"); // Redirect unknown routes to React
+
 
             // Map de controllers naar de juiste endpoints
             app.MapControllers(); // Alleen API endpoints

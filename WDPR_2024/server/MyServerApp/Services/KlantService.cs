@@ -1,6 +1,8 @@
 ﻿using WDPR_2024.server.MyServerApp.Data;
 using WDPR_2024.server.MyServerApp.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace WDPR_2024.server.MyServerApp.Services
 {
@@ -33,6 +35,19 @@ namespace WDPR_2024.server.MyServerApp.Services
         public async Task<bool> IsEmailGeregistreerdAsync(string email)
         {
             return await _context.Klanten.AnyAsync(k => k.Email == email);
+        }
+
+        // Haal een klant op via e-mailadres
+        public async Task<Klant> GetKlantByEmailAsync(string email)
+        {
+            return await _context.Klanten.FirstOrDefaultAsync(k => k.Email == email);
+        }
+
+        // Verifieer het wachtwoord (placeholder: vervang door hashing in productie)
+        public bool VerifyPassword(string inputPassword, string storedPassword)
+        {
+            // Voor een productieomgeving: gebruik hashing (bijv. BCrypt of een ander mechanisme)
+            return inputPassword == storedPassword;
         }
 
         // Registreer een nieuwe klant
@@ -80,6 +95,18 @@ namespace WDPR_2024.server.MyServerApp.Services
 
             _context.Klanten.Remove(klant);
             await _context.SaveChangesAsync();
+        }
+
+        // Authenticeer een klant (voor login)
+        public async Task<Klant> AuthenticateKlantAsync(string email, string password)
+        {
+            var klant = await GetKlantByEmailAsync(email);
+            if (klant == null || !VerifyPassword(password, klant.Password))
+            {
+                throw new UnauthorizedAccessException("Ongeldig e-mailadres of wachtwoord.");
+            }
+
+            return klant;
         }
     }
 }
