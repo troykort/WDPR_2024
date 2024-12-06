@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using WDPR_2024.server.MyServerApp.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace WDPR_2024.server.MyServerApp
 {
@@ -13,9 +16,9 @@ namespace WDPR_2024.server.MyServerApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Voeg de services toe aan de container
+            
             builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
             // Configureer Identity
@@ -23,11 +26,11 @@ namespace WDPR_2024.server.MyServerApp
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-            // Voeg de benodigde services toe voor je applicatie
+            
             builder.Services.AddAuthorization();
             builder.Services.AddControllers();
 
-            // Voeg alle andere services toe
+            // alle andere services 
             builder.Services.AddScoped<VoertuigService>();
             builder.Services.AddScoped<BedrijfService>();
             builder.Services.AddScoped<VerhuurAanvraagService>();
@@ -37,12 +40,33 @@ namespace WDPR_2024.server.MyServerApp
             builder.Services.AddScoped<NotificatieService>();
 
             // Voeg EmailService toe (bijvoorbeeld voor SMTP)
-            builder.Services.AddSingleton(new EmailService(
-                smtpServer: "smtp.example.com", // SMTP server zoals smtp.gmail.com
-                smtpPort: 587, // Meestal 587 voor TLS, of 465 voor SSL
-                smtpUser: "your-email@example.com", // Gebruik jouw e-mailadres
-                smtpPassword: "your-email-password" // Het wachtwoord voor je SMTP-server
-            ));
+            //builder.Services.AddSingleton(new EmailService(
+            //    smtpServer: "smtp.example.com", // SMTP server zoals smtp.gmail.com
+            //    smtpPort: 587, // Meestal 587 voor TLS, of 465 voor SSL
+            //    smtpUser: "your-email@example.com", // Gebruik jouw e-mailadres
+            //    smtpPassword: "your-email-password" // Het wachtwoord voor je SMTP-server
+            //));
+
+            // Configure JWT authentication
+            var key = Encoding.ASCII.GetBytes("your_very_long_secret_key_here_that_is_at_least_32_bytes_long");
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = "your_issuer",
+                    ValidAudience = "your_audience",
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                };
+            });
 
             var app = builder.Build();
 
@@ -53,7 +77,14 @@ namespace WDPR_2024.server.MyServerApp
             app.UseAuthorization();
 
             // Map de controllers naar de juiste endpoints
-            app.MapControllers(); // Alleen API endpoints
+            app.MapControllers(); 
+
+            // Seed the database
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                SeedData.Initialize(services).Wait();
+            }
 
             app.Run();
         }

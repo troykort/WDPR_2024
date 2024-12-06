@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,12 +8,13 @@ using WDPR_2024.server.MyServerApp.Models;
 
 namespace WDPR_2024.server.MyServerApp.Data
 {
-    public static class SeedData
+    public class SeedData
     {
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var logger = serviceProvider.GetRequiredService<ILogger<SeedData>>();
 
             // Rollen die nodig zijn
             string[] roles = { "Backoffice", "Frontoffice", "Wagenparkbeheerder", "Abonnementbeheerder", "Klant" };
@@ -23,6 +25,7 @@ namespace WDPR_2024.server.MyServerApp.Data
                 if (!await roleManager.RoleExistsAsync(role))
                 {
                     await roleManager.CreateAsync(new IdentityRole(role));
+                    logger.LogInformation($"Role '{role}' created.");
                 }
             }
 
@@ -38,11 +41,23 @@ namespace WDPR_2024.server.MyServerApp.Data
                     EmailConfirmed = true
                 };
 
-                var result = await userManager.CreateAsync(user, "Admin@123"); // Gebruik een sterk wachtwoord
+                var result = await userManager.CreateAsync(user, "Admin@123");
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(user, "Backoffice");
+                    logger.LogInformation($"User '{defaultUserEmail}' created and added to role 'Backoffice'.");
                 }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        logger.LogError($"Error creating user '{defaultUserEmail}': {error.Description}");
+                    }
+                }
+            }
+            else
+            {
+                logger.LogInformation($"User '{defaultUserEmail}' already exists.");
             }
         }
 
@@ -51,6 +66,7 @@ namespace WDPR_2024.server.MyServerApp.Data
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var logger = serviceProvider.GetRequiredService<ILogger<SeedData>>();
 
             // Controleer of de opgegeven rol bestaat
             var roleExists = await roleManager.RoleExistsAsync(newRole);
@@ -75,6 +91,8 @@ namespace WDPR_2024.server.MyServerApp.Data
 
             // Voeg de gebruiker toe aan de nieuwe rol
             await userManager.AddToRoleAsync(user, newRole);
+            logger.LogInformation($"User '{userEmail}' role updated to '{newRole}'.");
         }
     }
 }
+
