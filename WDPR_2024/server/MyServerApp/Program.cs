@@ -48,7 +48,7 @@ namespace WDPR_2024.server.MyServerApp
             //));
 
             // Configure JWT authentication
-            var key = Encoding.ASCII.GetBytes("your_very_long_secret_key_here_that_is_at_least_32_bytes_long");
+            var key = Encoding.ASCII.GetBytes("your_very_long_secret_key_here_that_is_at_least_32_bytes_longerrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
