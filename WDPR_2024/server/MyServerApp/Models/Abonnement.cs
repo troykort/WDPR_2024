@@ -8,7 +8,7 @@ namespace WDPR_2024.server.MyServerApp.Models
 {
     public class Abonnement
     {
-        public decimal AbonnementID { get; set; }
+        public int AbonnementID { get; set; }
         public string Type { get; set; } // "Pay-as-you-go", "Prepaid"
         public decimal Kosten { get; set; }
         public DateTime StartDatum { get; set; }

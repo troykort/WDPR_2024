@@ -47,7 +47,7 @@ namespace WDPR_2024.server.MyServerApp
             var app = builder.Build();
 
             // Middleware configureren
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
