@@ -17,7 +17,6 @@ function Login() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
-                mode: 'no-cors',// maybe nog weg halen
 
             });
 
