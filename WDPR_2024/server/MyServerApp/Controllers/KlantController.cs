@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using WDPR_2024.server.MyServerApp.Models;
 using WDPR_2024.server.MyServerApp.Data;
 using WDPR_2024.server.MyServerApp.Services;
+using WDPR_2024.server.MyServerApp.DtoModels;
 
 namespace WDPR_2024.server.MyServerApp.Controllers
 {
@@ -89,25 +90,29 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         }
 
 [HttpPost("login")]
-public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+public async Task<IActionResult> Login([FromBody] KlantDto loginData)
 {
     if (!ModelState.IsValid)
     {
         return BadRequest(ModelState);
     }
 
-   try
+    try
     {
-        var klant = await _klantService.AuthenticateKlantAsync(loginRequest.Email, loginRequest.Password);
-        return Ok(new { klant.KlantID, klant.Naam, klant.Email });
+        // Authenticate the user using KlantDto
+        var authenticatedKlant = await _klantService.AuthenticateKlantAsync(loginData);
+        return Ok(authenticatedKlant); // Return safe DTO data
     }
     catch (UnauthorizedAccessException ex)
     {
         return Unauthorized(ex.Message);
     }
-
-        
-
-
+    catch (Exception ex)
+    {
+        return BadRequest($"An error occurred: {ex.Message}");
     }
+}
+
+
+}
 }

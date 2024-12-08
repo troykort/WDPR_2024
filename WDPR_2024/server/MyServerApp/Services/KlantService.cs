@@ -3,6 +3,7 @@ using WDPR_2024.server.MyServerApp.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
+using WDPR_2024.server.MyServerApp.DtoModels;
 
 namespace WDPR_2024.server.MyServerApp.Services
 {
@@ -98,15 +99,24 @@ namespace WDPR_2024.server.MyServerApp.Services
         }
 
         // Authenticeer een klant (voor login)
-        public async Task<Klant> AuthenticateKlantAsync(string email, string password)
-        {
-            var klant = await GetKlantByEmailAsync(email);
-            if (klant == null || !VerifyPassword(password, klant.Password))
-            {
-                throw new UnauthorizedAccessException("Ongeldig e-mailadres of wachtwoord.");
-            }
+ public async Task<KlantDto> AuthenticateKlantAsync(KlantDto klantDto)
+{
+    // Retrieve the user by email
+    var klant = await GetKlantByEmailAsync(klantDto.Email);
+    if (klant == null || klantDto.Password != klant.Wachtwoord) // Plaintext comparison
+    {
+        throw new UnauthorizedAccessException("Invalid email or password.");
+    }
 
-            return klant;
-        }
+    // Return only the safe data in KlantDto
+    return new KlantDto
+    {
+        KlantID = klant.KlantID,
+        Naam = klant.Naam,
+        Email = klant.Email
+    };
+}
+
+
     }
 }

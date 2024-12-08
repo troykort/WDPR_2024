@@ -17,6 +17,8 @@ function Login() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
+                mode: 'no-cors',// maybe nog weg halen
+
             });
 
             if (!response.ok) {
@@ -40,8 +42,7 @@ function Login() {
     return (
         <div className="login-page">
             {/* Top Section with Logo */}
-            <div className="top-bar">
-                <img src="/images/logo.png" alt="logo" className="logo-img" />
+            <div >
             </div>
 
             {/* Login Section */}

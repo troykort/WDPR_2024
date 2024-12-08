@@ -44,6 +44,10 @@ namespace WDPR_2024.server.MyServerApp
                 smtpPassword: "your-email-password" // Het wachtwoord voor je SMTP-server
             ));
             // builder.WebHost.UseUrls("http://localhost:5184");
+            
+
+
+            
 
 
             var app = builder.Build();
