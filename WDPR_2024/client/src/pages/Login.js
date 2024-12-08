@@ -35,7 +35,7 @@ function Login() {
     };
 
     const handleBack = () => {
-        alert('Navigating Back...');
+        navigate('/'); // Redirect to the main page
     };
 
     return (
