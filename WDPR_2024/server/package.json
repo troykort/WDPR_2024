@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node server/src/server.js",
+    "start": "node src/server.js",
     "client": "npm start --prefix client",
     "server": "nodemon server/src/server.js",
     "dev": "concurrently \"npm run server\" \"npm run client\"",

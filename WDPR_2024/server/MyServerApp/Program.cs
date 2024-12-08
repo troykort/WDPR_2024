@@ -50,6 +50,8 @@ namespace WDPR_2024.server.MyServerApp
             builder.Services.AddScoped<NotificatieService>();
             builder.Services.AddScoped<MedewerkerService>();
 
+
+
             //Email Service wordt not later toegevoegd
              builder.Services.AddSingleton(new EmailService(
                  smtpServer: "smtp.example.com", 
@@ -79,6 +81,7 @@ namespace WDPR_2024.server.MyServerApp
                 };
             });
 
+
             var app = builder.Build();
 
             // Middleware configureren
@@ -88,9 +91,13 @@ namespace WDPR_2024.server.MyServerApp
             app.UseAuthorization();
 
 
+
+            // Map de controllers naar de juiste endpoints
+
             app.UseCors("AllowSpecificOrigins");
 
             
+
             app.MapControllers(); // Alleen API endpoints
 
             // Seed the database
