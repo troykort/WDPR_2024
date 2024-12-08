@@ -1,7 +1,8 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: white; /* Dark purple background */
+    background-color: #C4B8A5; /* Update background color */
+    color: #5E0639; /* Set the text color for the body */
 }
 
 /* Full-page layout */
@@ -29,13 +30,13 @@ body {
     display: flex;
     justify-content: center;
     align-items: center; /* Centers vertically */
-    background-color: antiquewhite; /* Dark purple background */
+    background-color: #C4B8A5;
     padding: 20px;
 }
 
 /* White login box */
 .login-box {
-    background-color: #4d0026;
+    background-color: #F2EBDB;
     padding: 30px 40px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds depth */
@@ -44,11 +45,11 @@ body {
     max-width: 400px;
 }
 
-    .login-box h1 {
-        margin-bottom: 30px;
-        font-size: 28px;
-        color: white;
-    }
+.login-box h1 {
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: #5E0639; /* Set the text color */
+}
 
 /* Form styles */
 .form-group {
@@ -56,21 +57,22 @@ body {
     text-align: left;
 }
 
-    .form-group label {
-        font-size: 14px;
-        color: #4d0026;
-        margin-bottom: 5px;
-        display: block;
-    }
+.form-group label {
+    font-size: 14px;
+    color: #5E0639; /* Set the text color */
+    margin-bottom: 5px;
+    display: block;
+}
 
-    .form-group input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
-        box-sizing: border-box;
-    }
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+    color: #5E0639; /* Set the text color */
+}
 
 /* Button styles */
 .button-group {
@@ -129,6 +131,7 @@ body {
     display: block;
     margin: 0 auto; /* Center the logo horizontally */
 }
+
 /* Full-page layout */
 .register-page {
     display: flex;
@@ -157,32 +160,32 @@ body {
     max-width: 400px;
 }
 
-    .register-box h1 {
-        margin-bottom: 30px;
-        font-size: 28px;
-        color: white; /* Match theme */
-    }
+.register-box h1 {
+    margin-bottom: 30px;
+    font-size: 28px;
+    color: white; /* Match theme */
+}
 
 .form-group {
     margin-bottom: 20px;
     text-align: left;
 }
 
-    .form-group label {
-        font-size: 14px;
-        color: white;
-        margin-bottom: 5px;
-        display: block;
-    }
+.form-group label {
+    font-size: 14px;
+    color: white;
+    margin-bottom: 5px;
+    display: block;
+}
 
-    .form-group input {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 16px;
-        box-sizing: border-box;
-    }
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
 
 /* Button styles */
 .button-group {
@@ -201,3 +204,6 @@ body {
     background-color: #800000;
     color: white;
 }
+
+
+

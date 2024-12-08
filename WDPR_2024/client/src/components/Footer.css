@@ -1,5 +1,5 @@
 ﻿.footer {
-    background-color: #F2EBDB;
+    background-color: #F2EBDB !important;
     padding: 20px;
     text-align: center;
     color: #5E0639;
@@ -15,14 +15,14 @@
 }
 
 .footer-button {
-    margin: 0 10px; /* Add space between buttons */
+    margin: 0 10px;
     padding: 10px 20px;
     background-color: #F2EBDB;
     color: #5E0639;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    text-decoration: none;
+    text-decoration: underline;
     font-size: 16px;
 }
 

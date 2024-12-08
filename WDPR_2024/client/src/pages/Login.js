@@ -8,7 +8,6 @@ function Login() {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-
     const handleLogin = async () => {
         try {
             const response = await fetch('http://localhost:5000/api/klanten/login', {
@@ -17,7 +16,6 @@ function Login() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
-
             });
 
             if (!response.ok) {
@@ -35,13 +33,12 @@ function Login() {
     };
 
     const handleBack = () => {
-        alert('Navigating Back...');
+        navigate('/'); // Navigate to the home page
     };
 
     return (
         <div className="login-page">
-            {/* Top Section with Logo */}
-            <div >
+            <div>
             </div>
 
             {/* Login Section */}
@@ -49,7 +46,7 @@ function Login() {
                 <div className="login-box">
                     <h1>Login Page</h1>
                     <div className="form-group">
-                        <label htmlFor="email">Email Address</label>
+                        <label htmlFor="email" style={{ color: '#5E0639' }}>Email Address</label>
                         <input
                             type="email"
                             id="email"
@@ -59,7 +56,7 @@ function Login() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password" style={{ color: '#5E0639' }}>Password</label>
                         <input
                             type="password"
                             id="password"
@@ -78,12 +75,12 @@ function Login() {
                     </div>
                 </div>
             </div>
-
-            {/* Footer */}
-            <div >
+            <div>
             </div>
         </div>
     );
 }
 
 export default Login;
+
+
