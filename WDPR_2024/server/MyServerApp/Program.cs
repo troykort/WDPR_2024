@@ -16,20 +16,31 @@ namespace WDPR_2024.server.MyServerApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Voeg de services toe aan de container
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigins", policy =>
+                {
+                    policy.WithOrigins("http://localhost:3000/") 
+                          .AllowAnyHeader()    
+                          .AllowAnyMethod()   
+                          .AllowCredentials(); 
+                });
+            });
+
+            
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Configureer Identity
+         
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-            // Voeg de benodigde services toe voor je applicatie
+            
             builder.Services.AddAuthorization();
             builder.Services.AddControllers();
 
-            // Voeg alle andere services toe
+            
             builder.Services.AddScoped<VoertuigService>();
             builder.Services.AddScoped<BedrijfService>();
             builder.Services.AddScoped<VerhuurAanvraagService>();
@@ -39,12 +50,12 @@ namespace WDPR_2024.server.MyServerApp
             builder.Services.AddScoped<NotificatieService>();
             builder.Services.AddScoped<MedewerkerService>();
 
-            //Voeg EmailService toe(bijvoorbeeld voor SMTP)
+            //Email Service wordt not later toegevoegd
              builder.Services.AddSingleton(new EmailService(
-                 smtpServer: "smtp.example.com", // SMTP server zoals smtp.gmail.com
-                 smtpPort: 587, // Meestal 587 voor TLS, of 465 voor SSL
-                 smtpUser: "your-email@example.com", // Gebruik jouw e-mailadres
-                 smtpPassword: "your-email-password" // Het wachtwoord voor je SMTP-server
+                 smtpServer: "smtp.example.com", 
+                 smtpPort: 587, 
+                 smtpUser: "your-email@example.com", 
+                 smtpPassword: "your-email-password" 
              ));
 
             // Configure JWT authentication
@@ -76,7 +87,10 @@ namespace WDPR_2024.server.MyServerApp
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // Map de controllers naar de juiste endpoints
+
+            app.UseCors("AllowSpecificOrigins");
+
+            
             app.MapControllers(); // Alleen API endpoints
 
             // Seed the database
