@@ -14,17 +14,17 @@ namespace WDPR_2024.server.MyServerApp.Models
         public string Email { get; set; }
         public string Telefoonnummer { get; set; }
         public string Wachtwoord { get; set; }
-        public string RijbewijsNummer { get; set; }
-        public string RijbewijsFotoPath { get; set; } // Voor geüploade rijbewijsfoto
-        public bool IsActief { get; set; }
+        public string? RijbewijsNummer { get; set; }
+        public string? RijbewijsFotoPath { get; set; } // Voor geüploade rijbewijsfoto
+        public bool? IsActief { get; set; }
 
         // Relaties
         public int? BedrijfID { get; set; }
-        public Bedrijf Bedrijf { get; set; }
-        public ICollection<VerhuurAanvraag> VerhuurAanvragen { get; set; }
-        public ICollection<Schademelding> Schademeldingen { get; set; }
+        public Bedrijf? Bedrijf { get; set; }
+        public ICollection<VerhuurAanvraag>? VerhuurAanvragen { get; set; }
+        public ICollection<Schademelding>? Schademeldingen { get; set; }
 
-        public ICollection<Notificatie> Notificaties { get; set; }
+        public ICollection<Notificatie>? Notificaties { get; set; }
     }
 
 }

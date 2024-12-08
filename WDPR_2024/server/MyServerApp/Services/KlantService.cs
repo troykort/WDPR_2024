@@ -107,12 +107,11 @@ namespace WDPR_2024.server.MyServerApp.Services
     {
         throw new UnauthorizedAccessException("Invalid email or password.");
     }
-
+    
     // Return only the safe data in KlantDto
     return new KlantDto
     {
         KlantID = klant.KlantID,
-        Naam = klant.Naam,
         Email = klant.Email
     };
 }

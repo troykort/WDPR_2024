@@ -20,7 +20,7 @@ namespace WDPR_2024.server.MyServerApp
             {
                 options.AddPolicy("AllowSpecificOrigins", policy =>
                 {
-                    policy.WithOrigins("http://localhost:3000/") 
+                    policy.WithOrigins("http://localhost:3000") 
                           .AllowAnyHeader()    
                           .AllowAnyMethod()   
                           .AllowCredentials(); 
