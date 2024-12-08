@@ -1,0 +1,33 @@
+﻿.footer {
+    background-color: #F2EBDB;
+    padding: 20px;
+    text-align: center;
+    color: #5E0639;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-nav {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.footer-button {
+    margin: 0 10px; /* Add space between buttons */
+    padding: 10px 20px;
+    background-color: #F2EBDB;
+    color: #5E0639;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+   
+.footer-info {
+    font-size: 16px;
+    text-align: center;
+}
