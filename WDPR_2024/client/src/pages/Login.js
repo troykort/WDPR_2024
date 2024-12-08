@@ -80,10 +80,7 @@ function Login() {
             </div>
 
             {/* Footer */}
-            <div className="footer">
-                <button className="footer-btn">About Us</button>
-                <button className="footer-btn">Privacy</button>
-                <button className="footer-btn">FAQ</button>
+            <div >
             </div>
         </div>
     );
