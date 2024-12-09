@@ -113,6 +113,7 @@ namespace WDPR_2024.server.MyServerApp.Services
     {
         KlantID = klant.KlantID,
         Email = klant.Email
+        
     };
 }
 
