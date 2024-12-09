@@ -65,7 +65,7 @@ return (
                         />
                     </ div >
                     < div >
-                        < label htmlFor = "kvknummer" > KVK - nummer </ label >
+                        < label htmlFor = "kvknummer" > KVK-nummer </ label >
                         < input
                             type = "text"
                             id = "kvknummer"
@@ -77,7 +77,7 @@ return (
                         />
                     </ div >
                     < div >
-                        < label htmlFor = "emailDomein" > E - maildomein </ label >
+                        < label htmlFor = "emailDomein" > E-maildomein </ label >
                         < input
                             type = "text"
                             id = "emailDomein"
@@ -89,7 +89,7 @@ return (
                         />
                     </ div >
                     < div >
-                        < label htmlFor = "contactEmail" > Contact e - mailadres </ label >
+                        < label htmlFor = "contactEmail" > Contact e-mailadres </ label >
                         < input
                             type = "email"
                             id = "contactEmail"

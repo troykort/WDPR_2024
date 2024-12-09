@@ -40,17 +40,21 @@ const BusinessSubscription = () => {
     return (
         <div className="subscription-page">
             <h2>Zakelijke Abonnementen</h2>
-            <p>Bekijk en beheer uw zakelijke abonnementen hier.</p>
+            <p>Kies uw zakelijke abonnementen hier.</p>
             <div className="subscription-boxes">
                 <div className="subscription-box prepaid">
-                    <h3>Prepaid</h3>
-                    <p>Kies voor een prepaid abonnement en betaal vooraf voor uw diensten.</p>
-                    
+                    <h3 style={{ marginBottom: '5px' }}>Prepaid</h3>
+                    <p style={{ marginTop: '5px' }}>Kies voor een prepaid abonnement en betaal vooraf voor uw diensten.</p>
+                    <div className="button-group">
+                        <button type="button" onClick={(e) => handleSubmit(e, 'prepaid')}>Kies Prepaid</button>
+                    </div>
                 </div>
                 <div className="subscription-box pay-as-you-go">
-                    <h3>Pay-as-you-go</h3>
-                    <p>Kies voor een pay-as-you-go abonnement en betaal alleen voor wat u gebruikt.</p>
-                    
+                    <h3 style={{ marginBottom: '5px' }}>Pay-as-you-go</h3>
+                    <p style={{ marginTop: '5px' }}>Kies voor een pay-as-you-go abonnement en betaal alleen voor wat u gebruikt.</p>
+                    <div className="button-group">
+                        <button type="button" onClick={(e) => handleSubmit(e, 'pay-as-you-go')}>Kies Pay-as-you-go</button>
+                    </div>
                 </div>
             </div>
             <div className="button-container">
