@@ -45,37 +45,28 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            width: 100%;
+            width: 80%;
+            max-width: 400px;
             color: #5E0639;
         }
 
-        .register-page form button {
-            padding: 10px;
-            background-color: #5E0639;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            max-width: 300px;
-        }
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 300px;
+}
 
-            .register-page form button:hover {
-                background-color: #3e0426;
-            }
+.register-page form button {
+    padding: 10px;
+    background-color: #5E0639;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 48%;
+}
 
-    .register-page button {
-        margin-top: 10px;
-        padding: 10px;
-        background-color: #5E0639;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        width: 100%;
-        max-width: 300px;
+    .register-page form button:hover {
+        background-color: #3e0426;
     }
-
-        .register-page button:hover {
-            background-color: #3e0426;
-        }

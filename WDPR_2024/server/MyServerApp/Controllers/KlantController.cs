@@ -89,30 +89,66 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             }
         }
 
-[HttpPost("login")]
-public async Task<IActionResult> Login([FromBody] KlantDto loginData)
-{
-    if (!ModelState.IsValid)
-    {
-        return BadRequest(ModelState);
-    }
+        // 6. POST: Login
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] KlantDto loginData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-    try
-    {
-        // Authenticate the user using KlantDto
-        var authenticatedKlant = await _klantService.AuthenticateKlantAsync(loginData);
-        return Ok(authenticatedKlant); // Return safe DTO data
-    }
-    catch (UnauthorizedAccessException ex)
-    {
-        return Unauthorized(ex.Message);
-    }
-    catch (Exception ex)
-    {
-        return BadRequest($"An error occurred: {ex.Message}");
-    }
-}
+            try
+            {
+                // Authenticate the user using KlantDto
+                var authenticatedKlant = await _klantService.AuthenticateKlantAsync(loginData);
+                return Ok(authenticatedKlant); // Return safe DTO data
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"An error occurred: {ex.Message}");
+            }
+        }
 
+        // 7. POST: Register
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] KlantDto registerData)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-}
+            try
+            {
+             
+                if (await _klantService.IsEmailGeregistreerdAsync(registerData.Email))
+                {
+                    return BadRequest("E-mailadres is al geregistreerd.");
+                }
+
+                
+                var nieuweKlant = new Klant
+                {
+                    Naam = registerData.Naam,
+                    Adres = registerData.Adres,
+                    Telefoonnummer = registerData.Telefoonnummer,
+                    Email = registerData.Email,
+                    Wachtwoord = registerData.Password
+                };
+
+                
+                await _klantService.AddKlantAsync(nieuweKlant);
+                return Ok("Registratie succesvol.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Er is een fout opgetreden tijdens de registratie: {ex.Message}");
+            }
+        }
+    }
 }
