@@ -8,6 +8,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Include="client\src\pages\BusinessRegister.js" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Folder Include="server\MyServerApp\DTOs\" />
 		<Folder Include="server\MyServerApp\Utilities\" />
 	</ItemGroup>

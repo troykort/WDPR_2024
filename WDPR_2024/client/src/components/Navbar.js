@@ -12,11 +12,8 @@ const NavBar = () => {
                 </Link>
             </div>
             <div className="navbar-right">
-                <button className="navbar-button">Contact</button>
-                <button className="navbar-button">Over ons</button>
-                <button className="navbar-button">Voertuigen huren</button>
-                <button className="navbar-button">Abonnementen</button>
-                <button className="navbar-button">Profiel</button>
+                <Link to="/register" className="navbar-button">Sign Up</Link>
+                <Link to="/login" className="navbar-button">Login</Link>
             </div>
         </nav>
     );
