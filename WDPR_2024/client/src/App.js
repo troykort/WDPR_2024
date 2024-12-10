@@ -5,6 +5,9 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Login from './pages/Login';
 import './App.css';
+import HeaderVDashWPB from './components/HeaderV.DashWPB';
+import ManageCompanyEmployees from './pages/ManageBedrijfsMedewerkers';
+import VoertuigOverzichtPage from './pages/VoertuigOverzichtPage';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -17,6 +20,9 @@ const MainPage = () => {
         navigate('/login');
     };
 
+
+
+
     return (
         <div className="main-page">
             <button className="main-button" onClick={handleRegisterClick}>Registreer</button>
@@ -28,11 +34,14 @@ const MainPage = () => {
 const App = () => {
     return (
         <Router>
-            <Navbar />
+            <HeaderVDashWPB />
             <Routes>
                 <Route path="/" element={<MainPage />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/medewerkers" element={<ManageCompanyEmployees />} />
+                <Route path="/voertuigoverzicht" element={<VoertuigOverzichtPage />} />
+
             </Routes>
             <Footer />
         </Router>

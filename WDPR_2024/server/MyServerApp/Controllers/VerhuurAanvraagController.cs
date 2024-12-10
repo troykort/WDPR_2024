@@ -99,5 +99,14 @@ namespace WDPR_2024.server.MyServerApp.Controllers
 
             return Ok(aanvragen);
         }
+
+        [Authorize(Roles = "Wagenparkbeheerder")]
+        [HttpGet("verhuurd")]
+        public async Task<IActionResult> GetVerhuurdeVoertuigen([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] string? voertuigType, [FromQuery] string? huurderNaam)
+        {
+            var verhuurAanvragen = await _aanvraagService.GetVerhuurdeVoertuigenAsync(startDate, endDate, voertuigType, huurderNaam);
+            return Ok(verhuurAanvragen);
+        }
+
     }
 }

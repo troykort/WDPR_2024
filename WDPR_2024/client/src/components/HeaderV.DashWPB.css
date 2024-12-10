@@ -1,35 +1,60 @@
 .header {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
+    background-color: #f5efe0;
     padding: 10px 20px;
-    background-color: #f8f9fa;
-}
-
-.logo-button {
-    background: none;
-    border: none;
-    cursor: pointer;
+    border-bottom: 2px solid #4c1a2a;
 }
 
 .logo {
-    height: 40px;
-}
-
-.nav-list {
-    list-style: none;
     display: flex;
-    gap: 20px;
-    margin: 0;
-    padding: 0;
+    align-items: center;
 }
 
-.nav-link {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
+    .logo img {
+        height: 100px;
+        margin-right: 10px;
+    }
+
+    .logo span {
+        color: #4c1a2a;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+.nav-buttons button {
+    background-color: #4c1a2a;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    margin-right: 10px;
+    cursor: pointer;
 }
 
-    .nav-link:hover {
-        color: #007bff;
+.notifications {
+    position: relative;
+}
+
+.notification-dropdown {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 200px;
+    z-index: 1000;
+}
+
+    .notification-dropdown ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .notification-dropdown li {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
     }

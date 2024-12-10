@@ -77,5 +77,26 @@ namespace WDPR_2024.server.MyServerApp.Services
                 .Include(a => a.Voertuig)
                 .ToListAsync();
         }
+
+        public async Task<List<VerhuurAanvraag>> GetVerhuurdeVoertuigenAsync(DateTime? startDate, DateTime? endDate, string? voertuigType, string? huurderNaam)
+        {
+            var query = _context.VerhuurAanvragen
+                .Include(v => v.Voertuig)
+                .Include(v => v.Klant)
+                .Where(v => v.Status == "Verhuurd")
+                .AsQueryable();
+
+            if (startDate.HasValue)
+                query = query.Where(v => v.StartDatum >= startDate.Value);
+            if (endDate.HasValue)
+                query = query.Where(v => v.EindDatum <= endDate.Value);
+            if (!string.IsNullOrEmpty(voertuigType))
+                query = query.Where(v => v.Voertuig.TypeVoertuig == voertuigType);
+            if (!string.IsNullOrEmpty(huurderNaam))
+                query = query.Where(v => v.Klant.Naam.Contains(huurderNaam));
+
+            return await query.ToListAsync();
+        }
+
     }
 }

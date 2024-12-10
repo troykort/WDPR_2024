@@ -15,6 +15,13 @@ namespace WDPR_2024.server.MyServerApp.Services
         {
             _context = context;
         }
+        // Haal alle klanten op basis van emaildomein
+        public async Task<List<Klant>> GetKlantenByEmailDomainAsync(string emailDomain)
+        {
+            return await _context.Klanten
+                .Where(k => k.Email.EndsWith($"@{emailDomain}"))
+                .ToListAsync();
+        }
 
         // Haal een specifieke klant op
         public async Task<Klant> GetKlantByIdAsync(int id)
