@@ -85,14 +85,28 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             }
         }
 
-        // 6. GET: Haal voertuigen op op basis van type (auto, camper, caravan)
+
+        
         [HttpGet("type/{type}")]
         public async Task<IActionResult> GetVoertuigenByType(string type)
         {
+            if (string.IsNullOrEmpty(type))
+            {
+                return BadRequest("Type mag niet leeg zijn.");
+            }
+
             var voertuigen = await _voertuigService.GetVoertuigenByTypeAsync(type);
-            if (voertuigen == null || voertuigen.Count == 0) return NotFound("Geen voertuigen gevonden van dit type.");
+
+            if (voertuigen == null || !voertuigen.Any())
+            {
+                return NotFound($"Geen voertuigen van type '{type}' gevonden.");
+            }
 
             return Ok(voertuigen);
         }
+
     }
+
+
 }
+

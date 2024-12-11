@@ -1,7 +1,7 @@
 ﻿.voertuig-overzicht {
     font-family: Arial, sans-serif;
     padding: 20px;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     min-height: 60vh;
 }
@@ -39,6 +39,9 @@
 }
 
 .voertuig-item {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
     border-bottom: 1px solid #ddd;
     padding: 10px 0;
 }

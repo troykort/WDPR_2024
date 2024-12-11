@@ -63,12 +63,15 @@ namespace WDPR_2024.server.MyServerApp.Services
             await _context.SaveChangesAsync();
         }
 
-        // Haal voertuigen op op basis van type (auto, camper, caravan)
-        public async Task<List<Voertuig>> GetVoertuigenByTypeAsync(string type)
+        
+        // Voeg filterfunctionaliteit toe
+        public async Task<List<Voertuig>> GetVoertuigenByTypeAsync(string TypeVoertuig)
         {
             return await _context.Voertuigen
-                .Where(v => v.Type == type)
+                .Where(v => v.TypeVoertuig == TypeVoertuig)
                 .ToListAsync();
         }
+
+
     }
 }

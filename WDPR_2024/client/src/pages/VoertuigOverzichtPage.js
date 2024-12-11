@@ -5,30 +5,39 @@ import axios from "axios";
 const VoertuigOverzichtPage = () => {
     const [voertuigen, setVoertuigen] = useState([]);
     const [filters, setFilters] = useState({
+        status: "",
         startDate: "",
         endDate: "",
-        voertuigType: "",
-        huurderNaam: ""
+        merk: "", 
+        type: "", 
     });
 
     useEffect(() => {
+        // Initial fetch and polling
         fetchVoertuigen();
-    }, [filters]);
+        const interval = setInterval(fetchVoertuigen, 30000); // Poll every 30 seconds
+        return () => clearInterval(interval); 
+    }, []);
 
     const fetchVoertuigen = async () => {
         try {
-            const response = await axios.get("/api/verhuur-aanvragen/verhuurd", {
-                params: {
-                    startDate: filters.startDate,
-                    endDate: filters.endDate,
-                    voertuigType: filters.voertuigType,
-                    huurderNaam: filters.huurderNaam
-                }
-            });
+            const response = await axios.get("http://localhost:5000/api/voertuigen/type/auto");
             setVoertuigen(response.data);
         } catch (error) {
             console.error("Error fetching voertuigen:", error);
         }
+    };
+
+    const applyFilters = () => {
+        return voertuigen.filter((voertuig) => {
+            const isStatusMatch = filters.status ? voertuig.status === filters.status : true;
+            const isStartDateMatch = filters.startDate ? new Date(voertuig.startDatum) >= new Date(filters.startDate) : true;
+            const isEndDateMatch = filters.endDate ? new Date(voertuig.eindDatum) <= new Date(filters.endDate) : true;
+            const isMerkMatch = filters.merk ? voertuig.merk.toLowerCase().includes(filters.merk.toLowerCase()) : true;
+            const isTypeMatch = filters.type ? voertuig.type.toLowerCase().includes(filters.type.toLowerCase()) : true;
+
+            return isStatusMatch && isStartDateMatch && isEndDateMatch && isMerkMatch && isTypeMatch;
+        });
     };
 
     const handleFilterChange = (e) => {
@@ -37,14 +46,34 @@ const VoertuigOverzichtPage = () => {
     };
 
     const exportToCSV = (voertuig) => {
-        const csvContent = "data:text/csv;charset=utf-8," +
-            ["Voertuig,Type,Huurder,Startdatum,Einddatum"].join(",") +
+        const csvContent =
+            "data:text/csv;charset=utf-8," +
+            ["Voertuig,Type,Status,Huurder,Startdatum,Einddatum"].join(",") +
             "\n" +
-            `${voertuig.voertuig.merk} ${voertuig.voertuig.type},${voertuig.voertuig.typeVoertuig},${voertuig.klant.naam},${voertuig.startDatum},${voertuig.eindDatum}`;
+            `${voertuig.merk} ${voertuig.type},${voertuig.typeVoertuig},${voertuig.status},${voertuig.huurderNaam},${voertuig.startDatum},${voertuig.eindDatum}`;
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", `${voertuig.voertuig.merk}_${voertuig.voertuig.type}.csv`);
+        link.setAttribute("download", `${voertuig.merk}_${voertuig.type}.csv`);
+        document.body.appendChild(link);
+        link.click();
+    };
+
+    const exportAllToCSV = () => {
+        const csvContent =
+            "data:text/csv;charset=utf-8," +
+            ["Voertuig,Type,Status,Huurder,Startdatum,Einddatum"].join(",") +
+            "\n" +
+            applyFilters()
+                .map(
+                    (v) =>
+                        `${v.merk} ${v.type},${v.typeVoertuig},${v.status},${v.huurderNaam},${v.startDatum},${v.eindDatum}`
+                )
+                .join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "voertuigen_overzicht.csv");
         document.body.appendChild(link);
         link.click();
     };
@@ -53,23 +82,57 @@ const VoertuigOverzichtPage = () => {
         <div className="voertuig-overzicht">
             <h2>Voertuig Overzicht</h2>
             <div className="filters">
-                <input type="date" name="startDate" value={filters.startDate} onChange={handleFilterChange} placeholder="Startdatum" />
-                <input type="date" name="endDate" value={filters.endDate} onChange={handleFilterChange} placeholder="Einddatum" />
-                <input type="text" name="voertuigType" value={filters.voertuigType} onChange={handleFilterChange} placeholder="Voertuigtype" />
-                <input type="text" name="huurderNaam" value={filters.huurderNaam} onChange={handleFilterChange} placeholder="Huurder Naam" />
+                <select name="status" value={filters.status} onChange={handleFilterChange}>
+                    <option value="">Alle Statussen</option>
+                    <option value="Beschikbaar">Beschikbaar</option>
+                    <option value="Verhuurd">Verhuurd</option>
+                    <option value="In reparatie">In Reparatie</option>
+                    <option value="Geblokkeerd">Geblokkeerd</option>
+                </select>
+                <input
+                    type="date"
+                    name="startDate"
+                    value={filters.startDate}
+                    onChange={handleFilterChange}
+                    placeholder="Startdatum"
+                />
+                <input
+                    type="date"
+                    name="endDate"
+                    value={filters.endDate}
+                    onChange={handleFilterChange}
+                    placeholder="Einddatum"
+                />
+                <input
+                    type="text"
+                    name="merk"
+                    value={filters.merk}
+                    onChange={handleFilterChange}
+                    placeholder="Zoek op Merk"
+                />
+                <input
+                    type="text"
+                    name="type"
+                    value={filters.type}
+                    onChange={handleFilterChange}
+                    placeholder="Zoek op Type"
+                />
             </div>
+            <button onClick={exportAllToCSV} className="export-button">
+                Exporteer Alle Voertuigen naar CSV
+            </button>
             <div className="voertuig-list">
-                {voertuigen.map((voertuig) => (
-                    <div key={voertuig.id} className="voertuig-item">
-                        <p>{voertuig.voertuig.merk} {voertuig.voertuig.type}</p>
-                        <p>Type: {voertuig.voertuig.typeVoertuig}</p>
-                        <p>Huurder: {voertuig.klant.naam}</p>
+                {applyFilters().map((voertuig) => (
+                    <div key={voertuig.voertuigID} className="voertuig-item">
+                        <p>{voertuig.merk} {voertuig.type}</p>
+                        <p>Status: {voertuig.status}</p>
+                        <p>Huurder: {voertuig.huurderNaam}</p>
                         <p>Van: {voertuig.startDatum} Tot: {voertuig.eindDatum}</p>
                         <button
                             className="export-button"
                             onClick={() => exportToCSV(voertuig)}
                         >
-                            Export to CSV
+                            Exporteer naar CSV
                         </button>
                     </div>
                 ))}
