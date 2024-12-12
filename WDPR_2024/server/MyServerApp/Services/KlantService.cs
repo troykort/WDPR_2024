@@ -18,11 +18,10 @@ namespace WDPR_2024.server.MyServerApp.Services
 
         // Haal een specifieke klant op
         public async Task<Klant> GetKlantByIdAsync(int id)
-        {
-            return await _context.Klanten
-                .Include(k => k.Bedrijf)
-                .FirstOrDefaultAsync(k => k.KlantID == id);
-        }
+{
+    return await _context.Klanten.FirstOrDefaultAsync(k => k.KlantID == id);
+}
+
 
         // Haal alle klanten op
         public async Task<List<Klant>> GetAlleKlantenAsync()
@@ -113,7 +112,7 @@ namespace WDPR_2024.server.MyServerApp.Services
     {
         KlantID = klant.KlantID,
         Email = klant.Email
-        
+
     };
 }
 

@@ -150,5 +150,42 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 return BadRequest($"Er is een fout opgetreden tijdens de registratie: {ex.Message}");
             }
         }
+
+        [HttpGet("details")]
+        public async Task<IActionResult> GetDetails()
+        {
+    try
+    {
+        // Haal de klant-ID uit het token (optioneel, afhankelijk van je implementatie)
+        var klantIdClaim = User?.Claims.FirstOrDefault(c => c.Type == "KlantID")?.Value;
+        if (klantIdClaim == null) return Unauthorized("Geen toegang tot klantgegevens.");
+        
+        if (!int.TryParse(klantIdClaim, out var klantId))
+        {
+            return BadRequest("Ongeldig klant-ID in token.");
+        }
+
+        // Haal de klantgegevens op uit de service
+        var klant = await _klantService.GetKlantByIdAsync(klantId);
+        if (klant == null) return NotFound("Klant niet gevonden.");
+
+        // Maak een DTO van de klantgegevens voor veilige overdracht
+        var klantDto = new KlantDto
+        {
+            KlantID = klant.KlantID,
+            Naam = klant.Naam,
+            Adres = klant.Adres,
+            Telefoonnummer = klant.Telefoonnummer,
+            Email = klant.Email
+        };
+
+        return Ok(klantDto);
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(StatusCodes.Status500InternalServerError, $"Er is een fout opgetreden: {ex.Message}");
+    }
+}
+
     }
 }

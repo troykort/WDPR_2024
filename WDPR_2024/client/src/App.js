@@ -4,6 +4,7 @@ import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Login from './pages/Login';
+import AccountSettings from './pages/AccountSettings';
 import './App.css';
 
 const MainPage = () => {
@@ -33,6 +34,8 @@ const App = () => {
                 <Route path="/" element={<MainPage />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/accountSettings" element={<AccountSettings />} />
+
             </Routes>
             <Footer />
         </Router>

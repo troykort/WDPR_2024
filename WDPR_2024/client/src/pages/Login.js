@@ -25,6 +25,8 @@ function Login() {
             }
 
             const data = await response.json();
+            localStorage.setItem('klantDto', JSON.stringify(data));
+
             alert(`Login successful. Welcome, ${data.name}`);
             navigate('/dashboard'); // Navigate to dashboard or another page
         } catch (error) {
