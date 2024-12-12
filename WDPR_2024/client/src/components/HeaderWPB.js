@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./HeaderV.DashWPB.css";
+import "./HeaderWPB.css";
 import NotificationButton from "./notificationbutton";
 import logo from "../assets/Logo.png";
 
@@ -12,7 +12,7 @@ const Header = () => {
     };
 
     return (
-        <div className="header">
+        <Header className="header">
             <div className="logo">
                 <img src={logo} alt="Logo" />
              
@@ -25,7 +25,7 @@ const Header = () => {
                 <button onClick={() => navigate("/profiel")}>Profiel</button>
             </div>
             <NotificationButton />
-        </div>
+        </Header>
     );
 };
 

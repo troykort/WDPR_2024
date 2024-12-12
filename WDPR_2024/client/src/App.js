@@ -5,7 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Login from './pages/Login';
 import './App.css';
-import HeaderVDashWPB from './components/HeaderV.DashWPB';
+import HeaderVDashWPB from './components/HeaderWPB';
 import ManageCompanyEmployees from './pages/ManageBedrijfsMedewerkers';
 import VoertuigOverzichtPage from './pages/VoertuigOverzichtPage';
 
@@ -34,7 +34,7 @@ const MainPage = () => {
 const App = () => {
     return (
         <Router>
-            <HeaderVDashWPB />
+            
             <Routes>
                 <Route path="/" element={<MainPage />} />
                 <Route path="/register" element={<Register />} />
