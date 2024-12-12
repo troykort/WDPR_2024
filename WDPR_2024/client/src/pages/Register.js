@@ -66,7 +66,7 @@ const Register = () => {
         <div className="register-page">
             <form onSubmit={handleSubmit}>
                 <h2>Registreer</h2>
-                <p>Registreren voor particuliere klanten.</p>
+                <p>Registreren voor particuliere & zakelijk klanten.</p>
                 <div>
                     <label htmlFor="naam">Naam</label>
                     <input
@@ -143,7 +143,7 @@ const Register = () => {
                     <button type="button" onClick={handleGoBack}>Terug</button>
                     <button type="submit">Registreer</button>
                 </div>
-                <Link to="/business-register" className="zakelijkregistreren-button" style={{ color: '#5E0639' }}>Zakelijk Registreren</Link>
+                <Link to="/business-register" className="zakelijkregistreren-button" style={{ color: '#5E0639' }}>Bedrijfsabbonnement afsluiten</Link>
             </form>
         </div>
     );

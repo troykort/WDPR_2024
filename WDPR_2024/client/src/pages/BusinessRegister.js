@@ -28,9 +28,10 @@ const handleGoToSubscriptions = () => {
     navigate('/business-register/subscriptions', { state: { formData } });
 };
 
-const handleGoBack = () => {
-    navigate('/');
+const handleGoToRegister = () => {
+    navigate('/register', { state: { formData } });
 };
+
 
 return (
 
@@ -38,8 +39,8 @@ return (
             {
     location.pathname === '/business-register' && (
                 < form >
-                    < h2 > Zakelijk Registreren </ h2 >
-                    < p > Registreren voor zakelijke klanten.</ p >
+                    < h2 > Bedrijfsregistratie </ h2 >
+                    < p > Registreren als abbonnementsbeheerder voor bedrijven.</ p >
                     < div >
                         < label htmlFor = "bedrijfsnaam" > Bedrijfsnaam </ label >
                         < input
@@ -125,7 +126,7 @@ return (
                         />
                     </ div >
                     < div className = "button-group" >
-                        < button type = "button" onClick ={ handleGoBack}> Terug </ button >
+                        < button type = "button" onClick ={ handleGoToRegister}> Terug </ button >
                         < button type = "button" onClick ={ handleGoToSubscriptions}> Ga door </ button >
                     </ div >
                 </ form >

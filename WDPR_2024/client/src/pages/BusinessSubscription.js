@@ -39,8 +39,8 @@ const BusinessSubscription = () => {
 
     return (
         <div className="subscription-page">
-            <h2>Zakelijke Abonnementen</h2>
-            <p>Kies uw zakelijke abonnementen hier.</p>
+            <h2>Abonnementen</h2>
+            <p>Kies uw abonnement hier.</p>
             <div className="subscription-boxes">
                 <div className="subscription-box prepaid">
                     <h3 style={{ marginBottom: '5px' }}>Prepaid</h3>
@@ -58,7 +58,7 @@ const BusinessSubscription = () => {
                 </div>
             </div>
             <div className="button-container">
-                <button type="button" onClick={handleGoBack}>Terug naar Registratie</button>
+                <button type="button" onClick={handleGoBack}>Terug naar bedrijfsregistratie</button>
             </div>
         </div>
     );
@@ -67,3 +67,4 @@ const BusinessSubscription = () => {
 export default BusinessSubscription;
 
 
+                   
