@@ -7,7 +7,7 @@ import BusinessRegister from './pages/BusinessRegister';
 import BusinessSubscription from './pages/BusinessSubscription'; // Import the new component
 import Login from './pages/Login';
 import './App.css';
-import HeaderVDashWPB from './components/HeaderWPB';
+import HeaderWPB from './components/HeaderWPB';
 import ManageCompanyEmployees from './pages/ManageBedrijfsMedewerkers';
 import VoertuigOverzichtPage from './pages/VoertuigOverzichtPage';
 
@@ -37,17 +37,21 @@ const MainPage = () => {
 
 const App = () => {
     return (
-        <Router>           
-            <Routes>
-                <Route path="/" element={<MainPage />} />
-                <Route path="/register" element={<Register />} />
-                   <Route path="/business-register" element={<BusinessRegister />}>
+        <Router>
+            <div className="app-container">
+                {/*<HeaderWPB />*/}
+                {/*<Navbar />*/}
+                <div className="main-content">
+                    <Routes>
+                        <Route path="/" element={<MainPage />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/business-register" element={<BusinessRegister />}>
                             <Route path="subscriptions" element={<BusinessSubscription />} />
                         </Route>
-                <Route path="/login" element={<Login />} />
-                <Route path="/medewerkers" element={<ManageCompanyEmployees />} />
-                <Route path="/voertuigoverzicht" element={<VoertuigOverzichtPage />} 
-              </Routes>
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/medewerkers" element={<ManageCompanyEmployees />} />
+                        <Route path="/voertuigoverzicht" element={<VoertuigOverzichtPage />} />
+                    </Routes>
                 </div>
                 <Footer />
             </div>
@@ -56,3 +60,8 @@ const App = () => {
 };
 
 export default App;
+
+
+
+
+
