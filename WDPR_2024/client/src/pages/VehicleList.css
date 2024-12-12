@@ -1,0 +1,30 @@
+.vehicle-list {
+	padding: 20px;
+	font-family: Arial, sans-serif;
+}
+
+	.vehicle-list h1 {
+		color: #5E0639;
+	}
+
+	.vehicle-list ul {
+		list-style-type: none;
+		padding: 0;
+	}
+
+	.vehicle-list li {
+		border: 1px solid #ddd;
+		margin-bottom: 10px;
+		padding: 10px;
+		border-radius: 5px;
+	}
+
+	.vehicle-list h2 {
+		margin: 0;
+		color: #333;
+	}
+
+	.vehicle-list p {
+		margin: 5px 0;
+		color: #666;
+	}

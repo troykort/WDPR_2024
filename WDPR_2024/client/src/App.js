@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import BusinessRegister from './pages/BusinessRegister';
 import Login from './pages/Login';
+import VehicleList from './pages/VehicleList';
 import './App.css';
 
 const MainPage = () => {
@@ -42,6 +43,7 @@ const App = () => {
                         <Route path="/register" element={<Register />} />
                         <Route path="/business-register" element={<BusinessRegister />} />
                         <Route path="/login" element={<Login />} />
+                        <Route path="/vehicles" element={<VehicleList />} />
                     </Routes>
                 </div>
                 <Footer />
