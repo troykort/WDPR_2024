@@ -4,6 +4,7 @@ import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import BusinessRegister from './pages/BusinessRegister';
+import BusinessSubscription from './pages/BusinessSubscription'; // Import the new component
 import Login from './pages/Login';
 import VehicleList from './pages/VehicleList';
 import './App.css';
@@ -41,7 +42,9 @@ const App = () => {
                     <Routes>
                         <Route path="/" element={<MainPage />} />
                         <Route path="/register" element={<Register />} />
-                        <Route path="/business-register" element={<BusinessRegister />} />
+                        <Route path="/business-register" element={<BusinessRegister />}>
+                            <Route path="subscriptions" element={<BusinessSubscription />} />
+                        </Route>
                         <Route path="/login" element={<Login />} />
                         <Route path="/vehicles" element={<VehicleList />} />
                     </Routes>
