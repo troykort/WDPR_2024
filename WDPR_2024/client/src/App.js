@@ -7,6 +7,9 @@ import BusinessRegister from './pages/BusinessRegister';
 import BusinessSubscription from './pages/BusinessSubscription'; // Import the new component
 import Login from './pages/Login';
 import './App.css';
+import HeaderVDashWPB from './components/HeaderWPB';
+import ManageCompanyEmployees from './pages/ManageBedrijfsMedewerkers';
+import VoertuigOverzichtPage from './pages/VoertuigOverzichtPage';
 
 const MainPage = () => {
     return (
@@ -34,18 +37,17 @@ const MainPage = () => {
 
 const App = () => {
     return (
-        <Router>
-            <div className="app-container">
-                <Navbar />
-                <div className="main-content">
-                    <Routes>
-                        <Route path="/" element={<MainPage />} />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/business-register" element={<BusinessRegister />}>
+        <Router>           
+            <Routes>
+                <Route path="/" element={<MainPage />} />
+                <Route path="/register" element={<Register />} />
+                   <Route path="/business-register" element={<BusinessRegister />}>
                             <Route path="subscriptions" element={<BusinessSubscription />} />
                         </Route>
-                        <Route path="/login" element={<Login />} />
-                    </Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/medewerkers" element={<ManageCompanyEmployees />} />
+                <Route path="/voertuigoverzicht" element={<VoertuigOverzichtPage />} 
+              </Routes>
                 </div>
                 <Footer />
             </div>

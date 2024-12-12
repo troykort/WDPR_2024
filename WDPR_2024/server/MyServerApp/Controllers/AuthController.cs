@@ -30,18 +30,26 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             {
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes("your_very_long_secret_key_here_32_bytes!");
+
+                // Haal de rollen van de gebruiker op, bijvoorbeeld "Wagenparkbeheerder"
+                var roles = await _userManager.GetRolesAsync(user);
+
+                // Voeg claims toe aan de JWT, inclusief de "Wagenparkbeheerder" rol als deze aan de gebruiker is toegewezen
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Role, roles.Contains("Wagenparkbeheerder") ? "Wagenparkbeheerder" : "Klant")
+                };
+
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                        new Claim(ClaimTypes.Name, user.UserName),
-                        new Claim(ClaimTypes.Role, "Backoffice")
-                    }),
+                    Subject = new ClaimsIdentity(claims),
                     Expires = DateTime.UtcNow.AddHours(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                     Issuer = "your_issuer",
                     Audience = "your_audience"
                 };
+
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var tokenString = tokenHandler.WriteToken(token);
 
@@ -57,4 +65,3 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         public string Password { get; set; }
     }
 }
-

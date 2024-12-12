@@ -44,6 +44,14 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             return Ok(klanten);
         }
 
+        [Authorize(Roles = "Wagenparkbeheerder")]
+        [HttpGet("{emailDomain}")]
+        public async Task<IActionResult> GetAlleKlanten([FromQuery] string emailDomain)
+        {
+            var klanten = await _klantService.GetKlantenByEmailDomainAsync(emailDomain);
+            return Ok(klanten);
+        }
+
         // 3. POST: Voeg een nieuwe klant toe
         [HttpPost]
         public async Task<IActionResult> CreateKlant(Klant nieuweKlant)
@@ -150,5 +158,26 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 return BadRequest($"Er is een fout opgetreden tijdens de registratie: {ex.Message}");
             }
         }
+
+        [Authorize(Roles = "Wagenparkbeheerder")]
+        [HttpGet("me")]
+        public async Task<IActionResult> GetWagenparkbeheerderDetails()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "Id");
+            if (userIdClaim == null) return Unauthorized("Gebruikers-ID ontbreekt in de tokenclaims.");
+
+            if (!int.TryParse(userIdClaim.Value, out int userId)) return BadRequest("Ongeldig gebruikers-ID.");
+
+            var beheerder = await _klantService.GetKlantByIdAsync(userId);
+            if (beheerder == null) return NotFound("Gebruiker niet gevonden.");
+
+            return Ok(new
+            {
+                beheerder.KlantID,
+                beheerder.Naam,
+                beheerder.Email
+            });
+        }
+
     }
 }
