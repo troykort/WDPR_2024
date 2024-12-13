@@ -4,18 +4,21 @@ import './Login.css';
 
 function Login() {
     // State for handling input fields
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [Email, setEmail] = useState('');
+    const [Password, setPassword] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/klanten/login', {
+            const response = await fetch('http://localhost:5000/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email, password }),
+                body: JSON.stringify({
+                    Username: Email,
+                    Password
+                }),
             });
 
             if (!response.ok) {
@@ -50,7 +53,7 @@ function Login() {
                         <input
                             type="email"
                             id="email"
-                            value={email}
+                            value={Email}
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter your email"
                         />
@@ -60,7 +63,7 @@ function Login() {
                         <input
                             type="password"
                             id="password"
-                            value={password}
+                            value={Password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Enter your password"
                         />

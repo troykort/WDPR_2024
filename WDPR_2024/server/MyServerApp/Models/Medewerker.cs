@@ -13,6 +13,8 @@ namespace WDPR_2024.server.MyServerApp.Models
         public string Email { get; set; }
         public string Rol { get; set; } // "Backoffice", "Frontoffice"
 
+        //public string Wachtwoord { get; set; }
+
         // Relaties
         public ICollection<VerhuurAanvraag> BehandeldeAanvragen { get; set; }
     }

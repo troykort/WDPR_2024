@@ -33,19 +33,6 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             return Ok(bedrijven);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateBedrijf(Bedrijf nieuwBedrijf)
-        {
-            try
-            {
-                await _bedrijfService.AddBedrijfAsync(nieuwBedrijf);
-                return Ok("Bedrijf succesvol aangemaakt.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBedrijf(int id, Bedrijf bijgewerktBedrijf)

@@ -30,17 +30,17 @@ const Register = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:5000/api/klanten/register', {
+            const response = await fetch('http://localhost:5000/api/auth/register/particulier', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    naam: formData.naam,
-                    adres: formData.adres,
-                    telefoonnummer: formData.telefoonnummer,
-                    email: formData.email,
-                    password: formData.password
+                    Naam: formData.naam,
+                    Adres: formData.adres,
+                    Telefoonnummer: formData.telefoonnummer,
+                    Email: formData.email,
+                    Password: formData.password
                 }),
             });
 

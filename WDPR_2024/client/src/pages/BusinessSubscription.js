@@ -11,7 +11,7 @@ const BusinessSubscription = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:5000/api/bedrijven/register', {
+            const response = await fetch('http://localhost:5000/api/auth/register/zakelijk', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

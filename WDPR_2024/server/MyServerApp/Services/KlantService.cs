@@ -1,8 +1,9 @@
-﻿using WDPR_2024.server.MyServerApp.Data;
+﻿using Microsoft.AspNetCore.Identity;
+using WDPR_2024.server.MyServerApp.Data;
 using WDPR_2024.server.MyServerApp.Models;
-using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using WDPR_2024.server.MyServerApp.DtoModels;
 
 namespace WDPR_2024.server.MyServerApp.Services
@@ -10,11 +11,14 @@ namespace WDPR_2024.server.MyServerApp.Services
     public class KlantService
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public KlantService(AppDbContext context)
+        public KlantService(AppDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
+
         // Haal alle klanten op basis van emaildomein
         public async Task<List<Klant>> GetKlantenByEmailDomainAsync(string emailDomain)
         {
@@ -34,9 +38,7 @@ namespace WDPR_2024.server.MyServerApp.Services
         // Haal alle klanten op
         public async Task<List<Klant>> GetAlleKlantenAsync()
         {
-            return await _context.Klanten
-                .Include(k => k.Bedrijf)
-                .ToListAsync();
+            return await _context.Klanten.Include(k => k.Bedrijf).ToListAsync();
         }
 
         // Controleer of een e-mailadres al is geregistreerd
@@ -77,6 +79,25 @@ namespace WDPR_2024.server.MyServerApp.Services
                 }
             }
 
+            // Maak een Identity-gebruiker
+            var user = new ApplicationUser
+            {
+                UserName = nieuweKlant.Email,
+                Email = nieuweKlant.Email,
+                EmailConfirmed = true
+            };
+
+            var result = await _userManager.CreateAsync(user, nieuweKlant.Wachtwoord);
+            if (!result.Succeeded)
+            {
+                throw new Exception("Fout bij het aanmaken van de gebruiker.");
+            }
+
+            // Wijs een standaardrol toe
+            var role = nieuweKlant.BedrijfID.HasValue ? "Zakelijk" : "Particulier";
+            await _userManager.AddToRoleAsync(user, role);
+
+            // Koppel Identity-gebruiker aan Klant-model
             _context.Klanten.Add(nieuweKlant);
             await _context.SaveChangesAsync();
         }
@@ -101,29 +122,15 @@ namespace WDPR_2024.server.MyServerApp.Services
             var klant = await _context.Klanten.FindAsync(id);
             if (klant == null) throw new Exception("Klant niet gevonden.");
 
+            var user = await _userManager.FindByEmailAsync(klant.Email);
+            if (user != null)
+            {
+                await _userManager.DeleteAsync(user);
+            }
+
             _context.Klanten.Remove(klant);
             await _context.SaveChangesAsync();
         }
-
-        // Authenticeer een klant (voor login)
- public async Task<KlantDto> AuthenticateKlantAsync(KlantDto klantDto)
-{
-    // Retrieve the user by email
-    var klant = await GetKlantByEmailAsync(klantDto.Email);
-    if (klant == null || klantDto.Password != klant.Wachtwoord) // Plaintext comparison
-    {
-        throw new UnauthorizedAccessException("Invalid email or password.");
-    }
-    
-    // Return only the safe data in KlantDto
-    return new KlantDto
-    {
-        KlantID = klant.KlantID,
-        Email = klant.Email
-        
-    };
-}
-
 
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WDPR_2024.server.MyServerApp.Data;
 using WDPR_2024.server.MyServerApp.Models;
@@ -12,10 +13,14 @@ namespace WDPR_2024.server.MyServerApp.Services
     public class BedrijfService
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public BedrijfService(AppDbContext context)
+        public BedrijfService(AppDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // Haal een bedrijf op met medewerkers en abonnement
@@ -49,7 +54,42 @@ namespace WDPR_2024.server.MyServerApp.Services
                 throw new Exception("Een bedrijf met dit KVK-nummer bestaat al.");
             }
 
+            // Voeg het bedrijf toe aan de database
             _context.Bedrijven.Add(nieuwBedrijf);
+            await _context.SaveChangesAsync();
+        }
+
+        // Voeg een medewerker toe aan een bedrijf
+        public async Task AddMedewerkerToBedrijfAsync(int bedrijfId, Klant nieuweMedewerker)
+        {
+            var bedrijf = await GetBedrijfByIdAsync(bedrijfId);
+            if (bedrijf == null) throw new Exception("Bedrijf niet gevonden.");
+
+            // Controleer of de e-mail domein overeenkomt
+            if (!nieuweMedewerker.Email.EndsWith($"@{bedrijf.EmailDomein}"))
+            {
+                throw new Exception("Het e-mailadres komt niet overeen met het e-maildomein van het bedrijf.");
+            }
+
+            // Voeg de medewerker toe
+            nieuweMedewerker.BedrijfID = bedrijfId;
+            _context.Klanten.Add(nieuweMedewerker);
+
+            // Maak een Identity-gebruiker aan
+            var user = new ApplicationUser
+            {
+                UserName = nieuweMedewerker.Email,
+                Email = nieuweMedewerker.Email,
+                EmailConfirmed = true
+            };
+
+            var result = await _userManager.CreateAsync(user, nieuweMedewerker.Wachtwoord);
+            if (!result.Succeeded)
+            {
+                throw new Exception("Fout bij het aanmaken van de medewerker.");
+            }
+
+            await _userManager.AddToRoleAsync(user, "Zakelijk");
             await _context.SaveChangesAsync();
         }
 
@@ -66,11 +106,21 @@ namespace WDPR_2024.server.MyServerApp.Services
             await _context.SaveChangesAsync();
         }
 
-        // Verwijder een bedrijf
+        // Verwijder een bedrijf en bijbehorende medewerkers
         public async Task DeleteBedrijfAsync(int id)
         {
             var bedrijf = await GetBedrijfByIdAsync(id);
             if (bedrijf == null) throw new Exception("Bedrijf niet gevonden.");
+
+            // Verwijder Identity-gebruikers van medewerkers
+            foreach (var medewerker in bedrijf.Medewerkers)
+            {
+                var user = await _userManager.FindByEmailAsync(medewerker.Email);
+                if (user != null)
+                {
+                    await _userManager.DeleteAsync(user);
+                }
+            }
 
             _context.Bedrijven.Remove(bedrijf);
             await _context.SaveChangesAsync();

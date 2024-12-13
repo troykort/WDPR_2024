@@ -4,12 +4,12 @@ import './BusinessRegister.css';
 
 const BusinessRegister = () => {
 const [formData, setFormData] = useState({
-bedrijfsnaam: '',
-        adres: '',
-        kvknummer: '',
-        emailDomein: '',
-        contactEmail: '',
-        password: '',
+        Bedrijfsnaam: '',
+        Adres: '',
+        Kvknummer: '',
+        EmailDomein: '',
+        ContactEmail: '',
+        Password: '',
         confirmPassword: ''
     });
 

@@ -16,10 +16,10 @@ namespace WDPR_2024.server.MyServerApp.Data
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var logger = serviceProvider.GetRequiredService<ILogger<SeedData>>();
 
-            // Rollen die nodig zijn
-            string[] roles = { "Backoffice", "Frontoffice", "Wagenparkbeheerder", "Abonnementbeheerder", "Klant" };
+            // Define roles
+            string[] roles = { "Backoffice", "Frontoffice", "Wagenparkbeheerder", "Abonnementbeheerder", "Particulier", "Zakelijk" };
 
-            // Creëer de rollen als ze nog niet bestaan
+            // Ensure all roles exist
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -29,8 +29,8 @@ namespace WDPR_2024.server.MyServerApp.Data
                 }
             }
 
-            // Voeg een standaardgebruiker toe voor Backoffice
-            var defaultUserEmail = "Dlamericaan@gmail.com";
+            // Add default Backoffice user
+            var defaultUserEmail = "backoffice@example.com";
             var defaultUser = await userManager.FindByEmailAsync(defaultUserEmail);
             if (defaultUser == null)
             {
@@ -41,7 +41,7 @@ namespace WDPR_2024.server.MyServerApp.Data
                     EmailConfirmed = true
                 };
 
-                var result = await userManager.CreateAsync(user, "Admin@123");
+                var result = await userManager.CreateAsync(user, "Backoffice@123");
                 if (result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(user, "Backoffice");
@@ -61,38 +61,32 @@ namespace WDPR_2024.server.MyServerApp.Data
             }
         }
 
-        // Functie om de rol van een gebruiker te wijzigen
+        // Update user role utility
         public static async Task UpdateUserRole(IServiceProvider serviceProvider, string userEmail, string newRole)
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             var logger = serviceProvider.GetRequiredService<ILogger<SeedData>>();
 
-            // Controleer of de opgegeven rol bestaat
-            var roleExists = await roleManager.RoleExistsAsync(newRole);
-            if (!roleExists)
+            if (!await roleManager.RoleExistsAsync(newRole))
             {
-                throw new Exception($"Rol '{newRole}' bestaat niet.");
+                throw new Exception($"Role '{newRole}' does not exist.");
             }
 
-            // Vind de gebruiker op basis van e-mail
             var user = await userManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
-                throw new Exception("Gebruiker niet gevonden.");
+                throw new Exception($"User with email '{userEmail}' not found.");
             }
 
-            // Verwijder de gebruiker uit alle rollen
             var currentRoles = await userManager.GetRolesAsync(user);
             foreach (var role in currentRoles)
             {
                 await userManager.RemoveFromRoleAsync(user, role);
             }
 
-            // Voeg de gebruiker toe aan de nieuwe rol
             await userManager.AddToRoleAsync(user, newRole);
             logger.LogInformation($"User '{userEmail}' role updated to '{newRole}'.");
         }
     }
 }
-

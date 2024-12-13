@@ -12,7 +12,7 @@ const Header = () => {
     };
 
     return (
-        <Header className="header">
+        <div className="header">
             <div className="logo">
                 <img src={logo} alt="Logo" />
              
@@ -25,7 +25,7 @@ const Header = () => {
                 <button onClick={() => navigate("/profiel")}>Profiel</button>
             </div>
             <NotificationButton />
-        </Header>
+        </div>
     );
 };
 
