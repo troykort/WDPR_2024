@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 function Login() {
-    // State for handling input fields
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = async () => {
@@ -28,27 +28,23 @@ function Login() {
             localStorage.setItem('klantDto', JSON.stringify(data));
 
             alert(`Login successful. Welcome, ${data.name}`);
-            navigate('/dashboard'); // Navigate to dashboard or another page
+            navigate('/dashboard');
         } catch (error) {
             alert('An error occurred during login: ' + error.message);
         }
     };
 
     const handleBack = () => {
-        navigate('/'); // Navigate to the home page
+        navigate('/');
     };
 
     return (
         <div className="login-page">
-            <div>
-            </div>
-
-            {/* Login Section */}
             <div className="login-section">
                 <div className="login-box">
                     <h1>Login Page</h1>
                     <div className="form-group">
-                        <label htmlFor="email" style={{ color: '#5E0639' }}>Email Address</label>
+                        <label htmlFor="email">Email Address</label>
                         <input
                             type="email"
                             id="email"
@@ -58,31 +54,32 @@ function Login() {
                         />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password" style={{ color: '#5E0639' }}>Password</label>
-                        <input
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="Enter your password"
-                        />
+                        <label htmlFor="password">Password</label>
+                        <div className="password-container">
+                            <input
+                                type={showPassword ? 'text' : 'password'}
+                                id="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Enter your password"
+                            />
+                            <button
+                                type="button"
+                                className="toggle-password-btn"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? '🙉' : '🙈'}
+                            </button>
+                        </div>
                     </div>
                     <div className="button-group">
-                        <button onClick={handleBack} className="btn back-btn">
-                            Back
-                        </button>
-                        <button onClick={handleLogin} className="btn login-btn">
-                            Login
-                        </button>
+                        <button onClick={handleBack} className="btn back-btn">Back</button>
+                        <button onClick={handleLogin} className="btn login-btn">Login</button>
                     </div>
                 </div>
-            </div>
-            <div>
             </div>
         </div>
     );
 }
 
 export default Login;
-
-
