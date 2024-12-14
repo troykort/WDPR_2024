@@ -39,8 +39,8 @@ const App = () => {
     return (
         <Router>
             <div className="app-container">
-                <HeaderWPB />
-                {/*<Navbar />*/}
+                {/*<HeaderWPB />*/}
+                <Navbar />
                 <div className="main-content">
                     <Routes>
                         <Route path="/" element={<MainPage />} />

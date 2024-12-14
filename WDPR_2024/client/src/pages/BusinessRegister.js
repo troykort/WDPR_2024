@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 import './BusinessRegister.css';
 
 const BusinessRegister = () => {
 const [formData, setFormData] = useState({
-        Bedrijfsnaam: '',
+Bedrijfsnaam: '',
         Adres: '',
         Kvknummer: '',
         EmailDomein: '',
@@ -17,9 +17,9 @@ const navigate = useNavigate();
 const location = useLocation();
 
 const handleChange = (e) => {
-const { name, value } = e.target;
-setFormData({
-    ...formData,
+    const { name, value } = e.target;
+    setFormData({
+        ...formData,
             [name]: value
         });
     };
@@ -32,6 +32,23 @@ const handleGoToRegister = () => {
     navigate('/register', { state: { formData } });
 };
 
+const togglePasswordVisibility = () => {
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const icon = document.querySelector('.password-toggle-icon');
+    if (passwordInput.type === 'password')
+    {
+        passwordInput.type = 'text';
+        confirmPasswordInput.type = 'text';
+        icon.textContent = '🙉';
+    }
+    else
+    {
+        passwordInput.type = 'password';
+        confirmPasswordInput.type = 'password';
+        icon.textContent = '🙈';
+    }
+};
 
 return (
 
@@ -66,7 +83,7 @@ return (
                         />
                     </ div >
                     < div >
-                        < label htmlFor = "kvknummer" > KVK-nummer </ label >
+                        < label htmlFor = "kvknummer" > KVK - nummer </ label >
                         < input
                             type = "text"
                             id = "kvknummer"
@@ -78,7 +95,7 @@ return (
                         />
                     </ div >
                     < div >
-                        < label htmlFor = "emailDomein" > E-maildomein </ label >
+                        < label htmlFor = "emailDomein" > E - maildomein </ label >
                         < input
                             type = "text"
                             id = "emailDomein"
@@ -90,7 +107,7 @@ return (
                         />
                     </ div >
                     < div >
-                        < label htmlFor = "contactEmail" > Contact e-mailadres </ label >
+                        < label htmlFor = "contactEmail" > Contact e - mailadres </ label >
                         < input
                             type = "email"
                             id = "contactEmail"
@@ -112,6 +129,12 @@ return (
     placeholder = "Voer uw wachtwoord in"
                             required
                         />
+                        < span
+                            className = "password-toggle-icon"
+                            onClick ={ togglePasswordVisibility}
+                        >
+                            🙈
+                        </ span >
                     </ div >
                     < div >
                         < label htmlFor = "confirmPassword" > Herhaal Wachtwoord </ label >
@@ -137,4 +160,3 @@ return (
 };
 
 export default BusinessRegister;
-

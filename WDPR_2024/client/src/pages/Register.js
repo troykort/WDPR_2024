@@ -62,11 +62,26 @@ const Register = () => {
         navigate('/');
     };
 
+    const togglePasswordVisibility = () => {
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const icon = document.querySelector('.password-toggle-icon');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            confirmPasswordInput.type = 'text';
+            icon.textContent = '🙉';
+        } else {
+            passwordInput.type = 'password';
+            confirmPasswordInput.type = 'password';
+            icon.textContent = '🙈';
+        }
+    };
+
     return (
         <div className="register-page">
             <form onSubmit={handleSubmit}>
                 <h2>Registreer</h2>
-                <p>Registreren voor particuliere & zakelijk klanten.</p>
+                <p>Registreren voor particuliere & zakelijke klanten.</p>
                 <div>
                     <label htmlFor="naam">Naam</label>
                     <input
@@ -126,6 +141,12 @@ const Register = () => {
                         placeholder="Voer uw wachtwoord in"
                         required
                     />
+                    <span
+                        className="password-toggle-icon"
+                        onClick={togglePasswordVisibility}
+                    >
+                        🙈
+                    </span>
                 </div>
                 <div>
                     <label htmlFor="confirmPassword">Herhaal Wachtwoord</label>
