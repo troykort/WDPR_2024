@@ -9,10 +9,13 @@ import Login from './pages/Login';
 import './App.css';
 import HeaderWPB from './components/HeaderWPB';
 import HeaderABO from './components/HeaderABO';
+import HeaderParticulier from './components/HeaderParticulier'; // Zorg ervoor dat deze component bestaat
 import ManageCompanyEmployees from './pages/ManageBedrijfsMedewerkers';
 import VoertuigOverzichtPage from './pages/VoertuigOverzichtPage';
 import DashboardWPB from './pages/DashboardWPB';
 import DashboardABO from './pages/DashboardABO'; // Zorg ervoor dat deze pagina bestaat
+import DashboardParticulier from './pages/DashboardParticulier'; // Zorg ervoor dat deze pagina bestaat
+import Voertuigverhuur from './pages/Voertuigverhuur';
 import StatistiekenWPB from './pages/StatistiekenWPB';
 import ProfielWPB from './pages/ProfielWPB';
 import Privacybeleid from './pages/Privacybeleid';
@@ -56,10 +59,12 @@ const App = () => {
     const location = useLocation();
     const isDashboardWPB = location.pathname.startsWith('/dashboardwpb') || location.pathname.startsWith('/medewerkers') || location.pathname.startsWith('/voertuigoverzicht') || location.pathname.startsWith('/statistieken') || location.pathname.startsWith('/profiel');
     const isDashboardABO = location.pathname.startsWith('/dashboardabo');
+    const isDashboardParticulier = location.pathname.startsWith('/dashboardparticulier');
+    const isVoertuigverhuur = location.pathname.startsWith('/voertuigverhuur');
 
     return (
         <div className="app-container">
-            {!isDashboardWPB && !isDashboardABO && <Navbar />}
+            {!isDashboardWPB && !isDashboardABO && !isDashboardParticulier && !isVoertuigverhuur && <Navbar />}
             <div className="main-content">
                 <Routes>
                     <Route path="/" element={<MainPage />} />
@@ -104,6 +109,18 @@ const App = () => {
                             <DashboardABO />
                         </ProtectedRoute>
                     } />
+                    <Route path="/dashboardparticulier" element={
+                        <ProtectedRoute allowedRoles={["Particulier"]}>
+                            <HeaderParticulier />
+                            <DashboardParticulier />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/voertuigverhuur" element={
+                        <ProtectedRoute allowedRoles={["Particulier"]}>
+                            <HeaderParticulier />
+                            <Voertuigverhuur />
+                        </ProtectedRoute>
+                    } />
                     <Route path="/privacybeleid" element={<Privacybeleid />} />
                     <Route path="/unauthorized" element={<h2>Toegang geweigerd</h2>} />
                 </Routes>
@@ -120,4 +137,5 @@ const AppWrapper = () => (
 );
 
 export default AppWrapper;
+
 

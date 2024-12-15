@@ -48,7 +48,7 @@ function Login() {
                     navigate('/abonnementbeheerder-dashboard');
                     break;
                 case 'Particulier':
-                    navigate('/abonnementbeheerder-dashboard');
+                    navigate('/dashboardparticulier');
                     break;
                 case 'Frontoffice':
                     navigate('/frontoffice-dashboard');

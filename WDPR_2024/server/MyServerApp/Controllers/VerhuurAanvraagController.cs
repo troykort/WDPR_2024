@@ -12,12 +12,12 @@ namespace WDPR_2024.server.MyServerApp.Controllers
     public class VerhuurAanvraagController : ControllerBase
     {
         private readonly VerhuurAanvraagService _aanvraagService;
-        private readonly EmailService _emailService; 
+        private readonly EmailService _emailService;
 
         public VerhuurAanvraagController(VerhuurAanvraagService aanvraagService, EmailService emailService)
         {
             _aanvraagService = aanvraagService;
-            _emailService = emailService; 
+            _emailService = emailService;
         }
 
         // 1. GET: Haal een specifieke aanvraag op
@@ -100,6 +100,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             return Ok(aanvragen);
         }
 
+        // 6. GET: Haal verhuurde voertuigen op
         [Authorize(Roles = "Wagenparkbeheerder")]
         [HttpGet("verhuurd")]
         public async Task<IActionResult> GetVerhuurdeVoertuigen([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] string? voertuigType, [FromQuery] string? huurderNaam)
@@ -108,5 +109,29 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             return Ok(verhuurAanvragen);
         }
 
+        // 7. GET: Haal beschikbare voertuigen op
+        [HttpGet("beschikbaar")]
+        public async Task<IActionResult> GetBeschikbareVoertuigen([FromQuery] string type, [FromQuery] DateTime? startDatum, [FromQuery] DateTime? eindDatum)
+        {
+            var beschikbareVoertuigen = await _aanvraagService.GetBeschikbareVoertuigenAsync(type, startDatum, eindDatum);
+            return Ok(beschikbareVoertuigen);
+        }
+
+        // 8. GET: Haal details van een voertuig op
+        [HttpGet("voertuig/{voertuigID}")]
+        public async Task<IActionResult> GetVoertuigDetails(int voertuigID)
+        {
+            var voertuig = await _aanvraagService.GetVoertuigDetailsAsync(voertuigID);
+            if (voertuig == null) return NotFound("Voertuig niet gevonden.");
+            return Ok(voertuig);
+        }
+
+        // 9. GET: Controleer beschikbaarheid van een voertuig
+        [HttpGet("beschikbaarheid/{voertuigID}")]
+        public async Task<IActionResult> CheckBeschikbaarheid(int voertuigID, [FromQuery] DateTime startDatum, [FromQuery] DateTime eindDatum)
+        {
+            var beschikbaar = await _aanvraagService.IsVoertuigBeschikbaarAsync(voertuigID, startDatum, eindDatum);
+            return Ok(new { Beschikbaar = beschikbaar });
+        }
     }
 }

@@ -78,6 +78,7 @@ namespace WDPR_2024.server.MyServerApp.Services
                 .ToListAsync();
         }
 
+        // Haal verhuurde voertuigen op met filters
         public async Task<List<VerhuurAanvraag>> GetVerhuurdeVoertuigenAsync(DateTime? startDate, DateTime? endDate, string? voertuigType, string? huurderNaam)
         {
             var query = _context.VerhuurAanvragen
@@ -98,5 +99,39 @@ namespace WDPR_2024.server.MyServerApp.Services
             return await query.ToListAsync();
         }
 
+        // Haal alle beschikbare voertuigen op basis van type en datums
+        public async Task<List<Voertuig>> GetBeschikbareVoertuigenAsync(string type, DateTime startDatum, DateTime eindDatum)
+        {
+            var voertuigen = await _context.Voertuigen
+                .Where(v => v.TypeVoertuig == type && v.Status == "Beschikbaar")
+                .ToListAsync();
+
+            var verhuurdeVoertuigen = await _context.VerhuurAanvragen
+                .Where(a => a.Status == "Verhuurd" &&
+                            a.StartDatum < eindDatum && a.EindDatum > startDatum)
+                .Select(a => a.VoertuigID)
+                .ToListAsync();
+
+            return voertuigen.Where(v => !verhuurdeVoertuigen.Contains(v.VoertuigID)).ToList();
+        }
+
+        // Controleer beschikbaarheid van een voertuig
+        public async Task<bool> IsVoertuigBeschikbaarAsync(int voertuigId, DateTime startDatum, DateTime eindDatum)
+        {
+            var overlappendeAanvragen = await _context.VerhuurAanvragen
+                .Where(a => a.VoertuigID == voertuigId &&
+                            a.Status == "Verhuurd" &&
+                            a.StartDatum < eindDatum &&
+                            a.EindDatum > startDatum)
+                .ToListAsync();
+
+            return !overlappendeAanvragen.Any();
+        }
+
+        // Haal details van een voertuig op basis van ID
+        public async Task<Voertuig> GetVoertuigDetailsAsync(int voertuigId)
+        {
+            return await _context.Voertuigen.FirstOrDefaultAsync(v => v.VoertuigID == voertuigId);
+        }
     }
 }

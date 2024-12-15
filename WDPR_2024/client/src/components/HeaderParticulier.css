@@ -1,0 +1,38 @@
+﻿.headerparticulier {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #F2EBDB;
+    color: #5E0639;
+    border-bottom: 2px solid #4c1a2a;
+}
+
+.headerparticulier-left {
+    display: flex;
+    align-items: center;
+}
+
+.headerparticulier-logo {
+    height: 100px;
+}
+
+.headerparticulier-right {
+    display: flex;
+    align-items: center;
+}
+
+.headerparticulier-button {
+    text-decoration: none;
+    margin-left: 20px;
+    padding: 10px 20px;
+    background-color: #5E0639;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    .headerparticulier-button:hover {
+        background-color: #3e0426;
+    }

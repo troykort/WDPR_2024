@@ -1,0 +1,74 @@
+﻿.voertuigen-en-huur-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.voertuigen-en-huur-page {
+    background-color: #F2EBDB;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 80%; /* Maak de div iets kleiner */
+    max-width: 800px; /* Stel een maximale breedte in */
+    text-align: center; /* Zet de tekst in het midden */
+}
+
+.filters {
+    display: flex;
+    justify-content: center; /* Zet de filters in het midden */
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.voertuigen-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center; /* Zet de voertuigen in het midden */
+}
+
+.voertuig-card {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    width: 200px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+    .voertuig-card.selected {
+        background-color: #e0e0e0;
+        transform: scale(1.05);
+    }
+
+.voertuig-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
+
+.voertuig-details {
+    padding: 10px;
+}
+
+.submit-button, .load-more-button, .reset-button {
+    background-color: #4c1a2a;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;
+    margin: 20px auto; /* Zet de knop in het midden */
+}
+
+    .submit-button:hover, .load-more-button:hover, .reset-button:hover {
+        background-color: #3a1420;
+    }
