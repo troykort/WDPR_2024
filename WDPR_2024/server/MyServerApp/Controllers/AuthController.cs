@@ -34,7 +34,6 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
-
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
@@ -73,7 +72,6 @@ namespace WDPR_2024.server.MyServerApp.Controllers
 
             try
             {
-               
                 var nieuweKlant = new Klant
                 {
                     Naam = model.Naam,
@@ -94,7 +92,6 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 return BadRequest($"Error during registration: {ex.Message}");
             }
         }
-
 
         [HttpPost("register/zakelijk")]
         public async Task<IActionResult> RegisterZakelijk([FromBody] RegisterZakelijkModel model)

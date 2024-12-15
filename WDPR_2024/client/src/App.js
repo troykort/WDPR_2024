@@ -1,17 +1,27 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import BusinessRegister from './pages/BusinessRegister';
-import BusinessSubscription from './pages/BusinessSubscription'; // Import the new component
+import BusinessSubscription from './pages/BusinessSubscription';
 import Login from './pages/Login';
 import './App.css';
 import HeaderWPB from './components/HeaderWPB';
 import ManageCompanyEmployees from './pages/ManageBedrijfsMedewerkers';
 import VoertuigOverzichtPage from './pages/VoertuigOverzichtPage';
+import DashboardWPB from './pages/DashboardWPB';
+import StatistiekenWPB from './pages/StatistiekenWPB';
+import ProfielWPB from './pages/ProfielWPB';
+import Privacybeleid from './pages/Privacybeleid';
 
 const MainPage = () => {
+    const navigate = useNavigate();
+
+    const handleGoToDashboardWPB = () => {
+        navigate('/dashboardwpb');
+    };
+
     return (
         <div className="main-page">
             <h1>Welkom bij Rent-IT!</h1>
@@ -31,37 +41,46 @@ const MainPage = () => {
                     <p>Bekijk ons aanbod van campers.</p>
                 </div>
             </div>
+            <button onClick={handleGoToDashboardWPB} className="btn dashboardwpb-btn" style={{ marginTop: '20px', backgroundColor: '#4c1a2a', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                Ga naar Dashboard WPB
+            </button>
         </div>
     );
 };
 
 const App = () => {
+    const location = useLocation();
+    const isDashboardWPB = location.pathname.startsWith('/dashboardwpb') || location.pathname.startsWith('/medewerkers') || location.pathname.startsWith('/voertuigoverzicht') || location.pathname.startsWith('/statistieken') || location.pathname.startsWith('/profiel');
+
     return (
-        <Router>
-            <div className="app-container">
-                {/*<HeaderWPB />*/}
-                <Navbar />
-                <div className="main-content">
-                    <Routes>
-                        <Route path="/" element={<MainPage />} />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/business-register" element={<BusinessRegister />}>
-                            <Route path="subscriptions" element={<BusinessSubscription />} />
-                        </Route>
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/medewerkers" element={<ManageCompanyEmployees />} />
-                        <Route path="/voertuigoverzicht" element={<VoertuigOverzichtPage />} />
-                    </Routes>
-                </div>
-                <Footer />
+        <div className="app-container">
+            {!isDashboardWPB && <Navbar />}
+            <div className="main-content">
+                <Routes>
+                    <Route path="/" element={<MainPage />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/business-register" element={<BusinessRegister />}>
+                        <Route path="subscriptions" element={<BusinessSubscription />} />
+                    </Route>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/medewerkers" element={<><HeaderWPB /><ManageCompanyEmployees /></>} />
+                    <Route path="/voertuigoverzicht" element={<><HeaderWPB /><VoertuigOverzichtPage /></>} />
+                    <Route path="/dashboardwpb" element={<><HeaderWPB /><DashboardWPB /></>} />
+                    <Route path="/statistieken" element={<><HeaderWPB /><StatistiekenWPB /></>} />
+                    <Route path="/profiel" element={<><HeaderWPB /><ProfielWPB /></>} />
+                    <Route path="/privacybeleid" element={<Privacybeleid />} />
+                </Routes>
             </div>
-        </Router>
+            <Footer />
+        </div>
     );
 };
 
-export default App;
+const AppWrapper = () => (
+    <Router>
+        <App />
+    </Router>
+);
 
-
-
-
+export default AppWrapper;
 

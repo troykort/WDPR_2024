@@ -4,9 +4,11 @@ import "./ManageBedrijfsMedewerkers.css";
 
 const EmployeePage = () => {
     const [employees, setEmployees] = useState([]);
+    const [filteredEmployees, setFilteredEmployees] = useState([]);
     const [domain, setDomain] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [filter, setFilter] = useState("");
 
     // Haal het domein van de wagenparkbeheerder op
     useEffect(() => {
@@ -46,6 +48,7 @@ const EmployeePage = () => {
                         }
                     );
                     setEmployees(response.data);
+                    setFilteredEmployees(response.data);
                 } catch (err) {
                     console.error("Error fetching employees:", err);
                     setError("Kan medewerkers niet ophalen. Probeer opnieuw.");
@@ -74,6 +77,7 @@ const EmployeePage = () => {
                     },
                 });
                 setEmployees((prev) => [...prev, nieuweMedewerker]);
+                setFilteredEmployees((prev) => [...prev, nieuweMedewerker]);
                 alert("Medewerker toegevoegd!");
             } catch (err) {
                 console.error("Error adding employee:", err);
@@ -97,6 +101,7 @@ const EmployeePage = () => {
                         },
                     });
                     setEmployees((prev) => prev.filter((e) => e.email !== email));
+                    setFilteredEmployees((prev) => prev.filter((e) => e.email !== email));
                     alert("Medewerker verwijderd!");
                 } else {
                     alert("Medewerker niet gevonden.");
@@ -107,6 +112,15 @@ const EmployeePage = () => {
             }
         }
     };
+
+    // Filter medewerkers
+    useEffect(() => {
+        setFilteredEmployees(
+            employees.filter((employee) =>
+                employee.email.toLowerCase().includes(filter.toLowerCase())
+            )
+        );
+    }, [filter, employees]);
 
     // Laadstatus en foutmeldingen weergeven
     if (loading) return <p>Gegevens laden...</p>;
@@ -119,9 +133,16 @@ const EmployeePage = () => {
                 <button className="toevoegen-button" onClick={addEmployee}>
                     Toevoegen
                 </button>
+                <input
+                    type="text"
+                    placeholder="Filter medewerkers"
+                    value={filter}
+                    onChange={(e) => setFilter(e.target.value)}
+                    className="filter-input"
+                />
             </div>
             <div className="employee-list">
-                {employees.map((employee) => (
+                {filteredEmployees.map((employee) => (
                     <div key={employee.email} className="employee-item">
                         <span>{employee.email}</span>
                         <button onClick={() => removeEmployee(employee.email)}>

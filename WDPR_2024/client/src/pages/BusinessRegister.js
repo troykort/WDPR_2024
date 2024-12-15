@@ -4,12 +4,12 @@ import './BusinessRegister.css';
 
 const BusinessRegister = () => {
 const [formData, setFormData] = useState({
-Bedrijfsnaam: '',
-        Adres: '',
-        Kvknummer: '',
-        EmailDomein: '',
-        ContactEmail: '',
-        Password: '',
+bedrijfsnaam: '',
+        adres: '',
+        kvkNummer: '',
+        emailDomein: '',
+        contactEmail: '',
+        password: '',
         confirmPassword: ''
     });
 
@@ -83,12 +83,12 @@ return (
                         />
                     </ div >
                     < div >
-                        < label htmlFor = "kvknummer" > KVK - nummer </ label >
+                        < label htmlFor = "kvkNummer" > KVK - nummer </ label >
                         < input
                             type = "text"
-                            id = "kvknummer"
-                            name = "kvknummer"
-                            value ={ formData.kvknummer}
+                            id = "kvkNummer"
+                            name = "kvkNummer"
+                            value ={ formData.kvkNummer}
     onChange ={ handleChange}
     placeholder = "Voer uw kvknummer in"
                             required

@@ -6,10 +6,10 @@ const Footer = () => {
     return (
         <footer className="footer">
             <nav className="footer-nav">
-                <Link to="/contact" className="footer-button">Privacybeleid</Link>
-                <Link to="/about" className="footer-button">Veelgestelde vragen (FAQ)</Link>
-                <Link to="/voertuigen" className="footer-button">Algemene voorwaarden</Link>
-                <Link to="/abonnementen" className="footer-button">Support</Link>
+                <Link to="/privacybeleid" className="footer-button">Privacybeleid</Link>
+                <Link to="/faq" className="footer-button">Veelgestelde vragen (FAQ)</Link>
+                <Link to="/algemene-voorwaarden" className="footer-button">Algemene voorwaarden</Link>
+                <Link to="/support" className="footer-button">Support</Link>
             </nav>
             <div className="footer-info">
                 <p>&copy; 2024 CarAndAll. All rights reserved.</p>
@@ -19,3 +19,5 @@ const Footer = () => {
 };
 
 export default Footer;
+
+

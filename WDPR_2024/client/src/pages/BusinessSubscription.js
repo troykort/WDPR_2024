@@ -7,9 +7,7 @@ const BusinessSubscription = () => {
     const navigate = useNavigate();
     const { formData } = location.state || {};
 
-    const handleSubmit = async (e, subscriptionType) => {
-        e.preventDefault();
-
+    const handleSubmit = async (subscriptionType) => {
         try {
             const response = await fetch('http://localhost:5000/api/auth/register/zakelijk', {
                 method: 'POST',
@@ -46,14 +44,14 @@ const BusinessSubscription = () => {
                     <h3 style={{ marginBottom: '5px' }}>Prepaid</h3>
                     <p style={{ marginTop: '5px' }}>Kies voor een prepaid abonnement en betaal vooraf voor uw diensten.</p>
                     <div className="button-group">
-                        <button type="button" onClick={(e) => handleSubmit(e, 'prepaid')}>Kies Prepaid</button>
+                        <button type="button" onClick={() => handleSubmit('prepaid')}>Kies Prepaid</button>
                     </div>
                 </div>
                 <div className="subscription-box pay-as-you-go">
                     <h3 style={{ marginBottom: '5px' }}>Pay-as-you-go</h3>
                     <p style={{ marginTop: '5px' }}>Kies voor een pay-as-you-go abonnement en betaal alleen voor wat u gebruikt.</p>
                     <div className="button-group">
-                        <button type="button" onClick={(e) => handleSubmit(e, 'pay-as-you-go')}>Kies Pay-as-you-go</button>
+                        <button type="button" onClick={() => handleSubmit('pay-as-you-go')}>Kies Pay-as-you-go</button>
                     </div>
                 </div>
             </div>
@@ -66,5 +64,3 @@ const BusinessSubscription = () => {
 
 export default BusinessSubscription;
 
-
-                   

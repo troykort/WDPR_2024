@@ -1,0 +1,7 @@
+.privacybeleid-container {
+    background-color: #F2EBDB; /* Achtergrondkleur */
+    padding: 20px; /* Voeg padding toe voor ruimte binnen de container */
+    border-radius: 10px; /* Optioneel: voeg afgeronde hoeken toe */
+    margin: 20px; /* Voeg marge toe voor ruimte buiten de container */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optioneel: voeg een schaduw toe voor een visueel effect */
+}

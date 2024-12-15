@@ -1,0 +1,45 @@
+.dashboardwpb-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.button-wrapper {
+    background-color: #f5efe0; 
+    padding: 10px; 
+    border-radius: 10px;
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; 
+    margin-top: 20px;
+}
+
+.home-btn, .manage-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4c1a2a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+    .home-btn:hover, .manage-btn:hover {
+        background-color: #7A084B; 
+
+    }
+
+.btn {
+    width: 200px;
+}
+
+.dashboard-description {
+    width: 50%;
+    margin: 20px 0;
+    text-align: center; 
+}

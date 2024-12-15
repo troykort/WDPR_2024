@@ -11,11 +11,14 @@ const Header = () => {
         setNotificationsVisible(!notificationsVisible);
     };
 
+    const handleLogoClick = () => {
+        navigate("/dashboardwpb");
+    };
+
     return (
         <div className="header">
-            <div className="logo">
+            <div className="logo" onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
                 <img src={logo} alt="Logo" />
-             
             </div>
             <h1>Wagenparkbeheerder Dashboard</h1>
             <div className="nav-buttons">
@@ -30,3 +33,5 @@ const Header = () => {
 };
 
 export default Header;
+
+
