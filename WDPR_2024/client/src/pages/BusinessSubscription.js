@@ -25,7 +25,7 @@ const BusinessSubscription = () => {
 
             const data = await response.json();
             alert(`Registratie succesvol. Welkom, ${data.bedrijfsnaam}`);
-            navigate('/dashboard'); // Navigate to dashboard or another page
+            navigate('/login'); // Navigate to login page after successful registration
         } catch (error) {
             alert('Er is een fout opgetreden tijdens de registratie: ' + error.message);
         }
@@ -63,4 +63,3 @@ const BusinessSubscription = () => {
 };
 
 export default BusinessSubscription;
-

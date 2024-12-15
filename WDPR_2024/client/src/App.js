@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import Register from './pages/Register';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -8,12 +8,16 @@ import BusinessSubscription from './pages/BusinessSubscription';
 import Login from './pages/Login';
 import './App.css';
 import HeaderWPB from './components/HeaderWPB';
+import HeaderABO from './components/HeaderABO';
 import ManageCompanyEmployees from './pages/ManageBedrijfsMedewerkers';
 import VoertuigOverzichtPage from './pages/VoertuigOverzichtPage';
 import DashboardWPB from './pages/DashboardWPB';
+import DashboardABO from './pages/DashboardABO'; // Zorg ervoor dat deze pagina bestaat
 import StatistiekenWPB from './pages/StatistiekenWPB';
 import ProfielWPB from './pages/ProfielWPB';
 import Privacybeleid from './pages/Privacybeleid';
+import ProtectedRoute from './components/ProtectedRoute';
+import { getRoleFromToken, getUserIdFromToken } from './utils/authHelpers';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -51,10 +55,11 @@ const MainPage = () => {
 const App = () => {
     const location = useLocation();
     const isDashboardWPB = location.pathname.startsWith('/dashboardwpb') || location.pathname.startsWith('/medewerkers') || location.pathname.startsWith('/voertuigoverzicht') || location.pathname.startsWith('/statistieken') || location.pathname.startsWith('/profiel');
+    const isDashboardABO = location.pathname.startsWith('/dashboardabo');
 
     return (
         <div className="app-container">
-            {!isDashboardWPB && <Navbar />}
+            {!isDashboardWPB && !isDashboardABO && <Navbar />}
             <div className="main-content">
                 <Routes>
                     <Route path="/" element={<MainPage />} />
@@ -63,12 +68,44 @@ const App = () => {
                         <Route path="subscriptions" element={<BusinessSubscription />} />
                     </Route>
                     <Route path="/login" element={<Login />} />
-                    <Route path="/medewerkers" element={<><HeaderWPB /><ManageCompanyEmployees /></>} />
-                    <Route path="/voertuigoverzicht" element={<><HeaderWPB /><VoertuigOverzichtPage /></>} />
-                    <Route path="/dashboardwpb" element={<><HeaderWPB /><DashboardWPB /></>} />
-                    <Route path="/statistieken" element={<><HeaderWPB /><StatistiekenWPB /></>} />
-                    <Route path="/profiel" element={<><HeaderWPB /><ProfielWPB /></>} />
+                    <Route path="/medewerkers" element={
+                        <ProtectedRoute allowedRoles={["Backoffice", "Abonnementbeheerder"]}>
+                            <HeaderWPB />
+                            <ManageCompanyEmployees />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/voertuigoverzicht" element={
+                        <ProtectedRoute allowedRoles={["Wagenparkbeheerder"]}>
+                            <HeaderWPB />
+                            <VoertuigOverzichtPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/dashboardwpb" element={
+                        <ProtectedRoute allowedRoles={["Wagenparkbeheerder", "Backoffice"]}>
+                            <HeaderWPB />
+                            <DashboardWPB />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/statistieken" element={
+                        <ProtectedRoute allowedRoles={["Wagenparkbeheerder", "Backoffice"]}>
+                            <HeaderWPB />
+                            <StatistiekenWPB />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/profiel" element={
+                        <ProtectedRoute allowedRoles={["Wagenparkbeheerder", "Backoffice", "Particulier", "Frontoffice", "Abonnementbeheerder", "Zakelijk"]}>
+                            <HeaderWPB />
+                            <ProfielWPB />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/dashboardabo" element={
+                        <ProtectedRoute allowedRoles={["Abonnementbeheerder"]}>
+                            <HeaderABO />
+                            <DashboardABO />
+                        </ProtectedRoute>
+                    } />
                     <Route path="/privacybeleid" element={<Privacybeleid />} />
+                    <Route path="/unauthorized" element={<h2>Toegang geweigerd</h2>} />
                 </Routes>
             </div>
             <Footer />

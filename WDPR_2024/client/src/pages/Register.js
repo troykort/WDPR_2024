@@ -52,7 +52,7 @@ const Register = () => {
 
             const data = await response.json();
             alert(`Registratie succesvol. Welkom, ${data.name}`);
-            navigate('/dashboard'); // Navigate to dashboard or another page
+            navigate('/login');
         } catch (error) {
             alert('Er is een fout opgetreden tijdens de registratie: ' + error.message);
         }

@@ -1,5 +1,6 @@
 ﻿import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import './Login.css';
 
 function Login() {
@@ -28,8 +29,37 @@ function Login() {
             }
 
             const data = await response.json();
-            alert(`Login successful. Welcome, ${data.name}`);
-            navigate('/dashboard'); // Navigate to dashboard or another page
+            localStorage.setItem('token', data.token); // Save the token in local storage
+
+            const decodedToken = jwtDecode(data.token);
+            const userRole = decodedToken.role;
+
+            alert(`Login successful`);
+
+            // Navigate to the appropriate page based on the user's role
+            switch (userRole) {
+                case 'Abonnementbeheerder':
+                    navigate('/dashboardabo');
+                    break;
+                case 'Wagenparkbeheerder':
+                    navigate('/dashboardwpb');
+                    break;
+                case 'Zakelijk':
+                    navigate('/abonnementbeheerder-dashboard');
+                    break;
+                case 'Particulier':
+                    navigate('/abonnementbeheerder-dashboard');
+                    break;
+                case 'Frontoffice':
+                    navigate('/frontoffice-dashboard');
+                    break;
+                case 'Backoffice':
+                    navigate('/backoffice-dashboard');
+                    break;
+                default:
+                    navigate('/dashboard'); // Default dashboard for other roles
+                    break;
+            }
         } catch (error) {
             alert('An error occurred during login: ' + error.message);
         }
@@ -106,3 +136,4 @@ function Login() {
 }
 
 export default Login;
+
