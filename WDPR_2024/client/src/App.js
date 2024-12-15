@@ -10,6 +10,7 @@ import './App.css';
 import HeaderWPB from './components/HeaderWPB';
 import ManageCompanyEmployees from './pages/ManageBedrijfsMedewerkers';
 import VoertuigOverzichtPage from './pages/VoertuigOverzichtPage';
+import VerhuurAanvragenPage from './pages/VerhuurAanvragenPage';
 
 const MainPage = () => {
     return (
@@ -51,6 +52,7 @@ const App = () => {
                         <Route path="/login" element={<Login />} />
                         <Route path="/medewerkers" element={<ManageCompanyEmployees />} />
                         <Route path="/voertuigoverzicht" element={<VoertuigOverzichtPage />} />
+                        <Route path="/verhuuraanvragen" element={<VerhuurAanvragenPage />} />
                     </Routes>
                 </div>
                 <Footer />

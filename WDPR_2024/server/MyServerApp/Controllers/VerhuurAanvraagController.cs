@@ -13,11 +13,12 @@ namespace WDPR_2024.server.MyServerApp.Controllers
     {
         private readonly VerhuurAanvraagService _aanvraagService;
         private readonly EmailService _emailService; 
-
-        public VerhuurAanvraagController(VerhuurAanvraagService aanvraagService, EmailService emailService)
+        private readonly NotificatieService _notificatieService;
+        public VerhuurAanvraagController(VerhuurAanvraagService aanvraagService, EmailService emailService, NotificatieService notificatieService)
         {
             _aanvraagService = aanvraagService;
-            _emailService = emailService; 
+            _emailService = emailService;
+            _notificatieService = notificatieService;
         }
 
         // 1. GET: Haal een specifieke aanvraag op
@@ -61,24 +62,46 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         {
             try
             {
+                // Haal de aanvraag op
                 var aanvraag = await _aanvraagService.GetAanvraagByIdAsync(id);
+                if (aanvraag == null)
+                {
+                    return NotFound("Aanvraag niet gevonden.");
+                }
 
-                // Verwerk statusupdate
+                // Update de status van de aanvraag
                 await _aanvraagService.UpdateAanvraagStatusAsync(id, nieuweStatus, opmerkingen);
 
-                // Verstuur een e-mail naar de klant als de aanvraag goedgekeurd is
+                // Maak een notificatie voor de klant
+                var notificatieTitel = nieuweStatus == "Goedgekeurd"
+                    ? "Uw verhuuraanvraag is goedgekeurd!"
+                    : "Uw verhuuraanvraag is afgewezen.";
+
+                var notificatieBericht = nieuweStatus == "Goedgekeurd"
+                    ? "Je aanvraag is goedgekeurd. Je kunt het voertuig ophalen op de afgesproken datum."
+                    : $"Je aanvraag is afgewezen. Opmerkingen: {opmerkingen}";
+
+                var notificatie = new Notificatie
+                {
+                    Titel = notificatieTitel,
+                    Bericht = notificatieBericht,
+                    KlantID = aanvraag.KlantID,
+                    VerzondenOp = DateTime.UtcNow
+                };
+
+                // Voeg de notificatie toe via de NotificatieService
+                await _notificatieService.AddNotificatieAsync(notificatie);
+
+                // Als extra: notificatie voor Backoffice (indien nodig)
                 if (nieuweStatus == "Goedgekeurd")
                 {
-                    var klantEmail = aanvraag.Klant.Email;
-                    var klantSubject = "Je verhuuraanvraag is goedgekeurd!";
-                    var klantBody = $"Je verhuuraanvraag is goedgekeurd! Je kunt het voertuig ophalen op de afgesproken datum. Bedankt voor je reservering!";
-                    await _emailService.SendEmailAsync(klantEmail, klantSubject, klantBody);
-
-                    // Verstuur een e-mail naar de backoffice om hen op de hoogte te stellen van de goedkeuring
-                    var backofficeEmail = "backoffice@carandall.com"; // Vervang dit door het e-mailadres van de backoffice
-                    var backofficeSubject = "Nieuwe goedgekeurde verhuuraanvraag";
-                    var backofficeBody = $"Er is een verhuuraanvraag goedgekeurd voor {aanvraag.Klant.Naam}. De aanvraag betreft het voertuig {aanvraag.Voertuig.Type}.";
-                    await _emailService.SendEmailAsync(backofficeEmail, backofficeSubject, backofficeBody);
+                    var backofficeNotificatie = new Notificatie
+                    {
+                        Titel = "Nieuwe goedgekeurde verhuuraanvraag",
+                        Bericht = $"Aanvraag voor voertuig {aanvraag.Voertuig.Type} door {aanvraag.Klant.Naam} is goedgekeurd.",
+                        VerzondenOp = DateTime.UtcNow
+                    };
+                    await _notificatieService.AddNotificatieAsync(backofficeNotificatie);
                 }
 
                 return Ok($"Status succesvol bijgewerkt naar {nieuweStatus}.");
@@ -88,6 +111,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
         // 5. GET: Haal aanvragen op basis van status
         [Authorize(Roles = "Backoffice")]
