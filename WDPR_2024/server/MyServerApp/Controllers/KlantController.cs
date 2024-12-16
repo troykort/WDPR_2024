@@ -40,20 +40,41 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         }
 
 
-        // 4. PUT: Werk een klant bij
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateKlant(int id, Klant gewijzigdeKlant)
+[HttpPut("{id}")]
+public async Task<IActionResult> UpdateKlant(int id, [FromBody] Klant gewijzigdeKlant)
+{
+    try
+    {
+        var existingKlant = await _klantService.GetKlantByIdAsync(id);
+        if (existingKlant == null)
         {
-            try
-            {
-                await _klantService.UpdateKlantAsync(id, gewijzigdeKlant);
-                return Ok("Klantgegevens succesvol bijgewerkt.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return NotFound("Klant niet gevonden.");
         }
+
+        // Dynamically update all fields
+        if (!string.IsNullOrEmpty(gewijzigdeKlant.Naam))
+            existingKlant.Naam = gewijzigdeKlant.Naam;
+
+        if (!string.IsNullOrEmpty(gewijzigdeKlant.Adres))
+            existingKlant.Adres = gewijzigdeKlant.Adres;
+
+        if (!string.IsNullOrEmpty(gewijzigdeKlant.Telefoonnummer))
+            existingKlant.Telefoonnummer = gewijzigdeKlant.Telefoonnummer;
+
+        if (!string.IsNullOrEmpty(gewijzigdeKlant.Email))
+            existingKlant.Email = gewijzigdeKlant.Email;
+
+        if (!string.IsNullOrEmpty(gewijzigdeKlant.Wachtwoord))
+            existingKlant.Wachtwoord = _klantService.HashPassword(gewijzigdeKlant.Wachtwoord);
+
+        await _klantService.UpdateKlantAsync(id, existingKlant);
+        return Ok("Klantgegevens succesvol bijgewerkt.");
+    }
+    catch (Exception ex)
+    {
+        return BadRequest($"Fout bij bijwerken van klant: {ex.Message}");
+    }
+}
 
         // 5. DELETE: Verwijder een klant
         [HttpDelete("{id}")]
@@ -88,5 +109,39 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 beheerder.Email
             });
         }
+      [HttpGet("details/{klantId}")]
+public async Task<IActionResult> GetDetails(int klantId)
+{
+    try
+    {
+        Console.WriteLine($"Received KlantID: {klantId}"); // Debugging log
+
+        // Fetch the Klant details using KlantID
+        var klant = await _klantService.GetKlantByIdAsync(klantId);
+        if (klant == null)
+            return NotFound("Klant niet gevonden.");
+
+        // Return the Klant details as a DTO
+        var klantDto = new KlantDto
+        {
+            KlantID = klant.KlantID,
+            Naam = klant.Naam,
+            Adres = klant.Adres,
+            Telefoonnummer = klant.Telefoonnummer,
+            Email = klant.Email
+        };
+
+        return Ok(klantDto);
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(StatusCodes.Status500InternalServerError, $"Er is een fout opgetreden: {ex.Message}");
+    }
+}
+
+
+
+
+        
     }
 }

@@ -32,37 +32,51 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+public async Task<IActionResult> Login([FromBody] LoginModel model)
+{
+    var user = await _userManager.FindByNameAsync(model.Username);
+    if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+    {
+        // Retrieve the corresponding KlantID
+        var klant = await _klantService.GetKlantByEmailAsync(user.Email);
+        if (klant == null)
         {
-            var user = await _userManager.FindByNameAsync(model.Username);
-            if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
-            {
-                var roles = await _userManager.GetRolesAsync(user);
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? "Particulier"),
-                    new Claim("Id", user.Id) // Add User ID for easier backend reference
-                };
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes("your_very_long_secret_key_here_32_bytes!");
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(claims),
-                    Expires = DateTime.UtcNow.AddHours(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                    Issuer = "your_issuer",
-                    Audience = "your_audience"
-                };
-
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var tokenString = tokenHandler.WriteToken(token);
-
-                return Ok(new { Token = tokenString });
-            }
-            return Unauthorized("Invalid credentials.");
+            return NotFound("Klant niet gevonden voor dit account.");
         }
+
+        var roles = await _userManager.GetRolesAsync(user);
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, user.UserName),
+            new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? "Particulier"),
+            new Claim("ID", user.Id) // Add User ID for easier backend reference
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes("your_very_long_secret_key_here_32_bytes!");
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.UtcNow.AddHours(1),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+            Issuer = "your_issuer",
+            Audience = "your_audience"
+        };
+
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        var tokenString = tokenHandler.WriteToken(token);
+
+        // Include KlantID in the response
+        return Ok(new
+        {
+            Token = tokenString,
+            KlantID = klant.KlantID // Ensure KlantID is returned
+        });
+    }
+    return Unauthorized("Invalid credentials.");
+}
+
+
 
         [HttpPost("register/particulier")]
         public async Task<IActionResult> RegisterParticulier([FromBody] RegisterModel model)

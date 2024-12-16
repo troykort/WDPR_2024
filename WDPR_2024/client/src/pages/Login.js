@@ -17,23 +17,34 @@ function Login() {
                 },
                 body: JSON.stringify({
                     Username: Email,
-                    Password
+                    Password,
                 }),
             });
-
+    
             if (!response.ok) {
                 const errorMessage = await response.text();
                 alert(`Login failed: ${errorMessage}`);
                 return;
             }
-
+    
             const data = await response.json();
-            alert(`Login successful. Welcome, ${data.name}`);
-            navigate('/dashboard'); // Navigate to dashboard or another page
+            console.log("Login API response:", data);
+    
+            // Save the token and KlantID to localStorage
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('klantId', data.klantID); // Correct casing
+            console.log("Token after login:", localStorage.getItem('token'));
+            console.log("KlantID after login", localStorage.getItem('klantId'));
+                
+            alert('Login successful');
+            navigate('/accountsettings'); // Redirect after login
         } catch (error) {
-            alert('An error occurred during login: ' + error.message);
+            console.error('Login error:', error.message);
+            alert('An error occurred during login.');
         }
     };
+    
+    
 
     const handleBack = () => {
         navigate('/'); // Navigate to the home page

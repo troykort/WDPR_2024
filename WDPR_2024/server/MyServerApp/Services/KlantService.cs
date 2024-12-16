@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using WDPR_2024.server.MyServerApp.DtoModels;
+using BCrypt.Net;
 
 namespace WDPR_2024.server.MyServerApp.Services
 {
@@ -18,6 +19,12 @@ namespace WDPR_2024.server.MyServerApp.Services
             _context = context;
             _userManager = userManager;
         }
+        public string HashPassword(string password){
+    
+        return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+    
+
 
         // Haal alle klanten op basis van emaildomein
         public async Task<List<Klant>> GetKlantenByEmailDomainAsync(string emailDomain)
@@ -103,18 +110,25 @@ namespace WDPR_2024.server.MyServerApp.Services
         }
 
         // Werk een klant bij
-        public async Task UpdateKlantAsync(int id, Klant gewijzigdeKlant)
-        {
-            var bestaandeKlant = await _context.Klanten.FindAsync(id);
-            if (bestaandeKlant == null) throw new Exception("Klant niet gevonden.");
+            public async Task UpdateKlantAsync(int klantId, Klant klant)
+{
+    var existingKlant = await _context.Klanten.FindAsync(klantId);
+    if (existingKlant != null)
+    {
+        existingKlant.Naam = klant.Naam ?? existingKlant.Naam;
+        existingKlant.Adres = klant.Adres ?? existingKlant.Adres;
+        existingKlant.Telefoonnummer = klant.Telefoonnummer ?? existingKlant.Telefoonnummer;
+        existingKlant.Email = klant.Email ?? existingKlant.Email;
 
-            bestaandeKlant.Naam = gewijzigdeKlant.Naam;
-            bestaandeKlant.Adres = gewijzigdeKlant.Adres;
-            bestaandeKlant.Email = gewijzigdeKlant.Email;
-            bestaandeKlant.Telefoonnummer = gewijzigdeKlant.Telefoonnummer;
+        if (!string.IsNullOrEmpty(klant.Wachtwoord))
+            existingKlant.Wachtwoord = klant.Wachtwoord;
 
-            await _context.SaveChangesAsync();
-        }
+        _context.Klanten.Update(existingKlant);
+        await _context.SaveChangesAsync();
+    }
+}
+
+
 
         // Verwijder een klant
         public async Task DeleteKlantAsync(int id)

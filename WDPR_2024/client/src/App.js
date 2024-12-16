@@ -14,6 +14,7 @@ import DashboardWPB from './pages/DashboardWPB';
 import StatistiekenWPB from './pages/StatistiekenWPB';
 import ProfielWPB from './pages/ProfielWPB';
 import Privacybeleid from './pages/Privacybeleid';
+import AccountSettings  from './pages/AccountSettings';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -69,6 +70,8 @@ const App = () => {
                     <Route path="/statistieken" element={<><HeaderWPB /><StatistiekenWPB /></>} />
                     <Route path="/profiel" element={<><HeaderWPB /><ProfielWPB /></>} />
                     <Route path="/privacybeleid" element={<Privacybeleid />} />
+                    <Route path="/accountsettings"element={<AccountSettings />} />
+
                 </Routes>
             </div>
             <Footer />
