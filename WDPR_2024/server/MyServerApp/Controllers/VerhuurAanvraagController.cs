@@ -109,13 +109,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             return Ok(verhuurAanvragen);
         }
 
-        // 7. GET: Haal beschikbare voertuigen op
-        [HttpGet("beschikbaar")]
-        public async Task<IActionResult> GetBeschikbareVoertuigen([FromQuery] string type, [FromQuery] DateTime? startDatum, [FromQuery] DateTime? eindDatum)
-        {
-            var beschikbareVoertuigen = await _aanvraagService.GetBeschikbareVoertuigenAsync(type, startDatum, eindDatum);
-            return Ok(beschikbareVoertuigen);
-        }
+      
 
         // 8. GET: Haal details van een voertuig op
         [HttpGet("voertuig/{voertuigID}")]

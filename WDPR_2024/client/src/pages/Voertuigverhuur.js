@@ -5,41 +5,39 @@ import './Voertuigverhuur.css';
 const Voertuigverhuur = () => {
     const [voertuigen, setVoertuigen] = useState([]);
     const [filters, setFilters] = useState({
+        merk: '',
         type: '',
-        startDate: '',
-        endDate: '',
+        typeVoertuig: '',
         sort: '',
     });
     const [selectedVoertuig, setSelectedVoertuig] = useState(null);
-    const [visibleCount, setVisibleCount] = useState(6); // Aantal voertuigen dat in eerste instantie wordt weergegeven
+    const [showPopup, setShowPopup] = useState(false);
 
     useEffect(() => {
+        const fetchVoertuigen = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/voertuigen/');
+                setVoertuigen(response.data);
+            } catch (error) {
+                console.error('Error fetching voertuigen:', error);
+            }
+        };
         fetchVoertuigen();
     }, []);
 
-    const fetchVoertuigen = async () => {
-        try {
-            const response = await axios.get('http://localhost:5000/api/voertuigen/');
-            setVoertuigen(response.data);
-        } catch (error) {
-            console.error('Error fetching voertuigen:', error);
-        }
-    };
-
     const applyFilters = () => {
-        return voertuigen.filter(voertuig => {
-            const isTypeMatch = filters.type ? voertuig.typeVoertuig === filters.type : true;
-            const isAvailable = filters.startDate && filters.endDate
-                ? new Date(filters.startDate) >= new Date(voertuig.availableFrom) &&
-                new Date(filters.endDate) <= new Date(voertuig.availableTo)
-                : true;
-            return isTypeMatch && isAvailable;
-        }).sort((a, b) => {
-            if (filters.sort === 'price') return a.price - b.price;
-            if (filters.sort === 'merk') return a.merk.localeCompare(b.merk);
-            if (filters.sort === 'availability') return new Date(a.availableFrom) - new Date(b.availableFrom);
-            return 0;
-        });
+        return voertuigen
+            .filter((voertuig) => {
+                const isMerkMatch = filters.merk ? voertuig.merk.toLowerCase().includes(filters.merk.toLowerCase()) : true;
+                const isTypeMatch = filters.type ? voertuig.type.toLowerCase().includes(filters.type.toLowerCase()) : true;
+                const isTypeVoertuigMatch = filters.typeVoertuig ? voertuig.typeVoertuig.toLowerCase().includes(filters.typeVoertuig.toLowerCase()) : true;
+                return isMerkMatch && isTypeMatch && isTypeVoertuigMatch;
+            })
+            .sort((a, b) => {
+                if (filters.sort === 'priceAsc') return a.price - b.price;
+                if (filters.sort === 'priceDesc') return b.price - a.price;
+                return 0;
+            });
     };
 
     const handleFilterChange = (e) => {
@@ -48,115 +46,109 @@ const Voertuigverhuur = () => {
     };
 
     const handleSelectVoertuig = (voertuig) => {
-        setSelectedVoertuig(voertuig);
-    };
-
-    const handleCheckboxChange = (voertuig) => {
-        if (selectedVoertuig?.id === voertuig.id) {
-            setSelectedVoertuig(null);
-        } else {
-            setSelectedVoertuig(voertuig);
-        }
+        setSelectedVoertuig(selectedVoertuig?.id === voertuig.id ? null : voertuig);
     };
 
     const handleSubmit = () => {
-        if (!selectedVoertuig || !filters.startDate || !filters.endDate) {
-            alert('Selecteer een voertuig en een geldige huurperiode.');
+        if (!selectedVoertuig) {
+            alert('Selecteer een voertuig.');
             return;
         }
-        // Voeg hier API-aanroep toe voor het aanvragen van verhuur
+        setShowPopup(true);
+    };
+
+    const handlePopupClose = () => {
+        setShowPopup(false);
+    };
+
+    const handlePopupConfirm = () => {
         console.log('Huur aanvraag verstuurd:', {
             voertuigID: selectedVoertuig.id,
-            startDate: filters.startDate,
-            endDate: filters.endDate,
         });
         alert('Huur aanvraag succesvol verstuurd!');
-    };
-
-    const handleLoadMore = () => {
-        setVisibleCount((prevCount) => prevCount + 6); // Laad 6 extra voertuigen
-    };
-
-    const handleReset = () => {
-        setVisibleCount(6); // Reset het aantal zichtbare voertuigen
-        setFilters({
-            type: '',
-            startDate: '',
-            endDate: '',
-            sort: '',
-        });
-        setSelectedVoertuig(null); // Deselecteer het voertuig
+        setShowPopup(false);
+        setSelectedVoertuig(null);
     };
 
     return (
         <div className="voertuigen-en-huur-page-container">
             <div className="voertuigen-en-huur-page">
-                <h1>Voertuigen Selecteren & Huurperiode</h1>
+                <h1>Voertuigen Selecteren</h1>
 
                 <div className="filters">
-                    <select name="type" value={filters.type} onChange={handleFilterChange}>
-                        <option value="">Alle Voertuigtypen</option>
+                    <input
+                        type="text"
+                        name="merk"
+                        value={filters.merk}
+                        onChange={handleFilterChange}
+                        placeholder="Zoek op merk"
+                    />
+                    <input
+                        type="text"
+                        name="type"
+                        value={filters.type}
+                        onChange={handleFilterChange}
+                        placeholder="Zoek op type"
+                    />
+                    <select
+                        name="typeVoertuig"
+                        value={filters.typeVoertuig}
+                        onChange={handleFilterChange}
+                    >
+                        <option value="">Alle types</option>
                         <option value="auto">Auto</option>
                         <option value="caravan">Caravan</option>
                         <option value="camper">Camper</option>
                     </select>
-                    <input
-                        type="date"
-                        name="startDate"
-                        value={filters.startDate}
+                    <select
+                        name="sort"
+                        value={filters.sort}
                         onChange={handleFilterChange}
-                        placeholder="Startdatum"
-                    />
-                    <input
-                        type="date"
-                        name="endDate"
-                        value={filters.endDate}
-                        onChange={handleFilterChange}
-                        placeholder="Einddatum"
-                    />
-                    <select name="sort" value={filters.sort} onChange={handleFilterChange}>
+                    >
                         <option value="">Sorteer op</option>
-                        <option value="price">Prijs</option>
-                        <option value="merk">Merk</option>
-                        <option value="availability">Beschikbaarheid</option>
+                        <option value="priceAsc">Prijs: Laag naar Hoog</option>
+                        <option value="priceDesc">Prijs: Hoog naar Laag</option>
                     </select>
                 </div>
 
                 <div className="voertuigen-list">
-                    {applyFilters().slice(0, visibleCount).map((voertuig) => (
+                    {applyFilters().map((voertuig) => (
                         <div
                             key={voertuig.id}
                             className={`voertuig-card ${selectedVoertuig?.id === voertuig.id ? 'selected' : ''}`}
+                            onClick={() => handleSelectVoertuig(voertuig)}
                         >
-                            <img src={voertuig.imageUrl} alt={voertuig.merk} className="voertuig-image" />
                             <div className="voertuig-details">
                                 <h3>{voertuig.merk}</h3>
-                                <p>Type: {voertuig.typeVoertuig}</p>
+                                <p>Type: {voertuig.type}</p>
+                                <p>Type Voertuig: {voertuig.typeVoertuig}</p>
                                 <p>Prijs per dag: €{voertuig.price}</p>
-                                <p>Beschikbaar van: {voertuig.availableFrom} tot {voertuig.availableTo}</p>
-                                <input
-                                    type="checkbox"
-                                    checked={selectedVoertuig?.id === voertuig.id}
-                                    onChange={() => handleCheckboxChange(voertuig)}
-                                />
+                                <p>
+                                    {voertuig.availableFrom
+                                        ? `Niet beschikbaar tot: ${voertuig.availableFrom}`
+                                        : 'Beschikbaar'}
+                                </p>
                             </div>
                         </div>
                     ))}
                 </div>
 
-                {visibleCount < applyFilters().length && (
-                    <button className="load-more-button" onClick={handleLoadMore}>
-                        Meer laden
-                    </button>
-                )}
-
-                <button className="reset-button" onClick={handleReset}>
-                    Reset
-                </button>
-
-                <button className="submit-button" onClick={handleSubmit}>
+                <button className="submit-button" onClick={handleSubmit} disabled={!selectedVoertuig}>
                     Bevestig Huur
                 </button>
+
+                {showPopup && (
+                    <div className="popup-overlay">
+                        <div className="popup">
+                            <h2>Bevestig Huur</h2>
+                            <p>Merk: {selectedVoertuig.merk}</p>
+                            <p>Type: {selectedVoertuig.type}</p>
+                            <p>Prijs: €{selectedVoertuig.price} per dag</p>
+                            <button onClick={handlePopupConfirm}>Bevestig</button>
+                            <button onClick={handlePopupClose}>Annuleer</button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
