@@ -29,35 +29,40 @@ namespace WDPR_2024.server.MyServerApp.Data
                 }
             }
 
-            // Add default Backoffice user
-            var defaultUserEmail = "backoffice@example.com";
-            var defaultUser = await userManager.FindByEmailAsync(defaultUserEmail);
-            if (defaultUser == null)
+            // Create a standard user for each role
+            foreach (var role in roles)
             {
-                var user = new ApplicationUser
-                {
-                    UserName = defaultUserEmail,
-                    Email = defaultUserEmail,
-                    EmailConfirmed = true
-                };
+                var userEmail = $"{role.ToLower()}@example.com";
+                var defaultPassword = $"{role}@123";
+                var user = await userManager.FindByEmailAsync(userEmail);
 
-                var result = await userManager.CreateAsync(user, "Backoffice@123");
-                if (result.Succeeded)
+                if (user == null)
                 {
-                    await userManager.AddToRoleAsync(user, "Backoffice");
-                    logger.LogInformation($"User '{defaultUserEmail}' created and added to role 'Backoffice'.");
+                    user = new ApplicationUser
+                    {
+                        UserName = userEmail,
+                        Email = userEmail,
+                        EmailConfirmed = true
+                    };
+
+                    var result = await userManager.CreateAsync(user, defaultPassword);
+                    if (result.Succeeded)
+                    {
+                        await userManager.AddToRoleAsync(user, role);
+                        logger.LogInformation($"User '{userEmail}' created with role '{role}' and password '{defaultPassword}'.");
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            logger.LogError($"Error creating user '{userEmail}': {error.Description}");
+                        }
+                    }
                 }
                 else
                 {
-                    foreach (var error in result.Errors)
-                    {
-                        logger.LogError($"Error creating user '{defaultUserEmail}': {error.Description}");
-                    }
+                    logger.LogInformation($"User '{userEmail}' already exists.");
                 }
-            }
-            else
-            {
-                logger.LogInformation($"User '{defaultUserEmail}' already exists.");
             }
         }
 

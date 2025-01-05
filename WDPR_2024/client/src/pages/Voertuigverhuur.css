@@ -66,7 +66,7 @@
     cursor: pointer;
     transition: background-color 0.3s;
     display: block;
-    margin: 20px auto; /* Zet de knop in het midden */
+    margin: 20px auto;
 }
 
     .submit-button:hover, .load-more-button:hover, .reset-button:hover {

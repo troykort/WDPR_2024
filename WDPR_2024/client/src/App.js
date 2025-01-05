@@ -20,6 +20,7 @@ import StatistiekenWPB from './pages/StatistiekenWPB';
 import ProfielWPB from './pages/ProfielWPB';
 import Privacybeleid from './pages/Privacybeleid';
 import ProtectedRoute from './components/ProtectedRoute';
+import VerhuurAanvragenPage from './pages/VerhuurAanvragenPage';
 import { getRoleFromToken, getUserIdFromToken } from './utils/authHelpers';
 
 const MainPage = () => {

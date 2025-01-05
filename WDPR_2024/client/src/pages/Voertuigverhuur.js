@@ -199,7 +199,7 @@ const Voertuigverhuur = () => {
                     {applyFilters().map((voertuig) => (
                         <div
                             key={voertuig.VoertuigID}
-                            className={`voertuig-card ${selectedVoertuig?.VoertuigID === voertuig.VoertuigID ? 'selected' : ''}`}
+                            className={`voertuig-card ${selectedVoertuig?.VoertuigID === voertuig.VoertuigID ? '' : ''}`}
                             onClick={() => handleSelectVoertuig(voertuig)}
                         >
                             <div className="voertuig-details">
