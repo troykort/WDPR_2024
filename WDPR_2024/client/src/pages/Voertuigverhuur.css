@@ -11,8 +11,8 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 80%; /* Maak de div iets kleiner */
-    max-width: 800px; /* Stel een maximale breedte in */
+    
+    max-width: 1000px; /* Stel een maximale breedte in */
     text-align: center; /* Zet de tekst in het midden */
 }
 
@@ -72,3 +72,52 @@
     .submit-button:hover, .load-more-button:hover, .reset-button:hover {
         background-color: #3a1420;
     }
+
+
+/* Overlay to darken the background */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    z-index: 1000; /* Ensure it appears above all other elements */
+}
+
+/* Popup container */
+.popup {
+    background-color: #ffffff; /* White background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); /* Subtle shadow for depth */
+    text-align: center; /* Center content */
+    max-width: 400px; /* Limit the width */
+    width: 100%; /* Full width for small screens */
+    z-index: 1001; /* Ensure it appears above the overlay */
+}
+
+    /* Buttons inside the popup */
+    .popup button {
+        background-color: #4c1a2a; /* Button color */
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin: 10px;
+    }
+
+        .popup button:hover {
+            background-color: #3a1420; /* Darker button color on hover */
+        }
+
+    /* Spacing between the popup content */
+    .popup p {
+        margin: 10px 0;
+    }
+

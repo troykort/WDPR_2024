@@ -36,18 +36,26 @@ namespace WDPR_2024.server.MyServerApp.Services
                 .ToListAsync();
         }
 
-        // Voeg een nieuwe verhuuraanvraag toe
         public async Task AddAanvraagAsync(VerhuurAanvraag nieuweAanvraag)
         {
+            // Fetch the vehicle associated with the rental request
             var voertuig = await _context.Voertuigen.FindAsync(nieuweAanvraag.VoertuigID);
 
+            // Check if the vehicle exists and is available
             if (voertuig == null || voertuig.Status != "Beschikbaar")
                 throw new Exception("Het geselecteerde voertuig is niet beschikbaar.");
 
+            // Update the aanvraag status and vehicle status
             nieuweAanvraag.Status = "In Behandeling";
+            voertuig.Status = "In Behandeling";
+
+            // Add the aanvraag to the context
             _context.VerhuurAanvragen.Add(nieuweAanvraag);
+
+            // Save changes to the database
             await _context.SaveChangesAsync();
         }
+
 
         // Werk een aanvraagstatus bij (Goedgekeurd, Afgewezen, Uitgegeven)
         public async Task UpdateAanvraagStatusAsync(int id, string nieuweStatus, string opmerkingen = null)

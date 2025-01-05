@@ -99,7 +99,7 @@ const App = () => {
                     } />
                     <Route path="/profiel" element={
                         <ProtectedRoute allowedRoles={["Wagenparkbeheerder", "Backoffice", "Particulier", "Frontoffice", "Abonnementbeheerder", "Zakelijk"]}>
-                            <HeaderWPB />
+                            
                             <ProfielWPB />
                         </ProtectedRoute>
                     } />

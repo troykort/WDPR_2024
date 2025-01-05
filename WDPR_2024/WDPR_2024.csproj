@@ -8,9 +8,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="server\MyServerApp\DTOs\**" />
 	  <Compile Remove="server\MyServerApp\Utilities\**" />
+	  <Content Remove="server\MyServerApp\DTOs\**" />
 	  <Content Remove="server\MyServerApp\Utilities\**" />
+	  <EmbeddedResource Remove="server\MyServerApp\DTOs\**" />
 	  <EmbeddedResource Remove="server\MyServerApp\Utilities\**" />
+	  <None Remove="server\MyServerApp\DTOs\**" />
 	  <None Remove="server\MyServerApp\Utilities\**" />
 	</ItemGroup>
 
@@ -19,10 +23,6 @@
 	  <Compile Include="client\src\components\AddBedrijfsMedewerkers.js" />
 	  <Compile Include="client\src\pages\BusinessRegister.js" />
 
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="server\MyServerApp\DTOs\" />
 	</ItemGroup>
 
 	<ItemGroup>

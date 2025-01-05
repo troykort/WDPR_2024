@@ -35,6 +35,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
+            var userid = await _klantService.GetKlantByEmailAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var roles = await _userManager.GetRolesAsync(user);
@@ -42,7 +43,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? "Particulier"),
-                    new Claim("Id", user.Id) // Add User ID for easier backend reference
+                    new Claim("Id", user.Id) 
                 };
 
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -59,7 +60,9 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var tokenString = tokenHandler.WriteToken(token);
 
-                return Ok(new { Token = tokenString });
+                return Ok(new { Token = tokenString,
+                    UserId = userid.KlantID,
+                });
             }
             return Unauthorized("Invalid credentials.");
         }

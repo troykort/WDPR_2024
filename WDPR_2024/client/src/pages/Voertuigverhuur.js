@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode'; // Proper import
 import './Voertuigverhuur.css';
 
 const Voertuigverhuur = () => {
@@ -9,9 +10,29 @@ const Voertuigverhuur = () => {
         type: '',
         typeVoertuig: '',
         sort: '',
+        startDate: '', // Start date for rental
+        endDate: '', // End date for rental
     });
-    const [selectedVoertuig, setSelectedVoertuig] = useState(null);
+    const [selectedVoertuig, setSelectedVoertuig] = useState();
     const [showPopup, setShowPopup] = useState(false);
+    const [klantID, setKlantID] = useState(null); // Store decoded ID
+
+    useEffect(() => {
+        // Decode the token once and store klantID
+        const token = localStorage.getItem('token');
+        const KlantID = localStorage.getItem('userId');
+        const KlantIDn = Number(KlantID); 
+        if (token) {
+            try {
+                
+                const decodedToken = jwtDecode(token);
+                console.log('Decoded token:', decodedToken);
+                setKlantID(KlantIDn || null); // Extract ID
+            } catch (err) {
+                console.error('Error decoding token:', err);
+            }
+        }
+    }, []);
 
     useEffect(() => {
         const fetchVoertuigen = async () => {
@@ -30,7 +51,9 @@ const Voertuigverhuur = () => {
             .filter((voertuig) => {
                 const isMerkMatch = filters.merk ? voertuig.merk.toLowerCase().includes(filters.merk.toLowerCase()) : true;
                 const isTypeMatch = filters.type ? voertuig.type.toLowerCase().includes(filters.type.toLowerCase()) : true;
-                const isTypeVoertuigMatch = filters.typeVoertuig ? voertuig.typeVoertuig.toLowerCase().includes(filters.typeVoertuig.toLowerCase()) : true;
+                const isTypeVoertuigMatch = filters.typeVoertuig
+                    ? voertuig.typeVoertuig.toLowerCase().includes(filters.typeVoertuig.toLowerCase())
+                    : true;
                 return isMerkMatch && isTypeMatch && isTypeVoertuigMatch;
             })
             .sort((a, b) => {
@@ -46,12 +69,22 @@ const Voertuigverhuur = () => {
     };
 
     const handleSelectVoertuig = (voertuig) => {
-        setSelectedVoertuig(selectedVoertuig?.id === voertuig.id ? null : voertuig);
+        console.log('Clicked voertuig:', voertuig);
+        setSelectedVoertuig((prev) => (prev?.VoertuigID === voertuig.VoertuigID ? voertuig : null));
     };
 
+
+
     const handleSubmit = () => {
+        console.log('Selected voertuig:', selectedVoertuig);
         if (!selectedVoertuig) {
             alert('Selecteer een voertuig.');
+            return;
+        }
+
+
+        if (!filters.startDate || !filters.endDate) {
+            alert('Selecteer een startdatum en einddatum.');
             return;
         }
         setShowPopup(true);
@@ -61,13 +94,48 @@ const Voertuigverhuur = () => {
         setShowPopup(false);
     };
 
-    const handlePopupConfirm = () => {
-        console.log('Huur aanvraag verstuurd:', {
-            voertuigID: selectedVoertuig.id,
-        });
-        alert('Huur aanvraag succesvol verstuurd!');
-        setShowPopup(false);
-        setSelectedVoertuig(null);
+    const handlePopupConfirm = async () => {
+        console.log("Selected voertuig:", selectedVoertuig); 
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Geen geldig token gevonden. Log opnieuw in.');
+                return;
+            }
+
+            const payload = {
+                KlantID:klantID,
+                VoertuigID:selectedVoertuig.voertuigID,
+                StartDatum:new Date(filters.startDate).toISOString(), // Convert to ISO 8601 format
+                EindDatum:new Date(filters.endDate).toISOString(),    // Convert to ISO 8601 format
+            };
+
+
+            console.log('Payload:', payload);
+
+            const response = await axios.post(
+                'http://localhost:5000/api/verhuur-aanvragen',
+                payload,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+           
+            
+            if (response.status === 201 || response.status === 200) {
+                alert('Huur aanvraag succesvol verstuurd!');
+                setShowPopup(false);
+                setSelectedVoertuig(null);
+            } else {
+                alert('Er is iets misgegaan bij het versturen van de aanvraag.');
+            }
+        } catch (error) {
+            console.error('Error during verhuuraanvraag submission:', error);
+            
+            alert('Fout bij het versturen van de aanvraag. Controleer uw invoer en probeer opnieuw.');
+        }
     };
 
     return (
@@ -100,6 +168,20 @@ const Voertuigverhuur = () => {
                         <option value="caravan">Caravan</option>
                         <option value="camper">Camper</option>
                     </select>
+                    <input
+                        type="date"
+                        name="startDate"
+                        value={filters.startDate}
+                        onChange={handleFilterChange}
+                        placeholder="Startdatum"
+                    />
+                    <input
+                        type="date"
+                        name="endDate"
+                        value={filters.endDate}
+                        onChange={handleFilterChange}
+                        placeholder="Einddatum"
+                    />
                     <select
                         name="sort"
                         value={filters.sort}
@@ -110,12 +192,14 @@ const Voertuigverhuur = () => {
                         <option value="priceDesc">Prijs: Hoog naar Laag</option>
                     </select>
                 </div>
-
+                <button className="submit-button" onClick={handleSubmit}>
+                    Bevestig Huur
+                </button>
                 <div className="voertuigen-list">
                     {applyFilters().map((voertuig) => (
                         <div
-                            key={voertuig.id}
-                            className={`voertuig-card ${selectedVoertuig?.id === voertuig.id ? 'selected' : ''}`}
+                            key={voertuig.VoertuigID}
+                            className={`voertuig-card ${selectedVoertuig?.VoertuigID === voertuig.VoertuigID ? 'selected' : ''}`}
                             onClick={() => handleSelectVoertuig(voertuig)}
                         >
                             <div className="voertuig-details">
@@ -133,9 +217,6 @@ const Voertuigverhuur = () => {
                     ))}
                 </div>
 
-                <button className="submit-button" onClick={handleSubmit} disabled={!selectedVoertuig}>
-                    Bevestig Huur
-                </button>
 
                 {showPopup && (
                     <div className="popup-overlay">
@@ -144,6 +225,8 @@ const Voertuigverhuur = () => {
                             <p>Merk: {selectedVoertuig.merk}</p>
                             <p>Type: {selectedVoertuig.type}</p>
                             <p>Prijs: €{selectedVoertuig.price} per dag</p>
+                            <p>Startdatum: {filters.startDate}</p>
+                            <p>Einddatum: {filters.endDate}</p>
                             <button onClick={handlePopupConfirm}>Bevestig</button>
                             <button onClick={handlePopupClose}>Annuleer</button>
                         </div>

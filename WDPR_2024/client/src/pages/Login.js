@@ -29,7 +29,10 @@ function Login() {
             }
 
             const data = await response.json();
-            localStorage.setItem('token', data.token); // Save the token in local storage
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('userId', data.userId); 
+            console.log('data:', data);
+            console.log('localStorage:', localStorage); 
 
             const decodedToken = jwtDecode(data.token);
             const userRole = decodedToken.role;

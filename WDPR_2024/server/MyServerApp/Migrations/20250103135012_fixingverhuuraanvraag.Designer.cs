@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WDPR_2024.server.MyServerApp.Data;
 
@@ -11,9 +12,11 @@ using WDPR_2024.server.MyServerApp.Data;
 namespace MyServerApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250103135012_fixingverhuuraanvraag")]
+    partial class fixingverhuuraanvraag
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -450,7 +453,7 @@ namespace MyServerApp.Migrations
                     b.Property<DateTime>("EindDatum")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("FrontofficeMedewerkerID")
+                    b.Property<int>("FrontofficeMedewerkerID")
                         .HasColumnType("int");
 
                     b.Property<int>("KlantID")
@@ -463,6 +466,7 @@ namespace MyServerApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Uitgiftedatum")
@@ -643,7 +647,8 @@ namespace MyServerApp.Migrations
                     b.HasOne("WDPR_2024.server.MyServerApp.Models.Medewerker", "FrontofficeMedewerker")
                         .WithMany("BehandeldeAanvragen")
                         .HasForeignKey("FrontofficeMedewerkerID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("WDPR_2024.server.MyServerApp.Models.Klant", "Klant")
                         .WithMany("VerhuurAanvragen")
