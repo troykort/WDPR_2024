@@ -5,7 +5,7 @@
     gap: 20px; /* Space between the two boxes */
     flex-wrap: wrap; /* Ensures responsiveness on smaller screens */
     height: 100vh; /* Full height of the viewport */
-    background-color: #f7f1e3;
+    /* background-color: #f7f1e3; */
 }
 
 .account-settings-container, .read-only-container {
@@ -16,6 +16,7 @@
     width: 400px; /* Fixed width for better alignment */
     max-width: 90%; /* Ensures responsiveness */
     box-sizing: border-box;
+    background-color: #f7f1e3;
 }
 
 h1, h2 {
@@ -46,4 +47,9 @@ h1, h2 {
     cursor: pointer;
     background-color: #6a1b9a;
     color: white;
+}
+.form-group label {
+    color: #5E0639; /* Purple-ish color */
+    font-weight: bold; /* Optional: makes the text stand out more */
+    margin-bottom: 0.5rem; /* Adds a bit of spacing for clarity */
 }
