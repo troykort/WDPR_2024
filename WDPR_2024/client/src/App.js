@@ -17,7 +17,7 @@ import DashboardABO from './pages/DashboardABO'; // Zorg ervoor dat deze pagina 
 import DashboardParticulier from './pages/DashboardParticulier'; // Zorg ervoor dat deze pagina bestaat
 import Voertuigverhuur from './pages/Voertuigverhuur';
 import StatistiekenWPB from './pages/StatistiekenWPB';
-import ProfielWPB from './pages/ProfielWPB';
+import AccountSettings from './pages/AccountSettings';
 import Privacybeleid from './pages/Privacybeleid';
 import ProtectedRoute from './components/ProtectedRoute';
 import VerhuurAanvragenPage from './pages/VerhuurAanvragenPage';
@@ -100,8 +100,7 @@ const App = () => {
                     } />
                     <Route path="/profiel" element={
                         <ProtectedRoute allowedRoles={["Wagenparkbeheerder", "Backoffice", "Particulier", "Frontoffice", "Abonnementbeheerder", "Zakelijk"]}>
-                            
-                            <ProfielWPB />
+                            <AccountSettings />
                         </ProtectedRoute>
                     } />
                     <Route path="/dashboardabo" element={
@@ -138,5 +137,3 @@ const AppWrapper = () => (
 );
 
 export default AppWrapper;
-
-

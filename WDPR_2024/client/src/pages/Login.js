@@ -4,7 +4,6 @@ import { jwtDecode } from 'jwt-decode';
 import './Login.css';
 
 function Login() {
-    // State for handling input fields
     const [Email, setEmail] = useState('');
     const [Password, setPassword] = useState('');
     const navigate = useNavigate();
