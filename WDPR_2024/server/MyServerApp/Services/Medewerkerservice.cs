@@ -121,5 +121,12 @@ namespace WDPR_2024.server.MyServerApp.Services
             var body = $"Hallo {medewerker.Naam},\n\nJe account is verwijderd uit ons systeem.";
             await _emailService.SendEmailAsync(medewerker.Email, subject, body);
         }
+
+        // Retrieve Medewerker by UserID
+        public async Task<Medewerker?> GetMedewerkerByUserIdAsync(string userId)
+        {
+            return await _context.Medewerkers.FirstOrDefaultAsync(m => m.UserID == userId);
+        }
+
     }
 }

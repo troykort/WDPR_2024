@@ -34,6 +34,12 @@ namespace WDPR_2024.server.MyServerApp.Services
                 .Include(k => k.Bedrijf)
                 .FirstOrDefaultAsync(k => k.KlantID == id);
         }
+        // Retrieve Klant by UserID
+        public async Task<Klant?> GetKlantByUserIdAsync(string userId)
+        {
+            return await _context.Klanten.FirstOrDefaultAsync(k => k.UserID == userId);
+        }
+
 
         // Haal alle klanten op
         public async Task<List<Klant>> GetAlleKlantenAsync()

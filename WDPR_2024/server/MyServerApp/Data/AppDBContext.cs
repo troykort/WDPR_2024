@@ -32,6 +32,19 @@ namespace WDPR_2024.server.MyServerApp.Data
                 .HasForeignKey(k => k.BedrijfID)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Klant>()
+    .HasOne(k => k.User)
+    .WithOne()
+    .HasForeignKey<Klant>(k => k.UserID)
+    .OnDelete(DeleteBehavior.Cascade);
+
+
+            // Relatie tussen Medewerker en ApplicationUser
+            modelBuilder.Entity<Medewerker>()
+                .HasOne(m => m.User)
+                .WithMany()
+                .HasForeignKey(m => m.UserID);
+
             // Bedrijf en Abonnement Relatie
             modelBuilder.Entity<Bedrijf>()
                 .HasOne(b => b.Abonnement)

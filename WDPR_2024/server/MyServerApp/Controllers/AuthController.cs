@@ -17,17 +17,20 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly KlantService _klantService;
+        private readonly MedewerkerService _medewerkerService;
         private readonly BedrijfService _bedrijfService;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             KlantService klantService,
+            MedewerkerService medewerkerService,
             BedrijfService bedrijfService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _klantService = klantService;
+            _medewerkerService = medewerkerService;
             _bedrijfService = bedrijfService;
         }
 
@@ -35,15 +38,33 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
-            var userid = await _klantService.GetKlantByEmailAsync(model.Username);
+
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var roles = await _userManager.GetRolesAsync(user);
+                var role = roles.FirstOrDefault();
+
+                int? klantId = null;
+                int? medewerkerId = null;
+
+                if (role == "Particulier" || role == "Zakelijk")
+                {
+                    var klant = await _klantService.GetKlantByUserIdAsync(user.Id);
+                    klantId = klant?.KlantID;
+                }
+                else
+                {
+                    var medewerker = await _medewerkerService.GetMedewerkerByUserIdAsync(user.Id);
+                    medewerkerId = medewerker?.MedewerkerID;
+                }
+
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(ClaimTypes.Role, roles.FirstOrDefault() ?? "Particulier"),
-                    new Claim("Id", user.Id) 
+                    new Claim(ClaimTypes.Role, role ?? "Particulier"),
+                    new Claim("UserID", user.Id),
+                    new Claim("KlantID", klantId?.ToString() ?? string.Empty),
+                    new Claim("MedewerkerID", medewerkerId?.ToString() ?? string.Empty)
                 };
 
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -60,8 +81,11 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 var token = tokenHandler.CreateToken(tokenDescriptor);
                 var tokenString = tokenHandler.WriteToken(token);
 
-                return Ok(new { Token = tokenString,
-                    UserId = userid.KlantID,
+                return Ok(new
+                {
+                    Token = tokenString,
+                    KlantID = klantId,
+                    MedewerkerID = medewerkerId
                 });
             }
             return Unauthorized("Invalid credentials.");

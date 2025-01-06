@@ -14,6 +14,8 @@ namespace WDPR_2024.server.MyServerApp.Models
         public string Email { get; set; }
         public string Telefoonnummer { get; set; }
         public string Wachtwoord { get; set; }
+        public string UserID { get; set; } // Foreign Key naar ApplicationUser.Id
+        public ApplicationUser? User { get; set; }
         public string? RijbewijsNummer { get; set; }
         public string? RijbewijsFotoPath { get; set; } // Voor geüploade rijbewijsfoto
         public bool? IsActief { get; set; }

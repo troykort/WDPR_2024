@@ -12,8 +12,10 @@ namespace WDPR_2024.server.MyServerApp.Models
         public string Naam { get; set; }
         public string Email { get; set; }
         public string Rol { get; set; } // "Backoffice", "Frontoffice"
-
-        //public string Wachtwoord { get; set; }
+                                        // Relatie met Identity
+        public string UserID { get; set; } // Foreign Key naar ApplicationUser.Id
+        public ApplicationUser? User { get; set; }
+       
 
         // Relaties
         public ICollection<VerhuurAanvraag> BehandeldeAanvragen { get; set; }
