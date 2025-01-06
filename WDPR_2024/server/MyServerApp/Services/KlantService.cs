@@ -82,26 +82,9 @@ namespace WDPR_2024.server.MyServerApp.Services
                 if (bedrijf != null)
                 {
                     nieuweKlant.BedrijfID = bedrijf.BedrijfID;
+                    nieuweKlant.Rol = "Zakelijk";
                 }
             }
-
-            // Maak een Identity-gebruiker
-            var user = new ApplicationUser
-            {
-                UserName = nieuweKlant.Email,
-                Email = nieuweKlant.Email,
-                EmailConfirmed = true
-            };
-
-            var result = await _userManager.CreateAsync(user, nieuweKlant.Wachtwoord);
-            if (!result.Succeeded)
-            {
-                throw new Exception("Fout bij het aanmaken van de gebruiker.");
-            }
-
-            // Wijs een standaardrol toe
-            var role = nieuweKlant.BedrijfID.HasValue ? "Zakelijk" : "Particulier";
-            await _userManager.AddToRoleAsync(user, role);
 
             // Koppel Identity-gebruiker aan Klant-model
             _context.Klanten.Add(nieuweKlant);
@@ -118,6 +101,8 @@ namespace WDPR_2024.server.MyServerApp.Services
             bestaandeKlant.Adres = gewijzigdeKlant.Adres;
             bestaandeKlant.Email = gewijzigdeKlant.Email;
             bestaandeKlant.Telefoonnummer = gewijzigdeKlant.Telefoonnummer;
+            bestaandeKlant.UserID = bestaandeKlant.UserID;
+            bestaandeKlant.Rol = bestaandeKlant.Rol;
 
             await _context.SaveChangesAsync();
         }

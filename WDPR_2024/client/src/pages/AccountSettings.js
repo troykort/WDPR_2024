@@ -27,11 +27,16 @@ function AccountSettings() {
             try {
                 const token = localStorage.getItem('token');
                 const klantId = localStorage.getItem('userId');
+                const medewerkerId = localStorage.getItem('medewerkerId')
+                const medewerkerIdn = Number(medewerkerId)
                 console.log(klantId);
+                console.log(medewerkerIdn);
+                
 
                 if (!token || !klantId) throw new Error('User not authenticated.');
 
-                const response = await fetch(`http://localhost:5000/api/klanten/details/${klantId}`, {
+
+                const response = await fetch(`http://localhost:5000/api/klanten/${klantId}`, {
                     method: 'GET',
                     headers: { Authorization: `Bearer ${token}` },
                 });
@@ -39,13 +44,15 @@ function AccountSettings() {
                 if (!response.ok) throw new Error('Failed to fetch user data.');
 
                 const data = await response.json();
-
+                console.log(data);
                 setOriginalData({
                     name: data.naam,
                     address: data.adres,
                     phone: data.telefoonnummer,
                     email: data.email,
                     password: '****', // Masked password display
+                    rol: data.rol,
+                    userID: data.userID,
                 });
 
                 setUserData({
@@ -88,6 +95,9 @@ function AccountSettings() {
                 Adres: userData.address || originalData.address,
                 Telefoonnummer: userData.phone || originalData.phone,
                 Email: userData.email || originalData.email,
+                Wachtwoord: userData.password || originalData.password,
+                Rol: originalData.rol,
+                UserID:  originalData.userID,
             };
 
             // Only include password if updated

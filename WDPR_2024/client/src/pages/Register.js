@@ -55,6 +55,7 @@ const Register = () => {
             navigate('/login');
         } catch (error) {
             alert('Er is een fout opgetreden tijdens de registratie: ' + error.message);
+            console.log(error);
         }
     };
 

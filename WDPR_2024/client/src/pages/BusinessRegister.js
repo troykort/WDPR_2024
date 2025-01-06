@@ -13,6 +13,8 @@ bedrijfsnaam: '',
         confirmPassword: ''
     });
 
+const [error, setError] = useState('');
+
 const navigate = useNavigate();
 const location = useLocation();
 
@@ -22,9 +24,16 @@ const handleChange = (e) => {
         ...formData,
             [name]: value
         });
+setError(''); // Clear error on input change
     };
-
+    
 const handleGoToSubscriptions = () => {
+    if (!formData.emailDomein.startsWith('@'))
+    {
+        setError('Het e-maildomein moet beginnen met een @.');
+        return;
+    }
+
     navigate('/business-register/subscriptions', { state: { formData } });
 };
 
@@ -83,7 +92,7 @@ return (
                         />
                     </ div >
                     < div >
-                        < label htmlFor = "kvkNummer" > KVK-nummer </ label >
+                        < label htmlFor = "kvkNummer" > KVK - nummer </ label >
                         < input
                             type = "text"
                             id = "kvkNummer"
@@ -95,7 +104,7 @@ return (
                         />
                     </ div >
                     < div >
-                        < label htmlFor = "emailDomein" > E-maildomein </ label >
+                        < label htmlFor = "emailDomein" > E - maildomein </ label >
                         < input
                             type = "text"
                             id = "emailDomein"
@@ -106,8 +115,9 @@ return (
                             required
                         />
                     </ div >
+                    { error && < p className = "error-message" >{ error}</ p >}
                     < div >
-                        < label htmlFor = "contactEmail" > Contact e-mailadres </ label >
+                        < label htmlFor = "contactEmail" > Contact e - mailadres </ label >
                         < input
                             type = "email"
                             id = "contactEmail"

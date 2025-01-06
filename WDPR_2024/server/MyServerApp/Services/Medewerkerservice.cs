@@ -127,6 +127,7 @@ namespace WDPR_2024.server.MyServerApp.Services
         {
             return await _context.Medewerkers.FirstOrDefaultAsync(m => m.UserID == userId);
         }
+        
 
     }
 }

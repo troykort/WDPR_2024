@@ -133,7 +133,12 @@ const App = () => {
                             <HeaderParticulier />
                             <Voertuigverhuur />
                         </ProtectedRoute>
+                    } /><Route path="/backoffice-dashboard" element={
+                        <ProtectedRoute allowedRoles={["Backoffice"]}>
+                            <VerhuurAanvragenPage />
+                        </ProtectedRoute>
                     } />
+
                     <Route path="/privacybeleid" element={<Privacybeleid />} />
                     <Route path="/unauthorized" element={<h2>Toegang geweigerd</h2>} />
                 </Routes>

@@ -15,10 +15,13 @@ namespace WDPR_2024.server.MyServerApp.Controllers
     public class KlantController : ControllerBase
     {
         private readonly KlantService _klantService;
+        private readonly MedewerkerService _medewerkerService;
 
-        public KlantController(KlantService klantService)
+        public KlantController(KlantService klantService, MedewerkerService medewerkerService)
         {
             _klantService = klantService;
+            _medewerkerService = medewerkerService;
+
         }
 
         // 1. GET: Haal een specifieke klant op
@@ -88,34 +91,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 beheerder.Email
             });
         }
-        [HttpGet("details/{klantId}")]
-        public async Task<IActionResult> GetDetails(int klantId)
-        {
-            try
-            {
-                Console.WriteLine($"Received KlantID: {klantId}"); // Debugging log
-
-                // Fetch the Klant details using KlantID
-                var klant = await _klantService.GetKlantByIdAsync(klantId);
-                if (klant == null)
-                    return NotFound("Klant niet gevonden.");
-
-                // Return the Klant details as a DTO
-                var klantDto = new KlantDto
-                {
-                    KlantID = klant.KlantID,
-                    Naam = klant.Naam,
-                    Adres = klant.Adres,
-                    Telefoonnummer = klant.Telefoonnummer,
-                    Email = klant.Email
-                };
-
-                return Ok(klantDto);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"Er is een fout opgetreden: {ex.Message}");
-            }
+        
         }
     }
-}
+

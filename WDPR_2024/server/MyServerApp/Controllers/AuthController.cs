@@ -97,27 +97,45 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            try
+            var user = new ApplicationUser
             {
+                UserName = model.Email,
+                Email = model.Email,
+                EmailConfirmed = true
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "Particulier");
+
                 var nieuweKlant = new Klant
                 {
                     Naam = model.Naam,
                     Adres = model.Adres,
                     Email = model.Email,
                     Telefoonnummer = model.Telefoonnummer,
-                    Wachtwoord = model.Password
+                    Wachtwoord = model.Password,
+                    IsActief = true,
+                    UserID = user.Id,
+                    Rol = "Particulier"
                 };
 
-                await _klantService.AddKlantAsync(nieuweKlant);
+                try
+                {
+                    await _klantService.AddKlantAsync(nieuweKlant);
+                }
+                catch (Exception ex)
+                {
+                    // If saving Klant fails, rollback the user creation
+                    await _userManager.DeleteAsync(user);
+                    return BadRequest($"Failed to save klant: {ex.Message}");
+                }
 
-                // Retrieve the ID of the created user from the database
-                var createdUser = await _userManager.FindByEmailAsync(nieuweKlant.Email);
-                return Ok(new { UserId = createdUser.Id });
+                return Ok(new { UserId = user.Id, KlantID = nieuweKlant.KlantID });
             }
-            catch (Exception ex)
-            {
-                return BadRequest($"Error during registration: {ex.Message}");
-            }
+
+            return BadRequest(result.Errors);
         }
 
         [HttpPost("register/zakelijk")]
@@ -125,7 +143,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
+   
             var user = new ApplicationUser
             {
                 UserName = model.ContactEmail,
@@ -136,9 +154,8 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "Abonnementbeheerder");
+                await _userManager.AddToRoleAsync(user, "Zakelijk");
 
-                // Add company to the database
                 var bedrijf = new Bedrijf
                 {
                     Bedrijfsnaam = model.Bedrijfsnaam,
@@ -147,9 +164,19 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                     EmailDomein = model.EmailDomein,
                     ContactEmail = model.ContactEmail
                 };
-                await _bedrijfService.AddBedrijfAsync(bedrijf);
 
-                return Ok(new { user.Id });
+                try
+                {
+                    await _bedrijfService.AddBedrijfAsync(bedrijf);
+                }
+                catch (Exception ex)
+                {
+                    // Rollback user creation if saving company fails
+                    await _userManager.DeleteAsync(user);
+                    return BadRequest($"Failed to save bedrijf: {ex.Message}");
+                }
+
+                return Ok(new { UserId = user.Id });
             }
 
             return BadRequest(result.Errors);
