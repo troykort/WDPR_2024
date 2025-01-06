@@ -83,7 +83,7 @@ function AccountSettings() {
 
 
             const payload = {
-                KlantID: Number(klantId), // Ensure it's an integer
+                KlantID: parseInt(klantId), // Ensure it's an integer
                 Naam: userData.name || originalData.name,
                 Adres: userData.address || originalData.address,
                 Telefoonnummer: userData.phone || originalData.phone,

@@ -56,6 +56,19 @@ const MainPage = () => {
     );
 };
 
+const ProfielPage = () => {
+    const role = getRoleFromToken();
+
+    return (
+        <>
+            {role === 'Particulier' && <HeaderParticulier />}
+            {role === 'Backoffice' && <HeaderABO />}
+            {role === 'Wagenparkbeheerder' && <HeaderWPB />}
+            <AccountSettings />
+        </>
+    );
+};
+
 const App = () => {
     const location = useLocation();
     const isDashboardWPB = location.pathname.startsWith('/dashboardwpb') || location.pathname.startsWith('/medewerkers') || location.pathname.startsWith('/voertuigoverzicht') || location.pathname.startsWith('/statistieken') || location.pathname.startsWith('/profiel');
@@ -100,7 +113,7 @@ const App = () => {
                     } />
                     <Route path="/profiel" element={
                         <ProtectedRoute allowedRoles={["Wagenparkbeheerder", "Backoffice", "Particulier", "Frontoffice", "Abonnementbeheerder", "Zakelijk"]}>
-                            <AccountSettings />
+                            <ProfielPage />
                         </ProtectedRoute>
                     } />
                     <Route path="/dashboardabo" element={
