@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode'; // Proper import
+import { jwtDecode } from 'jwt-decode'; 
 import './Voertuigverhuur.css';
 
 const Voertuigverhuur = () => {
@@ -10,24 +10,22 @@ const Voertuigverhuur = () => {
         type: '',
         typeVoertuig: '',
         sort: '',
-        startDate: '', // Start date for rental
-        endDate: '', // End date for rental
+        startDate: '', 
+        endDate: '', 
     });
     const [selectedVoertuig, setSelectedVoertuig] = useState();
     const [showPopup, setShowPopup] = useState(false);
-    const [klantID, setKlantID] = useState(null); // Store decoded ID
-
+    const [klantID, setKlantID] = useState(null); 
+    const [displayCount, setDisplayCount] = useState(8);
     useEffect(() => {
-        // Decode the token once and store klantID
         const token = localStorage.getItem('token');
         const KlantID = localStorage.getItem('userId');
-        const KlantIDn = Number(KlantID); 
+        const KlantIDn = Number(KlantID);
         if (token) {
             try {
-                
                 const decodedToken = jwtDecode(token);
                 console.log('Decoded token:', decodedToken);
-                setKlantID(KlantIDn || null); // Extract ID
+                setKlantID(KlantIDn || null);
             } catch (err) {
                 console.error('Error decoding token:', err);
             }
@@ -57,8 +55,8 @@ const Voertuigverhuur = () => {
                 return isMerkMatch && isTypeMatch && isTypeVoertuigMatch;
             })
             .sort((a, b) => {
-                if (filters.sort === 'priceAsc') return a.price - b.price;
-                if (filters.sort === 'priceDesc') return b.price - a.price;
+                if (filters.sort === 'priceAsc') return a.prijsPerDag - b.prijsPerDag;
+                if (filters.sort === 'priceDesc') return b.prijsPerDag - a.prijsPerDag;
                 return 0;
             });
     };
@@ -73,15 +71,12 @@ const Voertuigverhuur = () => {
         setSelectedVoertuig((prev) => (prev?.VoertuigID === voertuig.VoertuigID ? voertuig : null));
     };
 
-
-
     const handleSubmit = () => {
         console.log('Selected voertuig:', selectedVoertuig);
         if (!selectedVoertuig) {
             alert('Selecteer een voertuig.');
             return;
         }
-
 
         if (!filters.startDate || !filters.endDate) {
             alert('Selecteer een startdatum en einddatum.');
@@ -95,7 +90,7 @@ const Voertuigverhuur = () => {
     };
 
     const handlePopupConfirm = async () => {
-        console.log("Selected voertuig:", selectedVoertuig); 
+        console.log("Selected voertuig:", selectedVoertuig);
         try {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -104,12 +99,11 @@ const Voertuigverhuur = () => {
             }
 
             const payload = {
-                KlantID:klantID,
-                VoertuigID:selectedVoertuig.voertuigID,
-                StartDatum:new Date(filters.startDate).toISOString(), // Convert to ISO 8601 format
-                EindDatum:new Date(filters.endDate).toISOString(),    // Convert to ISO 8601 format
+                KlantID: klantID,
+                VoertuigID: selectedVoertuig.voertuigID,
+                StartDatum: new Date(filters.startDate).toISOString(), // Convert to ISO 8601 format
+                EindDatum: new Date(filters.endDate).toISOString(),    // Convert to ISO 8601 format
             };
-
 
             console.log('Payload:', payload);
 
@@ -122,8 +116,7 @@ const Voertuigverhuur = () => {
                     },
                 }
             );
-           
-            
+
             if (response.status === 201 || response.status === 200) {
                 alert('Huur aanvraag succesvol verstuurd!');
                 setShowPopup(false);
@@ -133,9 +126,13 @@ const Voertuigverhuur = () => {
             }
         } catch (error) {
             console.error('Error during verhuuraanvraag submission:', error);
-            
+
             alert('Fout bij het versturen van de aanvraag. Controleer uw invoer en probeer opnieuw.');
         }
+    };
+
+    const handleLoadMore = () => {
+        setDisplayCount((prevCount) => prevCount + 4);
     };
 
     return (
@@ -192,21 +189,22 @@ const Voertuigverhuur = () => {
                         <option value="priceDesc">Prijs: Hoog naar Laag</option>
                     </select>
                 </div>
-                <button className="submit-button" onClick={handleSubmit}>
-                    Bevestig Huur
-                </button>
+                {/*<button className="submit-button" onClick={handleSubmit}>*/}
+                {/*    Bevestig Huur*/}
+                {/*</button>*/}
                 <div className="voertuigen-list">
-                    {applyFilters().map((voertuig) => (
+                    {applyFilters().slice(0, displayCount).map((voertuig) => (
                         <div
                             key={voertuig.VoertuigID}
-                            className={`voertuig-card ${selectedVoertuig?.VoertuigID === voertuig.VoertuigID ? '' : ''}`}
+                            className={`voertuig-card ${selectedVoertuig?.voertuigID === voertuig.voertuigID ? 'selected' : ''}`}
                             onClick={() => handleSelectVoertuig(voertuig)}
                         >
                             <div className="voertuig-details">
-                                <h3>{voertuig.merk}</h3>
-                                <p>Type: {voertuig.type}</p>
+                                <h3 style={{ marginBottom: '0px' }}>{voertuig.merk}</h3>
+                                <p style={{ margin: 0, letterSpacing: '-0.1em', lineHeight: '1' }}>__________________________________</p>
+                                <p style={{ marginTop: '10px' }}>Type: {voertuig.type}</p>
                                 <p>Type Voertuig: {voertuig.typeVoertuig}</p>
-                                <p>Prijs per dag: €{voertuig.price}</p>
+                                <p>Prijs per dag: €{voertuig.prijsPerDag}</p>
                                 <p>
                                     {voertuig.availableFrom
                                         ? `Niet beschikbaar tot: ${voertuig.availableFrom}`
@@ -216,7 +214,19 @@ const Voertuigverhuur = () => {
                         </div>
                     ))}
                 </div>
-
+                
+                    <button className="reset-button" onClick={() => setDisplayCount(8)}>
+                        Reset
+                    </button>
+                    {displayCount < applyFilters().length && (
+                        <button className="load-more-button" onClick={handleLoadMore}>
+                            Meer laden
+                        </button>
+                    )}
+                    <button className="submit-button" onClick={handleSubmit}>
+                        Bevestig
+                    </button>
+                
 
                 {showPopup && (
                     <div className="popup-overlay">
