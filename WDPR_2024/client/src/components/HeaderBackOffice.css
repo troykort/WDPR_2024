@@ -1,0 +1,38 @@
+﻿.headerbackoffice {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #F2EBDB;
+    color: #5E0639;
+    border-bottom: 2px solid #4c1a2a;
+}
+
+.headerbackoffice-left {
+    display: flex;
+    align-items: center;
+}
+
+.headerbackoffice-logo {
+    height: 100px;
+}
+
+.headerbackoffice-right {
+    display: flex;
+    align-items: center;
+}
+
+.headerbackoffice-button {
+    text-decoration: none;
+    margin-left: 20px;
+    padding: 10px 20px;
+    background-color: #5E0639;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.headerbackoffice-button:hover {
+    background-color: #3e0426;
+}
