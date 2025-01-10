@@ -37,7 +37,7 @@ namespace WDPR_2024.server.MyServerApp.Data
     {
         Email = "backoffice@example.com",
         Password = "Backoffice@123",
-        Role = "Backoffice",
+        Role = "Bac9koffice",
         Name = "Back Office Admin",
         Address = "Backoffice Street 1",
         Phone = "010-1234567",

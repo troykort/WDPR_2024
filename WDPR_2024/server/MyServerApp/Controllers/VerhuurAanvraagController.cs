@@ -4,6 +4,7 @@ using WDPR_2024.server.MyServerApp.Models;
 using WDPR_2024.server.MyServerApp.Services;
 using System.Threading.Tasks;
 using System;
+using WDPR_2024.server.MyServerApp.DtoModels;
 
 namespace WDPR_2024.server.MyServerApp.Controllers
 {
@@ -33,10 +34,22 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         // 2. GET: Haal alle aanvragen op
         [Authorize(Roles = "Backoffice")]
         [HttpGet]
-        public async Task<IActionResult> GetAlleAanvragen()
+        public async Task<ActionResult<List<verhuurAanvraagDto>>> GetAlleAanvragen()
         {
             var aanvragen = await _aanvraagService.GetAlleAanvragenAsync();
-            return Ok(aanvragen);
+
+            // Map entities to DTOs
+            var aanvragenDto = aanvragen.Select(a => new verhuurAanvraagDto
+            {
+                VerhuurAanvraagID = a.VerhuurAanvraagID,
+                KlantNaam = a.Klant?.Naam ?? "Onbekend",
+                VoertuigInfo = a.Voertuig != null ? $"{a.Voertuig.Merk} {a.Voertuig.Type}" : "Onbekend voertuig",
+                StartDatum = a.StartDatum,
+                EindDatum = a.EindDatum,
+                Status = a.Status
+            }).ToList();
+
+            return Ok(aanvragenDto);
         }
 
         // 3. POST: Voeg een nieuwe aanvraag toe
@@ -56,18 +69,19 @@ namespace WDPR_2024.server.MyServerApp.Controllers
 
         // 4. PUT: Werk de status van een aanvraag bij
         [Authorize(Roles = "Backoffice")]
-        [HttpPut("{id}/status")]
-        public async Task<IActionResult> UpdateStatus(int id, [FromQuery] string nieuweStatus, [FromQuery] string opmerkingen = null)
+        [HttpPut("{id}/{status}")]
+        public async Task<IActionResult> UpdateStatus(int id, [FromQuery] string status, string opmerkingen = null)
         {
             try
             {
                 var aanvraag = await _aanvraagService.GetAanvraagByIdAsync(id);
 
                 // Verwerk statusupdate
-                await _aanvraagService.UpdateAanvraagStatusAsync(id, nieuweStatus, opmerkingen);
+                await _aanvraagService.UpdateAanvraagStatusAsync(id, status, opmerkingen);
+
 
                 // Verstuur een e-mail naar de klant als de aanvraag goedgekeurd is
-                if (nieuweStatus == "Goedgekeurd")
+                if (status == "Goedgekeurd")
                 {
                     var klantEmail = aanvraag.Klant.Email;
                     var klantSubject = "Je verhuuraanvraag is goedgekeurd!";
@@ -75,13 +89,21 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                     await _emailService.SendEmailAsync(klantEmail, klantSubject, klantBody);
 
                     // Verstuur een e-mail naar de backoffice om hen op de hoogte te stellen van de goedkeuring
-                    var backofficeEmail = "backoffice@carandall.com"; // Vervang dit door het e-mailadres van de backoffice
+                    var backofficeEmail = "dlamericaan@gmail.com"; // Vervang dit door het e-mailadres van de backoffice
                     var backofficeSubject = "Nieuwe goedgekeurde verhuuraanvraag";
                     var backofficeBody = $"Er is een verhuuraanvraag goedgekeurd voor {aanvraag.Klant.Naam}. De aanvraag betreft het voertuig {aanvraag.Voertuig.Type}.";
                     await _emailService.SendEmailAsync(backofficeEmail, backofficeSubject, backofficeBody);
                 }
+                else if (status == "Afgewezen")
+                {
+                    // Verstuur een e-mail naar de klant als de aanvraag afgewezen is
+                    var klantEmail = aanvraag.Klant.Email;
+                    var klantSubject = "Je verhuuraanvraag is afgewezen";
+                    var klantBody = $"Je verhuuraanvraag is afgewezen. Neem contact op met de backoffice voor meer informatie.";
+                    await _emailService.SendEmailAsync(klantEmail, klantSubject, klantBody);
+                }
 
-                return Ok($"Status succesvol bijgewerkt naar {nieuweStatus}.");
+                return Ok($"Status succesvol bijgewerkt naar {status}.");
             }
             catch (Exception ex)
             {

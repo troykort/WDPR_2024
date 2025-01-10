@@ -1,5 +1,6 @@
 ﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
+
 import "./VerhuurAanvragenPage.css";
 
 const VerhuurAanvragenPage = () => {
@@ -14,8 +15,12 @@ const VerhuurAanvragenPage = () => {
 
     const fetchAanvragen = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/verhuur-aanvragen");
+            const token = localStorage.getItem("token");
+            const response = await axios.get("http://localhost:5000/api/verhuur-aanvragen", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
             setAanvragen(response.data);
+            console.log("Fetched aanvragen:", response.data);
         } catch (error) {
             console.error("Error fetching verhuuraanvragen:", error);
         }
@@ -23,7 +28,18 @@ const VerhuurAanvragenPage = () => {
 
     const handleGoedkeuren = async (id) => {
         try {
-            await axios.post(`http://localhost:5000/api/verhuur-aanvragen/${id}/goedkeuren`);
+            const token = localStorage.getItem("token");
+            const status = "Goedgekeurd";
+
+            // Log ID for debugging
+            console.log("Goedkeuren ID:", id);
+
+            await axios.put(`http://localhost:5000/api/verhuur-aanvragen/${id}/${status}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
             fetchAanvragen(); // Refresh the list
             alert("Aanvraag is goedgekeurd!");
         } catch (error) {
@@ -36,10 +52,23 @@ const VerhuurAanvragenPage = () => {
             alert("Voer een reden in voor afwijzing.");
             return;
         }
+
         try {
-            await axios.post(`http://localhost:5000/api/verhuur-aanvragen/${selectedAanvraag}/afwijzen`, {
-                reden: afwijsReden,
-            });
+            const token = localStorage.getItem("token");
+            const status = "Afgewezen";
+
+            console.log("Afwijzen ID:", selectedAanvraag);
+
+            await axios.put(
+                `http://localhost:5000/api/verhuur-aanvragen/${selectedAanvraag}/${status}`,
+                { opmerkingen: afwijsReden },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
             setAfwijsReden("");
             setModalVisible(false);
             fetchAanvragen(); // Refresh the list
@@ -60,9 +89,9 @@ const VerhuurAanvragenPage = () => {
     };
 
     return (
-        <div className="verhuur-aanvragen-page">
+        <div className="verhuur-aanvragen-page-container">
             <h2>Verhuur Aanvragen</h2>
-            <table className="aanvragen-table">
+            <table className="verhuur-aanvragen-table">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -75,15 +104,25 @@ const VerhuurAanvragenPage = () => {
                 </thead>
                 <tbody>
                     {aanvragen.map((aanvraag) => (
-                        <tr key={aanvraag.id}>
-                            <td>{aanvraag.id}</td>
-                            <td>{aanvraag.huurderNaam}</td>
-                            <td>{aanvraag.voertuig}</td>
-                            <td>{aanvraag.datum}</td>
+                        <tr key={aanvraag.verhuurAanvraagID}>
+                            <td>{aanvraag.verhuurAanvraagID}</td>
+                            <td>{aanvraag.klantNaam || "Onbekend"}</td>
+                            <td>{aanvraag.voertuigInfo || "Onbekend voertuig"}</td>
+                            <td>{`${aanvraag.startDatum} - ${aanvraag.eindDatum}` || "Geen datum beschikbaar"}</td>
                             <td>{aanvraag.status}</td>
                             <td>
-                                <button onClick={() => handleGoedkeuren(aanvraag.id)}>Goedkeuren</button>
-                                <button onClick={() => openAfwijzenModal(aanvraag.id)}>Afwijzen</button>
+                                <button
+                                    className="verhuur-aanvragen-button verhuur-aanvragen-button-approve"
+                                    onClick={() => handleGoedkeuren(aanvraag.verhuurAanvraagID)}
+                                >
+                                    Goedkeuren
+                                </button>
+                                <button
+                                    className="verhuur-aanvragen-button verhuur-aanvragen-button-reject"
+                                    onClick={() => openAfwijzenModal(aanvraag.verhuurAanvraagID)}
+                                >
+                                    Afwijzen
+                                </button>
                             </td>
                         </tr>
                     ))}
@@ -91,15 +130,16 @@ const VerhuurAanvragenPage = () => {
             </table>
 
             {modalVisible && (
-                <div className="modal">
-                    <div className="modal-content">
+                <div className="verhuur-aanvragen-modal">
+                    <div className="verhuur-aanvragen-modal-content">
                         <h3>Reden voor afwijzing</h3>
                         <textarea
+                            className="verhuur-aanvragen-textarea"
                             value={afwijsReden}
                             onChange={(e) => setAfwijsReden(e.target.value)}
                             placeholder="Voer een reden in"
                         ></textarea>
-                        <div className="modal-actions">
+                        <div className="verhuur-aanvragen-modal-actions">
                             <button onClick={handleAfwijzen}>Afwijzen</button>
                             <button onClick={closeAfwijzenModal}>Annuleren</button>
                         </div>
