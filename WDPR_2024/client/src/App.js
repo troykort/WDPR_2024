@@ -27,6 +27,9 @@ import { getRoleFromToken, getUserIdFromToken } from './utils/authHelpers';
 import DashboardFrontoffice from './pages/DashboardFrontoffice';
 import HeaderBackOffice from './components/HeaderBackOffice';
 import FOVerhuurAanvragenPage from './pages/FOVerhuurAanvragenPage';
+import FAQ from './pages/FAQ';
+import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden';
+import Support from './pages/Support';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -161,6 +164,9 @@ const App = () => {
                         </ProtectedRoute>
                     } />
                     <Route path="/privacybeleid" element={<Privacybeleid />} />
+                    <Route path="/FAQ" element={<FAQ/>}/>
+                    <Route path="/algemene-voorwaarden" element={<AlgemeneVoorwaarden/>}/>
+                    <Route path="/support" element={<Support />} />
                     <Route path="/unauthorized" element={<h2>Toegang geweigerd</h2>} />
                 </Routes>
             </div>
