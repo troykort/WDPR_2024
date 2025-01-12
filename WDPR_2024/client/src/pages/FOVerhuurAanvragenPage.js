@@ -1,7 +1,7 @@
 ﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import "./FrontofficeVerhuurAanvragenPage.css";
+import "./FOVerhuurAanvragenPage.css";
 
 const FrontofficeVerhuurAanvragenPage = () => {
     const [aanvragen, setAanvragen] = useState([]);
