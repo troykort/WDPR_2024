@@ -2,6 +2,19 @@
 import { Link } from 'react-router-dom';
 import './HeaderABO.css';
 import logo from '../assets/Logo.png';
+import { useNavigate } from "react-router-dom";
+
+
+const Header = () => {
+    const navigate = useNavigate();
+    
+};
+
+const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+};
+
 
 const HeaderABO = () => {
     return (
@@ -16,6 +29,7 @@ const HeaderABO = () => {
                 <Link to="/abonnement" className="headerabo-button">Abonnement</Link>
                 <Link to="/medewerkers" className="headerabo-button">Medewerkers</Link>
                 <Link to="/profiel" className="headerabo-button">Profiel</Link>
+                <button onClick={handleLogout} className="headerbackoffice-button">Uitloggen</button>
             </div>
         </nav>
     );
