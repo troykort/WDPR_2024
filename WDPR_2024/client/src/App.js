@@ -21,9 +21,8 @@ import StatistiekenWPB from './pages/StatistiekenWPB';
 import AccountSettings from './pages/AccountSettings';
 import Privacybeleid from './pages/Privacybeleid';
 import ProtectedRoute from './components/ProtectedRoute';
-import VerhuurAanvragenPage from './pages/VerhuurAanvragenPage';
+import VerhuurAanvragenPage from './pages/BOVerhuurAanvragenPage';
 import { getRoleFromToken, getUserIdFromToken } from './utils/authHelpers';
-import HeaderBackOffice from './components/HeaderBackOffice';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -141,6 +140,10 @@ const App = () => {
                         <ProtectedRoute allowedRoles={["Backoffice"]}>
                             <HeaderBackOffice />
                             <VerhuurAanvragenPage />
+                        </ProtectedRoute>
+                    } /><Route path="/frontoffice-dashboard" element={
+                        <ProtectedRoute allowedRoles={["Frontoffice"]}>
+                            <FrontofficeDashboard />
                         </ProtectedRoute>
                     } />
                     <Route path="/privacybeleid" element={<Privacybeleid />} />
