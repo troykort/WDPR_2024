@@ -14,6 +14,10 @@ const Header = () => {
     const handleLogoClick = () => {
         navigate("/dashboardwpb");
     };
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/');
+    };
 
     return (
         <div className="header">
@@ -26,6 +30,7 @@ const Header = () => {
                 <button onClick={() => navigate("/medewerkers")}>Medewerkers</button>
                 <button onClick={() => navigate("/statistieken")}>Statistieken</button>
                 <button onClick={() => navigate("/profiel")}>Profiel</button>
+                <button onClick={handleLogout} className="headerbackoffice-button">Uitloggen</button>
             </div>
             <NotificationButton />
         </div>
