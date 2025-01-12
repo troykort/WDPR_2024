@@ -23,7 +23,7 @@ namespace WDPR_2024.server.MyServerApp.Services
             using var client = new SmtpClient(_smtpServer, _smtpPort)
             {
                 Credentials = new NetworkCredential(_smtpUser, _smtpPassword),
-                EnableSsl = true // Zorg ervoor dat SSL ingeschakeld is voor veilige verbindingen
+                EnableSsl = true 
             };
 
             var mailMessage = new MailMessage
@@ -31,7 +31,7 @@ namespace WDPR_2024.server.MyServerApp.Services
                 From = new MailAddress(_smtpUser),
                 Subject = subject,
                 Body = body,
-                IsBodyHtml = true // Stel in op false als je geen HTML e-mails gebruikt
+                IsBodyHtml = true 
             };
 
             mailMessage.To.Add(toEmail);

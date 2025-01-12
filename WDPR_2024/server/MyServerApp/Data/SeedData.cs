@@ -17,10 +17,10 @@ namespace WDPR_2024.server.MyServerApp.Data
             var dbContext = serviceProvider.GetRequiredService<AppDbContext>();
             var logger = serviceProvider.GetRequiredService<ILogger<SeedData>>();
 
-            // Define roles
+          
             string[] roles = { "Backoffice", "Frontoffice", "Wagenparkbeheerder", "Abonnementbeheerder", "Particulier", "Zakelijk" };
 
-            // Ensure all roles exist
+           
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
@@ -96,7 +96,7 @@ namespace WDPR_2024.server.MyServerApp.Data
 };
 
 
-            // Add or update users
+           
             foreach (var userInfo in users)
             {
                 var user = await userManager.FindByEmailAsync(userInfo.Email);
@@ -114,7 +114,7 @@ namespace WDPR_2024.server.MyServerApp.Data
                     {
                         await userManager.AddToRoleAsync(user, userInfo.Role);
 
-                        // Assign user to the corresponding model
+                      
                         if (userInfo.Role == "Particulier" || userInfo.Role == "Zakelijk")
                         {
                             var klant = new Klant

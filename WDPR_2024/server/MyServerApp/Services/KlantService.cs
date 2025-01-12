@@ -62,7 +62,7 @@ namespace WDPR_2024.server.MyServerApp.Services
         // Verifieer het wachtwoord (placeholder: vervang door hashing in productie)
         public bool VerifyPassword(string inputPassword, string storedPassword)
         {
-            // Voor een productieomgeving: gebruik hashing (bijv. BCrypt of een ander mechanisme)
+            
             return inputPassword == storedPassword;
         }
 
@@ -74,7 +74,7 @@ namespace WDPR_2024.server.MyServerApp.Services
                 throw new Exception("E-mailadres is al geregistreerd.");
             }
 
-            // Automatische koppeling aan een bedrijf op basis van e-maildomein
+            
             if (!string.IsNullOrEmpty(nieuweKlant.Email) && nieuweKlant.Email.Contains("@"))
             {
                 var emailDomein = nieuweKlant.Email.Split('@')[1];
@@ -86,7 +86,6 @@ namespace WDPR_2024.server.MyServerApp.Services
                 }
             }
 
-            // Koppel Identity-gebruiker aan Klant-model
             _context.Klanten.Add(nieuweKlant);
             await _context.SaveChangesAsync();
         }

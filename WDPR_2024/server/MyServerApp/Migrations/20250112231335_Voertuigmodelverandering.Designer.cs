@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WDPR_2024.server.MyServerApp.Data;
 
@@ -11,9 +12,11 @@ using WDPR_2024.server.MyServerApp.Data;
 namespace MyServerApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250112231335_Voertuigmodelverandering")]
+    partial class Voertuigmodelverandering
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -547,7 +550,7 @@ namespace MyServerApp.Migrations
                     b.Property<string>("HuidigeHuurderEmail")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("HuidigeHuurderID")
+                    b.Property<int>("HuidigeHuurderID")
                         .HasColumnType("int");
 
                     b.Property<string>("HuidigeHuurderNaam")
@@ -579,9 +582,6 @@ namespace MyServerApp.Migrations
                     b.Property<string>("TypeVoertuig")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Uitgiftedatum")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("VoertuigID");
 

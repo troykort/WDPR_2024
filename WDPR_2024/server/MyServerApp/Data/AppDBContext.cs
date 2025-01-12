@@ -19,6 +19,7 @@ namespace WDPR_2024.server.MyServerApp.Data
         public DbSet<Schademelding> Schademeldingen { get; set; }
         public DbSet<Notificatie> Notificaties { get; set; }
         public DbSet<Medewerker> Medewerkers { get; set; }
+        public DbSet<Opmerking> Opmerkingen { get; set; }
 
         // Configuratie van de modellen
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -38,6 +39,13 @@ namespace WDPR_2024.server.MyServerApp.Data
     .HasForeignKey<Klant>(k => k.UserID)
     .OnDelete(DeleteBehavior.Cascade);
 
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Opmerking>()
+                .HasOne(o => o.VerhuurAanvraag)
+                .WithMany(v => v.Opmerkingen)
+                .HasForeignKey(o => o.VerhuurAanvraagID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Relatie tussen Medewerker en ApplicationUser
             modelBuilder.Entity<Medewerker>()

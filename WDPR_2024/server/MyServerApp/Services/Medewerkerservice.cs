@@ -33,17 +33,17 @@ namespace WDPR_2024.server.MyServerApp.Services
         // Voeg een nieuwe medewerker toe
         public async Task AddMedewerkerAsync(Medewerker nieuweMedewerker, string rol)
         {
-            // Controleer of de medewerker al bestaat op basis van e-mail
+            
             if (await _context.Medewerkers.AnyAsync(m => m.Email == nieuweMedewerker.Email))
             {
                 throw new Exception("Medewerker met dit e-mailadres bestaat al.");
             }
 
-            // Sla de medewerker op in de Medewerkers-tabel
+           
             nieuweMedewerker.Rol = rol;
             _context.Medewerkers.Add(nieuweMedewerker);
 
-            // Maak een Identity-gebruiker aan
+          
             var user = new ApplicationUser
             {
                 UserName = nieuweMedewerker.Email,
@@ -59,7 +59,7 @@ namespace WDPR_2024.server.MyServerApp.Services
 
             await _userManager.AddToRoleAsync(user, rol);
 
-            // Verstuur welkomstmail naar de nieuwe medewerker
+            
             var subject = "Welkom bij het team!";
             var body = $"Hallo {nieuweMedewerker.Naam},\n\nJe bent succesvol toegevoegd als {rol}.\nWelkom!";
             await _emailService.SendEmailAsync(nieuweMedewerker.Email, subject, body);
@@ -67,7 +67,7 @@ namespace WDPR_2024.server.MyServerApp.Services
             await _context.SaveChangesAsync();
         }
 
-        // Wijzig de rol van een medewerker
+     
         public async Task UpdateMedewerkerRolAsync(int id, string nieuweRol)
         {
             var medewerker = await _context.Medewerkers.FindAsync(id);
@@ -76,13 +76,13 @@ namespace WDPR_2024.server.MyServerApp.Services
             var user = await _userManager.FindByEmailAsync(medewerker.Email);
             if (user == null) throw new Exception("Gebruiker gekoppeld aan medewerker niet gevonden.");
 
-            // Controleer of de rol bestaat
+          
             if (!await _roleManager.RoleExistsAsync(nieuweRol))
             {
                 throw new Exception($"De opgegeven rol '{nieuweRol}' bestaat niet.");
             }
 
-            // Verwijder de medewerker uit de huidige rollen en voeg de nieuwe rol toe
+          
             var currentRoles = await _userManager.GetRolesAsync(user);
             foreach (var role in currentRoles)
             {
@@ -91,11 +91,11 @@ namespace WDPR_2024.server.MyServerApp.Services
 
             await _userManager.AddToRoleAsync(user, nieuweRol);
 
-            // Werk de rol van de medewerker bij in de Medewerkers-tabel
+            
             medewerker.Rol = nieuweRol;
             await _context.SaveChangesAsync();
 
-            // Verstuur e-mail over de rolwijziging
+           
             var subject = "Je rol is gewijzigd!";
             var body = $"Hallo {medewerker.Naam},\n\nJe rol is succesvol gewijzigd naar {nieuweRol}.";
             await _emailService.SendEmailAsync(medewerker.Email, subject, body);
@@ -116,7 +116,7 @@ namespace WDPR_2024.server.MyServerApp.Services
             _context.Medewerkers.Remove(medewerker);
             await _context.SaveChangesAsync();
 
-            // Verstuur een e-mail naar de medewerker over de verwijdering
+          
             var subject = "Je account is verwijderd";
             var body = $"Hallo {medewerker.Naam},\n\nJe account is verwijderd uit ons systeem.";
             await _emailService.SendEmailAsync(medewerker.Email, subject, body);

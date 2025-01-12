@@ -127,7 +127,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 }
                 catch (Exception ex)
                 {
-                    // If saving Klant fails, rollback the user creation
+                   
                     await _userManager.DeleteAsync(user);
                     return BadRequest($"Failed to save klant: {ex.Message}");
                 }
@@ -171,7 +171,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 }
                 catch (Exception ex)
                 {
-                    // Rollback user creation if saving company fails
+                    
                     await _userManager.DeleteAsync(user);
                     return BadRequest($"Failed to save bedrijf: {ex.Message}");
                 }

@@ -21,6 +21,37 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             _emailService = emailService;
         }
 
+        [Authorize(Roles = "Backoffice, Frontoffice")]
+        [HttpPost("{id}/opmerkingen")]
+        public async Task<IActionResult> VoegOpmerkingToe(int id, [FromBody] string tekst)
+        {
+            try
+            {
+                var aanvraag = await _aanvraagService.GetAanvraagByIdAsync(id);
+                if (aanvraag == null)
+                {
+                    return NotFound("Verhuur aanvraag niet gevonden.");
+                }
+
+                var opmerking = new Opmerking
+                {
+                    Tekst = tekst,
+                    VerhuurAanvraagID = id,
+                    GebruikerNaam = User.Identity.Name,
+                    DatumToegevoegd = DateTime.UtcNow
+                };
+
+                await _aanvraagService.VoegOpmerkingToeAsync(opmerking);
+
+                return Ok(opmerking);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         // 1. GET: Haal een specifieke aanvraag op
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAanvraag(int id)
@@ -67,41 +98,25 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             }
         }
 
-        // 4. PUT: Werk de status van een aanvraag bij
-        [Authorize(Roles = "Backoffice")]
         [HttpPut("{id}/{status}")]
-        public async Task<IActionResult> UpdateStatus(int id, string status, string opmerkingen = null)
+        public async Task<IActionResult> UpdateStatus(int id, string status, [FromBody] UpdateStatusRequest request)
         {
+            if (request == null || string.IsNullOrWhiteSpace(request.Opmerkingen))
+            {
+                return BadRequest("Opmerkingen zijn verplicht.");
+            }
+
             try
             {
+                // Haal de aanvraag op
                 var aanvraag = await _aanvraagService.GetAanvraagByIdAsync(id);
+                if (aanvraag == null)
+                {
+                    return NotFound("Aanvraag niet gevonden.");
+                }
 
-                // Verwerk statusupdate
-                await _aanvraagService.UpdateAanvraagStatusAsync(id, status, opmerkingen);
-
-
-                //// Verstuur een e-mail naar de klant als de aanvraag goedgekeurd is
-                //if (status == "Goedgekeurd")
-                //{
-                //    var klantEmail = aanvraag.Klant.Email;
-                //    var klantSubject = "Je verhuuraanvraag is goedgekeurd!";
-                //    var klantBody = $"Je verhuuraanvraag is goedgekeurd! Je kunt het voertuig ophalen op de afgesproken datum. Bedankt voor je reservering!";
-                //    await _emailService.SendEmailAsync(klantEmail, klantSubject, klantBody);
-
-                //    // Verstuur een e-mail naar de backoffice om hen op de hoogte te stellen van de goedkeuring
-                //    var backofficeEmail = "dlamericaan@gmail.com"; // Vervang dit door het e-mailadres van de backoffice
-                //    var backofficeSubject = "Nieuwe goedgekeurde verhuuraanvraag";
-                //    var backofficeBody = $"Er is een verhuuraanvraag goedgekeurd voor {aanvraag.Klant.Naam}. De aanvraag betreft het voertuig {aanvraag.Voertuig.Type}.";
-                //    await _emailService.SendEmailAsync(backofficeEmail, backofficeSubject, backofficeBody);
-                //}
-                //else if (status == "Afgewezen")
-                //{
-                //    // Verstuur een e-mail naar de klant als de aanvraag afgewezen is
-                //    var klantEmail = aanvraag.Klant.Email;
-                //    var klantSubject = "Je verhuuraanvraag is afgewezen";
-                //    var klantBody = $"Je verhuuraanvraag is afgewezen. Neem contact op met de backoffice voor meer informatie.";
-                //    await _emailService.SendEmailAsync(klantEmail, klantSubject, klantBody);
-                //}
+                // Werk de status en opmerkingen bij
+                await _aanvraagService.UpdateAanvraagStatusAsync(id, status, request.Opmerkingen);
 
                 return Ok($"Status succesvol bijgewerkt naar {status}.");
             }
@@ -110,6 +125,9 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+
 
         // 5. GET: Haal aanvragen op basis van status
         [Authorize(Roles = "Backoffice")]

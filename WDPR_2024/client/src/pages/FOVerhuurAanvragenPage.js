@@ -1,6 +1,5 @@
 ﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
-
 import "./FOVerhuurAanvragenPage.css";
 
 const FrontofficeVerhuurAanvragenPage = () => {
@@ -8,6 +7,7 @@ const FrontofficeVerhuurAanvragenPage = () => {
     const [selectedAanvraag, setSelectedAanvraag] = useState(null);
     const [opmerkingen, setOpmerkingen] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         fetchAanvragen();
@@ -32,6 +32,11 @@ const FrontofficeVerhuurAanvragenPage = () => {
     };
 
     const handleCloseModal = () => {
+        if (opmerkingen.trim()) {
+            if (!window.confirm("Weet je zeker dat je de modal wilt sluiten? De ingevoerde opmerkingen gaan verloren.")) {
+                return;
+            }
+        }
         setSelectedAanvraag(null);
         setOpmerkingen("");
         setModalVisible(false);
@@ -42,22 +47,30 @@ const FrontofficeVerhuurAanvragenPage = () => {
             alert("Voer opmerkingen in om de uitgifte te registreren.");
             return;
         }
+        if (opmerkingen.length > 500) {
+            alert("Opmerkingen mogen niet langer zijn dan 500 tekens.");
+            return;
+        }
         try {
+            setIsLoading(true);
             const token = localStorage.getItem("token");
             const status = "Uitgegeven";
 
-            await axios.put(`http://localhost:5000/api/verhuur-aanvragen/${selectedAanvraag.verhuurAanvraagID}/${status}`, {
-                opmerkingen,
-            }, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
+            await axios.put(
+                `http://localhost:5000/api/verhuur-aanvragen/${selectedAanvraag.verhuurAanvraagID}/${status}`,
+                { opmerkingen },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
 
             alert("Uitgifte succesvol geregistreerd!");
             handleCloseModal();
             fetchAanvragen(); // Refresh de lijst
         } catch (error) {
             console.error("Error updating status:", error);
-            alert("Fout bij het registreren van de uitgifte.");
+            const errorMessage = error.response?.data?.message || "Er is iets misgegaan. Probeer opnieuw.";
+            alert(errorMessage);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -107,8 +120,7 @@ const FrontofficeVerhuurAanvragenPage = () => {
                             <strong>Voertuig:</strong> {selectedAanvraag?.voertuigInfo}
                         </p>
                         <p>
-                            <strong>Datum:</strong> {selectedAanvraag?.startDatum} -{" "}
-                            {selectedAanvraag?.eindDatum}
+                            <strong>Datum:</strong> {selectedAanvraag?.startDatum} - {selectedAanvraag?.eindDatum}
                         </p>
                         <textarea
                             className="frontoffice-verhuur-aanvragen-textarea"
@@ -117,7 +129,9 @@ const FrontofficeVerhuurAanvragenPage = () => {
                             placeholder="Voer opmerkingen of extra informatie in"
                         ></textarea>
                         <div className="frontoffice-verhuur-aanvragen-modal-actions">
-                            <button onClick={handleUpdateStatus}>Registreren</button>
+                            <button onClick={handleUpdateStatus} disabled={isLoading}>
+                                {isLoading ? "Bezig met registreren..." : "Registreren"}
+                            </button>
                             <button onClick={handleCloseModal}>Annuleren</button>
                         </div>
                     </div>

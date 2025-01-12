@@ -18,6 +18,38 @@ namespace WDPR_2024.server.MyServerApp.Services
             _context = context;
         }
 
+        public async Task<List<Voertuig>> GetUitgegevenVoertuigenAsync()
+        {
+            return await _context.VerhuurAanvragen
+                .Where(va => va.Status == "Uitgegeven")
+                .Include(va => va.Voertuig)
+                .Include(va => va.Klant)
+                .Select(va => new Voertuig
+                {
+                    VoertuigID = va.Voertuig.VoertuigID,
+                    Merk = va.Voertuig.Merk,
+                    Type = va.Voertuig.Type,
+                    Kenteken = va.Voertuig.Kenteken,
+                    Status = va.Voertuig.Status,
+                    HuidigeHuurderID = va.Klant.KlantID,
+                    HuidigeHuurderNaam = va.Klant.Naam,
+                    HuidigeHuurderEmail = va.Klant.Email,
+                    Uitgiftedatum = va.Uitgiftedatum
+
+                })
+                .ToListAsync();
+        }
+
+
+        public async Task UpdateVoertuigStatusAsync(int voertuigId, string nieuweStatus)
+        {
+            var voertuig = await _context.Voertuigen.FindAsync(voertuigId);
+            if (voertuig == null) throw new Exception("Voertuig niet gevonden.");
+
+            voertuig.Status = nieuweStatus;
+            await _context.SaveChangesAsync();
+        }
+
         // Haal een specifiek voertuig op
         public async Task<Voertuig> GetVoertuigByIdAsync(int id)
         {

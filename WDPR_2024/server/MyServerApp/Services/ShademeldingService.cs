@@ -31,11 +31,27 @@ namespace WDPR_2024.server.MyServerApp.Services
                 .ToListAsync();
         }
 
-        // Voeg een nieuwe schademelding toe
-        public async Task AddSchademeldingAsync(Schademelding nieuweSchademelding)
+        public async Task AddSchademeldingAsync(Schademelding schademelding)
         {
-            _context.Schademeldingen.Add(nieuweSchademelding);
+            _context.Schademeldingen.Add(schademelding);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<string> UploadFotoAsync(IFormFile foto)
+        {
+            if (foto == null) throw new Exception("Geen foto aangeleverd.");
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "schadefotos");
+            if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+
+            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(foto.FileName);
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await foto.CopyToAsync(fileStream);
+            }
+
+            return $"/schadefotos/{uniqueFileName}";
         }
 
         // Werk de status van een schademelding bij

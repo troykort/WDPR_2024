@@ -54,28 +54,28 @@ namespace WDPR_2024.server.MyServerApp.Services
                 throw new Exception("Een bedrijf met dit KVK-nummer bestaat al.");
             }
 
-            // Voeg het bedrijf toe aan de database
+         
             _context.Bedrijven.Add(nieuwBedrijf);
             await _context.SaveChangesAsync();
         }
 
-        // Voeg een medewerker toe aan een bedrijf
+      
         public async Task AddMedewerkerToBedrijfAsync(int bedrijfId, Klant nieuweMedewerker)
         {
             var bedrijf = await GetBedrijfByIdAsync(bedrijfId);
             if (bedrijf == null) throw new Exception("Bedrijf niet gevonden.");
 
-            // Controleer of de e-mail domein overeenkomt
+            
             if (!nieuweMedewerker.Email.EndsWith($"@{bedrijf.EmailDomein}"))
             {
                 throw new Exception("Het e-mailadres komt niet overeen met het e-maildomein van het bedrijf.");
             }
 
-            // Voeg de medewerker toe
+            
             nieuweMedewerker.BedrijfID = bedrijfId;
             _context.Klanten.Add(nieuweMedewerker);
 
-            // Maak een Identity-gebruiker aan
+            
             var user = new ApplicationUser
             {
                 UserName = nieuweMedewerker.Email,
@@ -112,7 +112,7 @@ namespace WDPR_2024.server.MyServerApp.Services
             var bedrijf = await GetBedrijfByIdAsync(id);
             if (bedrijf == null) throw new Exception("Bedrijf niet gevonden.");
 
-            // Verwijder Identity-gebruikers van medewerkers
+           
             foreach (var medewerker in bedrijf.Medewerkers)
             {
                 var user = await _userManager.FindByEmailAsync(medewerker.Email);

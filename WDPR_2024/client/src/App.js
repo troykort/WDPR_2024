@@ -27,6 +27,7 @@ import { getRoleFromToken, getUserIdFromToken } from './utils/authHelpers';
 import DashboardFrontoffice from './pages/DashboardFrontoffice';
 import HeaderBackOffice from './components/HeaderBackOffice';
 import FOVerhuurAanvragenPage from './pages/FOVerhuurAanvragenPage';
+import VoertuigInname from './pages/VoertuiginnamePage';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -155,6 +156,11 @@ const App = () => {
                         <ProtectedRoute allowedRoles={["Frontoffice"]}>
                             <HeaderFrontOffice />
                             <FOVerhuurAanvragenPage />
+                        </ProtectedRoute>
+                    } /><Route path="/voertuiginname" element={
+                        <ProtectedRoute allowedRoles={["Frontoffice"]}>
+                            <HeaderFrontOffice />
+                            <VoertuigInname />
                         </ProtectedRoute>
                     } />
 

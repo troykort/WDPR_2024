@@ -3,7 +3,7 @@ import axios from "axios";
 
 import "./BOVerhuurAanvragenPage.css";
 
-const VerhuurAanvragenPage = () => {
+const BOVerhuurAanvragenPage = () => {
     const [aanvragen, setAanvragen] = useState([]);
     const [afwijsReden, setAfwijsReden] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
@@ -17,13 +17,12 @@ const VerhuurAanvragenPage = () => {
         try {
             const token = localStorage.getItem("token");
             const response = await axios.get("http://localhost:5000/api/verhuur-aanvragen", {
-               
                 headers: { Authorization: `Bearer ${token}` },
             });
-            setAanvragen(response.data);
-            console.log("Fetched aanvragen:", response.data);
+            setAanvragen(response.data || []);
         } catch (error) {
             console.error("Error fetching verhuuraanvragen:", error);
+            alert("Er is een fout opgetreden bij het ophalen van de verhuuraanvragen.");
         }
     };
 
@@ -32,21 +31,21 @@ const VerhuurAanvragenPage = () => {
             const token = localStorage.getItem("token");
             const status = "Goedgekeurd";
 
-            // Log ID for debugging
-            console.log("Goedkeuren ID:", id);
-
-            await axios.put(`http://localhost:5000/api/verhuur-aanvragen/${id}/${status}`, 
+            await axios.put(
+                `http://localhost:5000/api/verhuur-aanvragen/${id}/${status}`,
                 { opmerkingen: null },
                 {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
 
-            fetchAanvragen(); // Refresh the list
+            fetchAanvragen(); // Refresh de lijst
             alert("Aanvraag is goedgekeurd!");
         } catch (error) {
             console.error("Error approving aanvraag:", error);
+            alert("Er is een fout opgetreden bij het goedkeuren van de aanvraag.");
         }
     };
 
@@ -55,12 +54,10 @@ const VerhuurAanvragenPage = () => {
             alert("Voer een reden in voor afwijzing.");
             return;
         }
-
+        console.log("Afwijsreden:", afwijsReden);
         try {
             const token = localStorage.getItem("token");
             const status = "Afgewezen";
-
-            console.log("Afwijzen ID:", selectedAanvraag);
 
             await axios.put(
                 `http://localhost:5000/api/verhuur-aanvragen/${selectedAanvraag}/${status}`,
@@ -68,16 +65,21 @@ const VerhuurAanvragenPage = () => {
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
+                       "Content-Type": "application/json",
                     },
                 }
             );
 
+            
+
+
             setAfwijsReden("");
             setModalVisible(false);
-            fetchAanvragen(); // Refresh the list
+            fetchAanvragen(); // Refresh de lijst
             alert("Aanvraag is afgewezen!");
         } catch (error) {
             console.error("Error rejecting aanvraag:", error);
+            alert("Er is een fout opgetreden bij het afwijzen van de aanvraag.");
         }
     };
 
@@ -92,9 +94,9 @@ const VerhuurAanvragenPage = () => {
     };
 
     return (
-        <div className="verhuur-aanvragen-page-container">
-            <h2>Verhuur Aanvragen</h2>
-            <table className="verhuur-aanvragen-table">
+        <div className="bo-verhuur-aanvragen-page-container">
+            <h2>Backoffice Verhuur Aanvragen</h2>
+            <table className="bo-verhuur-aanvragen-table">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -115,13 +117,13 @@ const VerhuurAanvragenPage = () => {
                             <td>{aanvraag.status}</td>
                             <td>
                                 <button
-                                    className="verhuur-aanvragen-button verhuur-aanvragen-button-approve"
+                                    className="bo-verhuur-aanvragen-button bo-verhuur-aanvragen-button-approve"
                                     onClick={() => handleGoedkeuren(aanvraag.verhuurAanvraagID)}
                                 >
                                     Goedkeuren
                                 </button>
                                 <button
-                                    className="verhuur-aanvragen-button verhuur-aanvragen-button-reject"
+                                    className="bo-verhuur-aanvragen-button bo-verhuur-aanvragen-button-reject"
                                     onClick={() => openAfwijzenModal(aanvraag.verhuurAanvraagID)}
                                 >
                                     Afwijzen
@@ -133,16 +135,16 @@ const VerhuurAanvragenPage = () => {
             </table>
 
             {modalVisible && (
-                <div className="verhuur-aanvragen-modal">
-                    <div className="verhuur-aanvragen-modal-content">
+                <div className="bo-verhuur-aanvragen-modal">
+                    <div className="bo-verhuur-aanvragen-modal-content">
                         <h3>Reden voor afwijzing</h3>
                         <textarea
-                            className="verhuur-aanvragen-textarea"
+                            className="bo-verhuur-aanvragen-textarea"
                             value={afwijsReden}
                             onChange={(e) => setAfwijsReden(e.target.value)}
                             placeholder="Voer een reden in"
                         ></textarea>
-                        <div className="verhuur-aanvragen-modal-actions">
+                        <div className="bo-verhuur-aanvragen-modal-actions">
                             <button onClick={handleAfwijzen}>Afwijzen</button>
                             <button onClick={closeAfwijzenModal}>Annuleren</button>
                         </div>
@@ -153,4 +155,4 @@ const VerhuurAanvragenPage = () => {
     );
 };
 
-export default VerhuurAanvragenPage;
+export default BOVerhuurAanvragenPage;

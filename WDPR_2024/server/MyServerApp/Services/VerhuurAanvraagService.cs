@@ -41,43 +41,76 @@ namespace WDPR_2024.server.MyServerApp.Services
 
         public async Task AddAanvraagAsync(VerhuurAanvraag nieuweAanvraag)
         {
-            // Fetch the vehicle associated with the rental request
+            
             var voertuig = await _context.Voertuigen.FindAsync(nieuweAanvraag.VoertuigID);
 
-            // Check if the vehicle exists and is available
+            
             if (voertuig == null || voertuig.Status != "Beschikbaar")
                 throw new Exception("Het geselecteerde voertuig is niet beschikbaar.");
 
-            // Update the aanvraag status and vehicle status
+            
             nieuweAanvraag.Status = "In Behandeling";
             voertuig.Status = "In Behandeling";
 
-            // Add the aanvraag to the context
+            
             _context.VerhuurAanvragen.Add(nieuweAanvraag);
 
-            // Save changes to the database
+            
             await _context.SaveChangesAsync();
         }
 
 
         // Werk een aanvraagstatus bij (Goedgekeurd, Afgewezen, Uitgegeven)
-        public async Task UpdateAanvraagStatusAsync(int id, string nieuweStatus, string opmerkingen = null)
+        public async Task UpdateAanvraagStatusAsync(int id, string nieuweStatus, string opmerkingenTekst = null)
         {
-            var aanvraag = await _context.VerhuurAanvragen.FindAsync(id);
+          
+            var aanvraag = await _context.VerhuurAanvragen
+                .Include(a => a.Opmerkingen) 
+                .Include(a => a.Voertuig) 
+                .FirstOrDefaultAsync(a => a.VerhuurAanvraagID == id);
+
             if (aanvraag == null) throw new Exception("Aanvraag niet gevonden.");
 
+           
             aanvraag.Status = nieuweStatus;
-            aanvraag.Opmerkingen = opmerkingen;
 
-            // Als goedgekeurd, markeer voertuig als verhuurd
+            
+            if (!string.IsNullOrWhiteSpace(opmerkingenTekst))
+            {
+                var opmerking = new Opmerking
+                {
+                    VerhuurAanvraagID = id,
+                    Tekst = opmerkingenTekst,
+                    GebruikerNaam = "Backoffice/Frontoffice gebruiker", 
+                    DatumToegevoegd = DateTime.UtcNow
+                };
+                _context.Opmerkingen.Add(opmerking);
+            }
+
+           
             if (nieuweStatus == "Goedgekeurd")
             {
-                var voertuig = await _context.Voertuigen.FindAsync(aanvraag.VoertuigID);
+                var voertuig = aanvraag.Voertuig;
+                if (voertuig == null) throw new Exception("Voertuig niet gevonden.");
                 voertuig.Status = "Verhuurd";
             }
 
-            await _context.SaveChangesAsync();
+            
+            if (nieuweStatus == "Uitgegeven")
+            {
+                var voertuig = aanvraag.Voertuig;
+                if (voertuig == null) throw new Exception("Voertuig niet gevonden.");
+
+                
+                voertuig.Status = "Uitgegeven";
+
+                
+                aanvraag.Uitgiftedatum = DateTime.Now;
+            }
+
+            await _context.SaveChangesAsync(); 
         }
+
 
         // Haal aanvragen op basis van status
         public async Task<List<VerhuurAanvraag>> GetAanvragenByStatusAsync(string status)
@@ -109,6 +142,13 @@ namespace WDPR_2024.server.MyServerApp.Services
 
             return await query.ToListAsync();
         }
+
+        public async Task VoegOpmerkingToeAsync(Opmerking opmerking)
+        {
+            _context.Opmerkingen.Add(opmerking);
+            await _context.SaveChangesAsync();
+        }
+
 
         // Haal alle beschikbare voertuigen op basis van type en datums
         public async Task<List<Voertuig>> GetBeschikbareVoertuigenAsync(string type, DateTime startDatum, DateTime eindDatum)

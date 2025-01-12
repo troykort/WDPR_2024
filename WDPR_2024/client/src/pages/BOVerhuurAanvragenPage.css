@@ -1,20 +1,19 @@
-﻿/* VerhuurAanvragenPage-specific styles */
-.verhuur-aanvragen-page-container {
+﻿/* BOVerhuurAanvragenPage-specific styles */
+.bo-verhuur-aanvragen-page-container {
     padding: 20px;
     font-family: Arial, sans-serif;
-    /* Added gradient background */
+    background: linear-gradient(to right, #f3f4f6, #e9ecef);
     min-height: 100vh; /* Ensure the background covers the full viewport height */
     box-sizing: border-box;
 }
 
-    .verhuur-aanvragen-page-container h2 {
+    .bo-verhuur-aanvragen-page-container h2 {
         font-size: 28px;
         margin-bottom: 20px;
         text-align: center;
-        
     }
 
-.verhuur-aanvragen-table {
+.bo-verhuur-aanvragen-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
@@ -25,20 +24,20 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
-    .verhuur-aanvragen-table th,
-    .verhuur-aanvragen-table td {
+    .bo-verhuur-aanvragen-table th,
+    .bo-verhuur-aanvragen-table td {
         border: 1px solid #ddd;
         padding: 12px;
         text-align: left;
     }
 
-    .verhuur-aanvragen-table th {
+    .bo-verhuur-aanvragen-table th {
         background-color: #f2f2f2;
         font-size: 20px;
         font-weight: bold;
     }
 
-.verhuur-aanvragen-button {
+.bo-verhuur-aanvragen-button {
     margin: 5px;
     padding: 12px 18px;
     border: none;
@@ -47,21 +46,21 @@
     font-size: 16px;
 }
 
-    .verhuur-aanvragen-button:hover {
+    .bo-verhuur-aanvragen-button:hover {
         opacity: 0.9;
     }
 
-.verhuur-aanvragen-button-approve {
+.bo-verhuur-aanvragen-button-approve {
     background-color: #4CAF50;
     color: white;
 }
 
-.verhuur-aanvragen-button-reject {
+.bo-verhuur-aanvragen-button-reject {
     background-color: #f44336;
     color: white;
 }
 
-.verhuur-aanvragen-modal {
+.bo-verhuur-aanvragen-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -73,7 +72,7 @@
     align-items: center;
 }
 
-.verhuur-aanvragen-modal-content {
+.bo-verhuur-aanvragen-modal-content {
     background: white;
     padding: 30px;
     border-radius: 15px;
@@ -83,13 +82,13 @@
     font-size: 18px; /* Increased modal text size */
 }
 
-    .verhuur-aanvragen-modal-content h3 {
+    .bo-verhuur-aanvragen-modal-content h3 {
         margin-bottom: 20px;
         font-size: 22px;
         font-weight: bold;
     }
 
-.verhuur-aanvragen-textarea {
+.bo-verhuur-aanvragen-textarea {
     width: 100%;
     height: 120px; /* Increased height */
     margin-top: 10px;
@@ -100,13 +99,13 @@
     resize: none; /* Disable resizing */
 }
 
-.verhuur-aanvragen-modal-actions {
+.bo-verhuur-aanvragen-modal-actions {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
 }
 
-    .verhuur-aanvragen-modal-actions button {
+    .bo-verhuur-aanvragen-modal-actions button {
         padding: 12px 20px;
         font-size: 16px;
         border: none;
@@ -115,20 +114,20 @@
         transition: background-color 0.3s;
     }
 
-        .verhuur-aanvragen-modal-actions button:first-of-type {
+        .bo-verhuur-aanvragen-modal-actions button:first-of-type {
             background-color: #f44336;
             color: white;
         }
 
-            .verhuur-aanvragen-modal-actions button:first-of-type:hover {
+            .bo-verhuur-aanvragen-modal-actions button:first-of-type:hover {
                 background-color: #d32f2f;
             }
 
-        .verhuur-aanvragen-modal-actions button:last-of-type {
+        .bo-verhuur-aanvragen-modal-actions button:last-of-type {
             background-color: #ccc;
             color: black;
         }
 
-            .verhuur-aanvragen-modal-actions button:last-of-type:hover {
+            .bo-verhuur-aanvragen-modal-actions button:last-of-type:hover {
                 background-color: #b0b0b0;
             }
