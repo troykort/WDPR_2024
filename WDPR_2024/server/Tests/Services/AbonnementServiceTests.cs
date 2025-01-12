@@ -35,7 +35,7 @@ namespace WDPR_2024.server.Tests.Services
             // Act
             var result = await _service.GetAbonnementByIdAsync(abonnementId);
 
-            // Assert
+            // Agssert
             Assert.NotNull(result);
             Assert.Equal(verwachtAbonnement, result);
         }
