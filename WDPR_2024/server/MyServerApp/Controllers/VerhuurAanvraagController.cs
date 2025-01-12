@@ -68,9 +68,9 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         }
 
         // 4. PUT: Werk de status van een aanvraag bij
-        [Authorize(Roles = "Backoffice")]
+        //[Authorize(Roles = "Backoffice")]
         [HttpPut("{id}/{status}")]
-        public async Task<IActionResult> UpdateStatus(int id, [FromQuery] string status, string opmerkingen = null)
+        public async Task<IActionResult> UpdateStatus(int id, string status, [FromQuery] string opmerkingen = null)
         {
             try
             {
@@ -80,28 +80,28 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 await _aanvraagService.UpdateAanvraagStatusAsync(id, status, opmerkingen);
 
 
-                // Verstuur een e-mail naar de klant als de aanvraag goedgekeurd is
-                if (status == "Goedgekeurd")
-                {
-                    var klantEmail = aanvraag.Klant.Email;
-                    var klantSubject = "Je verhuuraanvraag is goedgekeurd!";
-                    var klantBody = $"Je verhuuraanvraag is goedgekeurd! Je kunt het voertuig ophalen op de afgesproken datum. Bedankt voor je reservering!";
-                    await _emailService.SendEmailAsync(klantEmail, klantSubject, klantBody);
+                //// Verstuur een e-mail naar de klant als de aanvraag goedgekeurd is
+                //if (status == "Goedgekeurd")
+                //{
+                //    var klantEmail = aanvraag.Klant.Email;
+                //    var klantSubject = "Je verhuuraanvraag is goedgekeurd!";
+                //    var klantBody = $"Je verhuuraanvraag is goedgekeurd! Je kunt het voertuig ophalen op de afgesproken datum. Bedankt voor je reservering!";
+                //    await _emailService.SendEmailAsync(klantEmail, klantSubject, klantBody);
 
-                    // Verstuur een e-mail naar de backoffice om hen op de hoogte te stellen van de goedkeuring
-                    var backofficeEmail = "dlamericaan@gmail.com"; // Vervang dit door het e-mailadres van de backoffice
-                    var backofficeSubject = "Nieuwe goedgekeurde verhuuraanvraag";
-                    var backofficeBody = $"Er is een verhuuraanvraag goedgekeurd voor {aanvraag.Klant.Naam}. De aanvraag betreft het voertuig {aanvraag.Voertuig.Type}.";
-                    await _emailService.SendEmailAsync(backofficeEmail, backofficeSubject, backofficeBody);
-                }
-                else if (status == "Afgewezen")
-                {
-                    // Verstuur een e-mail naar de klant als de aanvraag afgewezen is
-                    var klantEmail = aanvraag.Klant.Email;
-                    var klantSubject = "Je verhuuraanvraag is afgewezen";
-                    var klantBody = $"Je verhuuraanvraag is afgewezen. Neem contact op met de backoffice voor meer informatie.";
-                    await _emailService.SendEmailAsync(klantEmail, klantSubject, klantBody);
-                }
+                //    // Verstuur een e-mail naar de backoffice om hen op de hoogte te stellen van de goedkeuring
+                //    var backofficeEmail = "dlamericaan@gmail.com"; // Vervang dit door het e-mailadres van de backoffice
+                //    var backofficeSubject = "Nieuwe goedgekeurde verhuuraanvraag";
+                //    var backofficeBody = $"Er is een verhuuraanvraag goedgekeurd voor {aanvraag.Klant.Naam}. De aanvraag betreft het voertuig {aanvraag.Voertuig.Type}.";
+                //    await _emailService.SendEmailAsync(backofficeEmail, backofficeSubject, backofficeBody);
+                //}
+                //else if (status == "Afgewezen")
+                //{
+                //    // Verstuur een e-mail naar de klant als de aanvraag afgewezen is
+                //    var klantEmail = aanvraag.Klant.Email;
+                //    var klantSubject = "Je verhuuraanvraag is afgewezen";
+                //    var klantBody = $"Je verhuuraanvraag is afgewezen. Neem contact op met de backoffice voor meer informatie.";
+                //    await _emailService.SendEmailAsync(klantEmail, klantSubject, klantBody);
+                //}
 
                 return Ok($"Status succesvol bijgewerkt naar {status}.");
             }
@@ -112,7 +112,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         }
 
         // 5. GET: Haal aanvragen op basis van status
-        [Authorize(Roles = "Backoffice")]
+        //[Authorize(Roles = "Backoffice")]
         [HttpGet("status/{status}")]
         public async Task<IActionResult> GetAanvragenByStatus(string status)
         {
