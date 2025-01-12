@@ -1,4 +1,4 @@
-.privacybeleid-container {
+.algemene-voorwaarden-container {
     background-color: #F2EBDB; /* Background color */
     padding: 20px; /* Padding for inner space */
     border-radius: 10px; /* Rounded corners */
@@ -13,28 +13,38 @@
     padding-top: 60px; /* Space for header */
 }
 
-.privacybeleid-container h1 {
+.algemene-voorwaarden-container h1 {
     font-size: 2em;
     color: #5B3D3D;
     margin-bottom: 20px;
 }
 
-.privacybeleid-container h2 {
+.algemene-voorwaarden-container h2 {
     font-size: 1.5em;
     margin-top: 20px;
     color: #5B3D3D;
 }
 
-.privacybeleid-container p, .privacybeleid-container ul {
+.algemene-voorwaarden-container p, .algemene-voorwaarden-container ul {
     font-size: 1.1em;
     margin: 10px 0;
 }
 
-.privacybeleid-container ul {
+.algemene-voorwaarden-container ul {
     list-style-type: none;
     padding-left: 20px;
 }
 
-.privacybeleid-container li {
+.algemene-voorwaarden-container li {
     margin-bottom: 10px;
+}
+
+.algemene-voorwaarden-container a {
+    color: #4c1a2a;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.algemene-voorwaarden-container a:hover {
+    text-decoration: underline;
 }
