@@ -70,7 +70,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         // 4. PUT: Werk de status van een aanvraag bij
         [Authorize(Roles = "Backoffice")]
         [HttpPut("{id}/{status}")]
-        public async Task<IActionResult> UpdateStatus(int id, string status, [FromQuery] string opmerkingen = null)
+        public async Task<IActionResult> UpdateStatus(int id, string status, string opmerkingen = null)
         {
             try
             {

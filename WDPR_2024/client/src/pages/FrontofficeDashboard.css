@@ -1,0 +1,69 @@
+﻿/* Frontoffice Dashboard CSS */
+.frontoffice-dashboard {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+    .frontoffice-dashboard h1 {
+        color: #333;
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+    }
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+    .dashboard-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .dashboard-card h2 {
+        margin: 10px 0;
+        color: #007bff;
+        font-size: 1.5rem;
+    }
+
+    .dashboard-card p {
+        color: #666;
+        font-size: 1rem;
+    }
+
+    .dashboard-card button {
+        margin-top: 15px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .dashboard-card button:hover {
+            background-color: #0056b3;
+        }

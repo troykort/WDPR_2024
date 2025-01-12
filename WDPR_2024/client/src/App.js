@@ -20,8 +20,9 @@ import StatistiekenWPB from './pages/StatistiekenWPB';
 import AccountSettings from './pages/AccountSettings';
 import Privacybeleid from './pages/Privacybeleid';
 import ProtectedRoute from './components/ProtectedRoute';
-import VerhuurAanvragenPage from './pages/VerhuurAanvragenPage';
+import VerhuurAanvragenPage from './pages/BOVerhuurAanvragenPage';
 import { getRoleFromToken, getUserIdFromToken } from './utils/authHelpers';
+import FrontofficeDashboard from './pages/FrontofficeDashboard';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -133,9 +134,14 @@ const App = () => {
                             <HeaderParticulier />
                             <Voertuigverhuur />
                         </ProtectedRoute>
-                    } /><Route path="/backoffice-dashboard" element={
+                    } />
+                    <Route path="/backoffice-dashboard" element={
                         <ProtectedRoute allowedRoles={["Backoffice"]}>
                             <VerhuurAanvragenPage />
+                        </ProtectedRoute>
+                    } /><Route path="/frontoffice-dashboard" element={
+                        <ProtectedRoute allowedRoles={["Frontoffice"]}>
+                            <FrontofficeDashboard />
                         </ProtectedRoute>
                     } />
 

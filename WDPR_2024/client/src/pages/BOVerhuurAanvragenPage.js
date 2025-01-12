@@ -17,6 +17,7 @@ const VerhuurAanvragenPage = () => {
         try {
             const token = localStorage.getItem("token");
             const response = await axios.get("http://localhost:5000/api/verhuur-aanvragen", {
+               
                 headers: { Authorization: `Bearer ${token}` },
             });
             setAanvragen(response.data);
@@ -34,7 +35,9 @@ const VerhuurAanvragenPage = () => {
             // Log ID for debugging
             console.log("Goedkeuren ID:", id);
 
-            await axios.put(`http://localhost:5000/api/verhuur-aanvragen/${id}/${status}`, {
+            await axios.put(`http://localhost:5000/api/verhuur-aanvragen/${id}/${status}`, 
+                { opmerkingen: null },
+                {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
