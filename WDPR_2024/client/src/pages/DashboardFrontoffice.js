@@ -10,7 +10,7 @@ const DashboardFrontoffice = () => {
         <div className="frontoffice-dashboard-container">
             <h1>Frontoffice Dashboard</h1>
             <div className="frontoffice-dashboard-navigation">
-                <button onClick={() => navigateToPage("/verhuuraanvragen-page")}>Verhuuraanvragen</button>
+                <button onClick={() => navigateToPage("/FO-verhuuraanvragen")}>Verhuuraanvragen</button>
                 <button onClick={() => navigateToPage("/voertuigbeheer-page")}>Voertuigbeheer</button>
             </div>
         </div>
