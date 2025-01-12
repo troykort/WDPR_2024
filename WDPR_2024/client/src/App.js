@@ -23,6 +23,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import VerhuurAanvragenPage from './pages/BOVerhuurAanvragenPage';
 import { getRoleFromToken, getUserIdFromToken } from './utils/authHelpers';
 import FrontofficeDashboard from './pages/FrontofficeDashboard';
+import FrontofficeVerhuurAanvragenPage from './pages/FOVerhuurAanvragenPage';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -141,7 +142,7 @@ const App = () => {
                         </ProtectedRoute>
                     } /><Route path="/frontoffice-dashboard" element={
                         <ProtectedRoute allowedRoles={["Frontoffice"]}>
-                            <FrontofficeDashboard />
+                            <FrontofficeVerhuurAanvragenPage />
                         </ProtectedRoute>
                     } />
 

@@ -63,7 +63,7 @@ namespace WDPR_2024.server.MyServerApp.Services
             await _context.SaveChangesAsync();
         }
 
-        
+
         // Voeg filterfunctionaliteit toe
         public async Task<List<Voertuig>> GetVoertuigenByTypeAsync(string TypeVoertuig)
         {

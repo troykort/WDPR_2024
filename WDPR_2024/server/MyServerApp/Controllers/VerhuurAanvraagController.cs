@@ -32,7 +32,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         }
 
         // 2. GET: Haal alle aanvragen op
-        [Authorize(Roles = "Backoffice")]
+        [Authorize(Roles = "Backoffice, Frontoffice")]
         [HttpGet]
         public async Task<ActionResult<List<verhuurAanvraagDto>>> GetAlleAanvragen()
         {
