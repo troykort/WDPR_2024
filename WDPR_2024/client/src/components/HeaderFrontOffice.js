@@ -22,7 +22,7 @@ const HeaderFrontOffice = () => {
             <div className="headerfrontoffice-right">
                 <Link to="/voertuigverhuur" className="headerfrontoffice-button">Klantenbeheer</Link>
                 <Link to="/voertuigverhuur" className="headerfrontoffice-button">Voertuigbeheer</Link>
-                <Link to="/verhuuraanvragenpage" className="headerfrontoffice-button">Verhuurbeheer</Link>
+                <Link to="/frontoffice-verhuuraanvragen" className="headerfrontoffice-button">Verhuuraanvragen</Link>
                 <Link to="/frontoffice-dashboard" className="headerfrontoffice-button">Home</Link>
                 <Link to="/profiel" className="headerfrontoffice-button">Profiel</Link>
                 <button onClick={handleLogout} className="headerfrontoffice-button">Uitloggen</button>

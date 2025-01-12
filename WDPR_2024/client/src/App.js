@@ -14,7 +14,7 @@ import HeaderFrontOffice from './components/HeaderFrontOffice';
 import ManageCompanyEmployees from './pages/ManageBedrijfsMedewerkers';
 import VoertuigOverzichtPage from './pages/VoertuigOverzichtPage';
 import DashboardWPB from './pages/DashboardWPB';
-import DashboardABO from './pages/DashboardABO'; 
+import DashboardABO from './pages/DashboardABO';
 import DashboardParticulier from './pages/DashboardParticulier';
 import DashboardBackoffice from './pages/DashboardBackoffice';
 import Voertuigverhuur from './pages/Voertuigverhuur';
@@ -23,7 +23,7 @@ import AccountSettings from './pages/AccountSettings';
 import Privacybeleid from './pages/Privacybeleid';
 import ProtectedRoute from './components/ProtectedRoute';
 import BOVerhuurAanvragenPage from './pages/BOVerhuurAanvragenPage';
-import { getRoleFromToken, getUserIdFromToken } from './utils/authHelpers'; 
+import { getRoleFromToken, getUserIdFromToken } from './utils/authHelpers';
 import DashboardFrontoffice from './pages/DashboardFrontoffice';
 import HeaderBackOffice from './components/HeaderBackOffice';
 import FOVerhuurAanvragenPage from './pages/FOVerhuurAanvragenPage';
@@ -82,10 +82,11 @@ const App = () => {
     const isVoertuigverhuur = location.pathname.startsWith('/voertuigverhuur');
     const isDashboardBackoffice = location.pathname.startsWith('/backoffice-dashboard');
     const isDashboardFrontoffice = location.pathname.startsWith('/frontoffice-dashboard');
+    const isFrontofficeVerhuuraanvragen = location.pathname.startsWith('/frontoffice-verhuuraanvragen');
 
     return (
         <div className="app-container">
-            {!isDashboardWPB && !isDashboardFrontoffice && !isDashboardBackoffice && !isDashboardABO && !isDashboardParticulier && !isVoertuigverhuur && <Navbar />}
+            {!isDashboardWPB && !isDashboardFrontoffice && !isDashboardBackoffice && !isDashboardABO && !isDashboardParticulier && !isVoertuigverhuur && !isFrontofficeVerhuuraanvragen && <Navbar />}
             <div className="main-content">
                 <Routes>
                     <Route path="/" element={<MainPage />} />
@@ -146,19 +147,19 @@ const App = () => {
                             <HeaderBackOffice />
                             <BOVerhuurAanvragenPage />
                         </ProtectedRoute>
-                    } /><Route path="/frontoffice-dashboard" element={
+                    } />
+                    <Route path="/frontoffice-dashboard" element={
                         <ProtectedRoute allowedRoles={["Frontoffice"]}>
                             <HeaderFrontOffice />
                             <DashboardFrontoffice />
                         </ProtectedRoute>
-                    } /><Route path="/FO-verhuuraanvragen" element={
+                    } />
+                    <Route path="/frontoffice-verhuuraanvragen" element={
                         <ProtectedRoute allowedRoles={["Frontoffice"]}>
                             <HeaderFrontOffice />
                             <FOVerhuurAanvragenPage />
                         </ProtectedRoute>
                     } />
-
-
                     <Route path="/privacybeleid" element={<Privacybeleid />} />
                     <Route path="/unauthorized" element={<h2>Toegang geweigerd</h2>} />
                 </Routes>
