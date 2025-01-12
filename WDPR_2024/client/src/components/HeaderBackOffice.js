@@ -14,7 +14,7 @@ const HeaderBackOffice = () => {
     return (
         <nav className="headerbackoffice">
             <div className="headerbackoffice-left">
-                <Link to="/dashboardbackoffice">
+                <Link to="/backoffice-dashboard">
                     <img src={logo} alt="Logo" className="headerbackoffice-logo" />
                 </Link>
             </div>
@@ -24,7 +24,7 @@ const HeaderBackOffice = () => {
                 <Link to="/voertuigverhuur" className="headerbackoffice-button">Schadebeheer</Link>
                 <Link to="/voertuigverhuur" className="headerbackoffice-button">Voertuigbeheer</Link>
                 <Link to="/verhuuraanvragenpage" className="headerbackoffice-button">Verhuurbeheer</Link>
-                <Link to="/dashboardbackoffice" className="headerbackoffice-button">Home</Link>
+                <Link to="/backoffice-dashboard" className="headerbackoffice-button">Home</Link>
                 <Link to="/profiel" className="headerbackoffice-button">Profiel</Link>
                 <button onClick={handleLogout} className="headerbackoffice-button">Uitloggen</button>
             </div>

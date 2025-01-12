@@ -1,7 +1,7 @@
 ﻿import React from "react";
-import "./FrontofficeDashboard.css";
+import "./DashboardFrontoffice.css";
 
-const FrontofficeDashboard = () => {
+const DashboardFrontoffice = () => {
     const navigateToPage = (path) => {
         window.location.href = path;
     };
@@ -17,4 +17,4 @@ const FrontofficeDashboard = () => {
     );
 };
 
-export default FrontofficeDashboard;
+export default DashboardFrontoffice;

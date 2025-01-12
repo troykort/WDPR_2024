@@ -10,6 +10,7 @@ import './App.css';
 import HeaderWPB from './components/HeaderWPB';
 import HeaderABO from './components/HeaderABO';
 import HeaderParticulier from './components/HeaderParticulier';
+import HeaderFrontOffice from './components/HeaderFrontOffice';
 import ManageCompanyEmployees from './pages/ManageBedrijfsMedewerkers';
 import VoertuigOverzichtPage from './pages/VoertuigOverzichtPage';
 import DashboardWPB from './pages/DashboardWPB';
@@ -22,7 +23,9 @@ import AccountSettings from './pages/AccountSettings';
 import Privacybeleid from './pages/Privacybeleid';
 import ProtectedRoute from './components/ProtectedRoute';
 import VerhuurAanvragenPage from './pages/BOVerhuurAanvragenPage';
-import { getRoleFromToken, getUserIdFromToken } from './utils/authHelpers';
+import { getRoleFromToken, getUserIdFromToken } from './utils/authHelpers'; 
+import DashboardFrontoffice from './pages/DashboardFrontoffice';
+import HeaderBackOffice from './components/HeaderBackOffice';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -77,10 +80,11 @@ const App = () => {
     const isDashboardParticulier = location.pathname.startsWith('/frontoffice-dashboard');
     const isVoertuigverhuur = location.pathname.startsWith('/voertuigverhuur');
     const isDashboardBackoffice = location.pathname.startsWith('/backoffice-dashboard');
+    const isDashboardFrontoffice = location.pathname.startsWith('/frontoffice-dashboard');
 
     return (
         <div className="app-container">
-            {!isDashboardWPB && !isDashboardBackoffice && !isDashboardABO && !isDashboardParticulier && !isVoertuigverhuur && <Navbar />}
+            {!isDashboardWPB && !isDashboardFrontoffice && !isDashboardBackoffice && !isDashboardABO && !isDashboardParticulier && !isVoertuigverhuur && <Navbar />}
             <div className="main-content">
                 <Routes>
                     <Route path="/" element={<MainPage />} />
@@ -143,9 +147,11 @@ const App = () => {
                         </ProtectedRoute>
                     } /><Route path="/frontoffice-dashboard" element={
                         <ProtectedRoute allowedRoles={["Frontoffice"]}>
-                            <FrontofficeDashboard />
+                            <HeaderFrontOffice />
+                            <DashboardFrontoffice />
                         </ProtectedRoute>
                     } />
+
                     <Route path="/privacybeleid" element={<Privacybeleid />} />
                     <Route path="/unauthorized" element={<h2>Toegang geweigerd</h2>} />
                 </Routes>
