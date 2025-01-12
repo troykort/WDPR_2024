@@ -9,21 +9,23 @@ import Login from './pages/Login';
 import './App.css';
 import HeaderWPB from './components/HeaderWPB';
 import HeaderABO from './components/HeaderABO';
-import HeaderParticulier from './components/HeaderParticulier'; // Zorg ervoor dat deze component bestaat
+import HeaderParticulier from './components/HeaderParticulier';
+import HeaderFrontOffice from './components/HeaderFrontOffice';
 import ManageCompanyEmployees from './pages/ManageBedrijfsMedewerkers';
 import VoertuigOverzichtPage from './pages/VoertuigOverzichtPage';
 import DashboardWPB from './pages/DashboardWPB';
-import DashboardABO from './pages/DashboardABO'; // Zorg ervoor dat deze pagina bestaat
-import DashboardParticulier from './pages/DashboardParticulier'; // Zorg ervoor dat deze pagina bestaat
+import DashboardABO from './pages/DashboardABO'; 
+import DashboardParticulier from './pages/DashboardParticulier';
+import DashboardBackoffice from './pages/DashboardBackoffice';
 import Voertuigverhuur from './pages/Voertuigverhuur';
 import StatistiekenWPB from './pages/StatistiekenWPB';
 import AccountSettings from './pages/AccountSettings';
 import Privacybeleid from './pages/Privacybeleid';
 import ProtectedRoute from './components/ProtectedRoute';
 import VerhuurAanvragenPage from './pages/BOVerhuurAanvragenPage';
-import { getRoleFromToken, getUserIdFromToken } from './utils/authHelpers';
-import FrontofficeDashboard from './pages/FrontofficeDashboard';
-import FrontofficeVerhuurAanvragenPage from './pages/FOVerhuurAanvragenPage';
+import { getRoleFromToken, getUserIdFromToken } from './utils/authHelpers'; 
+import DashboardFrontoffice from './pages/DashboardFrontoffice';
+import HeaderBackOffice from './components/HeaderBackOffice';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -64,7 +66,7 @@ const ProfielPage = () => {
     return (
         <>
             {role === 'Particulier' && <HeaderParticulier />}
-            {role === 'Backoffice' && <HeaderABO />}
+            {role === 'Backoffice' && <HeaderBackOffice />}
             {role === 'Wagenparkbeheerder' && <HeaderWPB />}
             <AccountSettings />
         </>
@@ -75,12 +77,14 @@ const App = () => {
     const location = useLocation();
     const isDashboardWPB = location.pathname.startsWith('/dashboardwpb') || location.pathname.startsWith('/medewerkers') || location.pathname.startsWith('/voertuigoverzicht') || location.pathname.startsWith('/statistieken') || location.pathname.startsWith('/profiel');
     const isDashboardABO = location.pathname.startsWith('/dashboardabo');
-    const isDashboardParticulier = location.pathname.startsWith('/dashboardparticulier');
+    const isDashboardParticulier = location.pathname.startsWith('/frontoffice-dashboard');
     const isVoertuigverhuur = location.pathname.startsWith('/voertuigverhuur');
+    const isDashboardBackoffice = location.pathname.startsWith('/backoffice-dashboard');
+    const isDashboardFrontoffice = location.pathname.startsWith('/frontoffice-dashboard');
 
     return (
         <div className="app-container">
-            {!isDashboardWPB && !isDashboardABO && !isDashboardParticulier && !isVoertuigverhuur && <Navbar />}
+            {!isDashboardWPB && !isDashboardFrontoffice && !isDashboardBackoffice && !isDashboardABO && !isDashboardParticulier && !isVoertuigverhuur && <Navbar />}
             <div className="main-content">
                 <Routes>
                     <Route path="/" element={<MainPage />} />
@@ -138,11 +142,13 @@ const App = () => {
                     } />
                     <Route path="/backoffice-dashboard" element={
                         <ProtectedRoute allowedRoles={["Backoffice"]}>
+                            <HeaderBackOffice />
                             <VerhuurAanvragenPage />
                         </ProtectedRoute>
                     } /><Route path="/frontoffice-dashboard" element={
                         <ProtectedRoute allowedRoles={["Frontoffice"]}>
-                            <FrontofficeVerhuurAanvragenPage />
+                            <HeaderFrontOffice />
+                            <DashboardFrontoffice />
                         </ProtectedRoute>
                     } />
 
