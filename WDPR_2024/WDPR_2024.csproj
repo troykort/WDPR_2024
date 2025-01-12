@@ -37,6 +37,15 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Moq" Version="4.20.72" />
+		<PackageReference Include="xunit" Version="2.9.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="client\src\components\__tests__\" />
+	  <Folder Include="client\src\pages\__test__\" />
+	  <Folder Include="client\src\utils\__test__\" />
+	  <Folder Include="server\Tests\Controllers\" />
 	</ItemGroup>
 
 </Project>
