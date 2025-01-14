@@ -30,18 +30,19 @@ const BOVerhuurAanvragenPage = () => {
         try {
             const token = localStorage.getItem("token");
             const status = "Goedgekeurd";
-
+            const opmerkingen = "aanvraag is goedgekeurd"
             await axios.put(
                 `http://localhost:5000/api/verhuur-aanvragen/${id}/${status}`,
-                { opmerkingen: null },
+                { opmerkingen },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
                     },
                 }
             );
 
-            fetchAanvragen(); // Refresh de lijst
+            fetchAanvragen(); 
             alert("Aanvraag is goedgekeurd!");
         } catch (error) {
             console.error("Error approving aanvraag:", error);

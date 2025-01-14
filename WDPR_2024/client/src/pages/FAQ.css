@@ -8,7 +8,7 @@
     flex-direction: column; /* Stack the content vertically */
     align-items: center; /* Center content horizontally */
     justify-content: flex-start; /* Align content from the top */
-    text-align: center; /* Center the text */
+    text-align: left; /* Center the text */
     min-height: 100vh; /* Ensure content covers full screen */
     padding-top: 60px; /* Space for header */
 }

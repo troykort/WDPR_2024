@@ -39,7 +39,7 @@ function Login() {
 
             alert(`Login successful`);
 
-            // Navigate to the appropriate page based on the user's role
+           
             switch (userRole) {
                 case 'Abonnementbeheerder':
                     navigate('/dashboardabo');
@@ -48,7 +48,7 @@ function Login() {
                     navigate('/dashboardwpb');
                     break;
                 case 'Zakelijk':
-                    navigate('/abonnementbeheerder-dashboard');
+                    navigate('/dashboardzakelijk');
                     break;
                 case 'Particulier':
                     navigate('/dashboardparticulier');
@@ -60,7 +60,7 @@ function Login() {
                     navigate('/backoffice-dashboard');
                     break;
                 default:
-                    navigate('/dashboard'); // Default dashboard for other roles
+                    navigate('/dashboard'); 
                     break;
             }
         } catch (error) {
@@ -69,7 +69,7 @@ function Login() {
     };
 
     const handleBack = () => {
-        navigate('/'); // Navigate to the home page
+        navigate('/'); 
     };
 
     const togglePasswordVisibility = () => {

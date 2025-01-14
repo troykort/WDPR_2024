@@ -97,15 +97,12 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize(Roles = "Backoffice, Frontoffice")]
         [HttpPut("{id}/{status}")]
         public async Task<IActionResult> UpdateStatus(int id, string status, [FromBody] UpdateStatusRequest request)
         {
-            if (request == null || string.IsNullOrWhiteSpace(request.Opmerkingen))
-            {
-                return BadRequest("Opmerkingen zijn verplicht.");
-            }
-
+            Console.WriteLine($"UpdateStatus Request: Id={id}, Status={status}, Opmerkingen={request.Opmerkingen}");
+            
             try
             {
                 // Haal de aanvraag op

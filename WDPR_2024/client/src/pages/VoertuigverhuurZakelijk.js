@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode'; 
+import { jwtDecode } from 'jwt-decode';
 import './Voertuigverhuur.css';
 
 const Voertuigverhuur = () => {
@@ -10,12 +10,12 @@ const Voertuigverhuur = () => {
         type: '',
         typeVoertuig: '',
         sort: '',
-        startDate: '', 
-        endDate: '', 
+        startDate: '',
+        endDate: '',
     });
     const [selectedVoertuig, setSelectedVoertuig] = useState();
     const [showPopup, setShowPopup] = useState(false);
-    const [klantID, setKlantID] = useState(null); 
+    const [klantID, setKlantID] = useState(null);
     const [displayCount, setDisplayCount] = useState(8);
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -49,9 +49,7 @@ const Voertuigverhuur = () => {
             .filter((voertuig) => {
                 const isMerkMatch = filters.merk ? voertuig.merk.toLowerCase().includes(filters.merk.toLowerCase()) : true;
                 const isTypeMatch = filters.type ? voertuig.type.toLowerCase().includes(filters.type.toLowerCase()) : true;
-                const isTypeVoertuigMatch = filters.typeVoertuig
-                    ? voertuig.typeVoertuig.toLowerCase().includes(filters.typeVoertuig.toLowerCase())
-                    : true;
+                const isTypeVoertuigMatch = "auto"
                 return isMerkMatch && isTypeMatch && isTypeVoertuigMatch;
             })
             .sort((a, b) => {
@@ -214,19 +212,19 @@ const Voertuigverhuur = () => {
                         </div>
                     ))}
                 </div>
-                
-                    <button className="reset-button" onClick={() => setDisplayCount(8)}>
-                        Reset
+
+                <button className="reset-button" onClick={() => setDisplayCount(8)}>
+                    Reset
+                </button>
+                {displayCount < applyFilters().length && (
+                    <button className="load-more-button" onClick={handleLoadMore}>
+                        Meer laden
                     </button>
-                    {displayCount < applyFilters().length && (
-                        <button className="load-more-button" onClick={handleLoadMore}>
-                            Meer laden
-                        </button>
-                    )}
-                    <button className="submit-button" onClick={handleSubmit}>
-                        Bevestig
-                    </button>
-                
+                )}
+                <button className="submit-button" onClick={handleSubmit}>
+                    Bevestig
+                </button>
+
 
                 {showPopup && (
                     <div className="popup-overlay">
