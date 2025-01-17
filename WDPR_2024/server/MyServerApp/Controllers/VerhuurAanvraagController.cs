@@ -14,11 +14,15 @@ namespace WDPR_2024.server.MyServerApp.Controllers
     {
         private readonly VerhuurAanvraagService _aanvraagService;
         private readonly EmailService _emailService;
+            private readonly ILogger<VerhuurAanvraagController> _logger;
 
-        public VerhuurAanvraagController(VerhuurAanvraagService aanvraagService, EmailService emailService)
+
+        public VerhuurAanvraagController(VerhuurAanvraagService aanvraagService, EmailService emailService,ILogger<VerhuurAanvraagController> logger)
         {
             _aanvraagService = aanvraagService;
             _emailService = emailService;
+                    _logger = logger;
+
         }
 
         [Authorize(Roles = "Backoffice, Frontoffice")]
@@ -164,5 +168,43 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             var beschikbaar = await _aanvraagService.IsVoertuigBeschikbaarAsync(voertuigID, startDatum, eindDatum);
             return Ok(new { Beschikbaar = beschikbaar });
         }
+        [Authorize]
+  [HttpGet("geschiedenis/{klantId}")]
+    public async Task<IActionResult> GetVerhuurGeschiedenis(int klantId)
+    {
+        _logger.LogInformation("Entering GetVerhuurGeschiedenis with klantId: {klantId}", klantId);
+
+        try
+        {
+            // Haal verhuurgeschiedenis op via de service
+            var verhuurGeschiedenis = await _aanvraagService.GetVerhuurGeschiedenisByKlantIdAsync(klantId);
+
+            if (verhuurGeschiedenis == null || verhuurGeschiedenis.Count == 0)
+            {
+                _logger.LogWarning("No rental history found for klantId: {klantId}", klantId);
+                return NotFound("Geen verhuurgeschiedenis gevonden voor deze klant.");
+            }
+
+            // Map naar DTO met fallback waarden
+            var geschiedenisDto = verhuurGeschiedenis.Select(g => new VerhuurGeschiedenisDto
+{
+    VerhuurAanvraagID = g.VerhuurAanvraagID,
+    KlantNaam = g.Klant?.Naam ?? "Onbekend",  // Check if Klant is null, and provide a fallback value
+    VoertuigInfo = g.Voertuig != null ? $"{g.Voertuig.Merk} {g.Voertuig.Type}" : "Onbekend voertuig",  // Same for Voertuig
+    StartDatum = g.StartDatum,
+    EindDatum = g.EindDatum
+}).ToList();
+
+
+            _logger.LogInformation("Rental history retrieved successfully for klantId: {klantId}", klantId);
+            return Ok(geschiedenisDto);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "yeyeyeyError while fetching rental history for klantId: {klantId}", klantId);
+            return BadRequest($"yeyeyeFout bij het ophalen van de verhuurgeschiedenis: {ex.Message}");
+        }
+    }
+
     }
 }

@@ -31,6 +31,7 @@ import VoertuigInname from './pages/VoertuiginnamePage';
 import FAQ from './pages/FAQ';
 import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden';
 import Support from './pages/Support';
+import RentalHistoryPage from './pages/RentalHistory';
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -168,7 +169,12 @@ const App = () => {
                             <HeaderFrontOffice />
                             <VoertuigInname />
                         </ProtectedRoute>
+                    } /><Route path="/rental-history/:klantId" element={
+                        <ProtectedRoute allowedRoles={["Particulier", "Backoffice", "Frontoffice"]}>
+                            <RentalHistoryPage />
+                        </ProtectedRoute>
                     } />
+                    
                     <Route path="/privacybeleid" element={<Privacybeleid />} />
                     <Route path="/FAQ" element={<FAQ/>}/>
                     <Route path="/algemene-voorwaarden" element={<AlgemeneVoorwaarden/>}/>

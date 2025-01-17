@@ -20,6 +20,8 @@ namespace WDPR_2024.server.MyServerApp.Data
         public DbSet<Notificatie> Notificaties { get; set; }
         public DbSet<Medewerker> Medewerkers { get; set; }
         public DbSet<Opmerking> Opmerkingen { get; set; }
+        public DbSet<VerhuurGeschiedenis> VerhuurGeschiedenis { get; set; } 
+
 
         // Configuratie van de modellen
         protected override void OnModelCreating(ModelBuilder modelBuilder)

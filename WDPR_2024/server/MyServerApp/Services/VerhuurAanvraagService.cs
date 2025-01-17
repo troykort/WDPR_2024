@@ -14,10 +14,14 @@ namespace WDPR_2024.server.MyServerApp.Services
     public class VerhuurAanvraagService
     {
         private readonly AppDbContext _context;
+        private readonly ILogger<VerhuurAanvraagService> _logger;
 
-        public VerhuurAanvraagService(AppDbContext context)
+
+        public VerhuurAanvraagService(AppDbContext context, ILogger<VerhuurAanvraagService> logger)
         {
             _context = context;
+            _logger = logger;
+
         }
 
         // Haal een specifieke verhuuraanvraag op
@@ -41,21 +45,21 @@ namespace WDPR_2024.server.MyServerApp.Services
 
         public async Task AddAanvraagAsync(VerhuurAanvraag nieuweAanvraag)
         {
-            
+
             var voertuig = await _context.Voertuigen.FindAsync(nieuweAanvraag.VoertuigID);
 
-            
+
             if (voertuig == null || voertuig.Status != "Beschikbaar")
                 throw new Exception("Het geselecteerde voertuig is niet beschikbaar.");
 
-            
+
             nieuweAanvraag.Status = "In Behandeling";
             voertuig.Status = "In Behandeling";
 
-            
+
             _context.VerhuurAanvragen.Add(nieuweAanvraag);
 
-            
+
             await _context.SaveChangesAsync();
         }
 
@@ -63,31 +67,31 @@ namespace WDPR_2024.server.MyServerApp.Services
         // Werk een aanvraagstatus bij (Goedgekeurd, Afgewezen, Uitgegeven)
         public async Task UpdateAanvraagStatusAsync(int id, string nieuweStatus, string opmerkingenTekst = null)
         {
-          
+
             var aanvraag = await _context.VerhuurAanvragen
-                .Include(a => a.Opmerkingen) 
-                .Include(a => a.Voertuig) 
+                .Include(a => a.Opmerkingen)
+                .Include(a => a.Voertuig)
                 .FirstOrDefaultAsync(a => a.VerhuurAanvraagID == id);
 
             if (aanvraag == null) throw new Exception("Aanvraag niet gevonden.");
 
-           
+
             aanvraag.Status = nieuweStatus;
 
-            
+
             if (!string.IsNullOrWhiteSpace(opmerkingenTekst))
             {
                 var opmerking = new Opmerking
                 {
                     VerhuurAanvraagID = id,
                     Tekst = opmerkingenTekst,
-                    GebruikerNaam = "Backoffice/Frontoffice gebruiker", 
+                    GebruikerNaam = "Backoffice/Frontoffice gebruiker",
                     DatumToegevoegd = DateTime.UtcNow
                 };
                 _context.Opmerkingen.Add(opmerking);
             }
 
-           
+
             if (nieuweStatus == "Goedgekeurd")
             {
                 var voertuig = aanvraag.Voertuig;
@@ -95,20 +99,20 @@ namespace WDPR_2024.server.MyServerApp.Services
                 voertuig.Status = "Verhuurd";
             }
 
-            
+
             if (nieuweStatus == "Uitgegeven")
             {
                 var voertuig = aanvraag.Voertuig;
                 if (voertuig == null) throw new Exception("Voertuig niet gevonden.");
 
-                
+
                 voertuig.Status = "Uitgegeven";
 
-                
+
                 aanvraag.Uitgiftedatum = DateTime.Now;
             }
 
-            await _context.SaveChangesAsync(); 
+            await _context.SaveChangesAsync();
         }
 
 
@@ -183,6 +187,27 @@ namespace WDPR_2024.server.MyServerApp.Services
         public async Task<Voertuig> GetVoertuigDetailsAsync(int voertuigId)
         {
             return await _context.Voertuigen.FirstOrDefaultAsync(v => v.VoertuigID == voertuigId);
+        }
+
+        public async Task<List<VerhuurAanvraag>> GetVerhuurGeschiedenisByKlantIdAsync(int klantId)
+        {
+            _logger.LogInformation("Fetching rental history for klantId: {klantId}", klantId);
+            var verhuurGeschiedenis = await _context.VerhuurAanvragen
+                .Where(a => a.KlantID == klantId && (a.Status == "Goedgekeurd" || a.Status == "Verhuurd"))
+                .Include(a => a.Voertuig)
+                .Include(a => a.Klant)
+                .ToListAsync();
+
+            if (verhuurGeschiedenis == null || verhuurGeschiedenis.Count == 0)
+            {
+                _logger.LogWarning("No rental history found for klantId: {klantId}", klantId);
+            }
+            else
+            {
+                _logger.LogInformation("Rental history successfully retrieved for klantId: {klantId}", klantId);
+            }
+
+            return verhuurGeschiedenis;
         }
     }
 }
