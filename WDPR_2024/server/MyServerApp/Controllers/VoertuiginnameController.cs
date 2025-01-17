@@ -36,7 +36,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
 
         [HttpPost]
         [Authorize(Roles = "Frontoffice,Backoffice")]
-        public async Task<IActionResult> RegisterInname([FromForm] VoertuiginnameDto dto)
+        public async Task<IActionResult> RegisterInname([FromForm] voertuigDto dto)
         {
             try
             {

@@ -14,11 +14,14 @@ namespace WDPR_2024.server.MyServerApp.Controllers
     {
         private readonly VerhuurAanvraagService _aanvraagService;
         private readonly EmailService _emailService;
+        private readonly NotificatieService _notificatieService;
+        private readonly KlantService _klantService;
 
-        public VerhuurAanvraagController(VerhuurAanvraagService aanvraagService, EmailService emailService)
+        public VerhuurAanvraagController(VerhuurAanvraagService aanvraagService, EmailService emailService, NotificatieService notificatieService)
         {
             _aanvraagService = aanvraagService;
             _emailService = emailService;
+            _notificatieService = notificatieService;
         }
 
         [Authorize(Roles = "Backoffice, Frontoffice")]
@@ -101,19 +104,67 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         [HttpPut("{id}/{status}")]
         public async Task<IActionResult> UpdateStatus(int id, string status, [FromBody] UpdateStatusRequest request)
         {
-            Console.WriteLine($"UpdateStatus Request: Id={id}, Status={status}, Opmerkingen={request.Opmerkingen}");
+        
             
             try
             {
-                // Haal de aanvraag op
+                
                 var aanvraag = await _aanvraagService.GetAanvraagByIdAsync(id);
                 if (aanvraag == null)
                 {
                     return NotFound("Aanvraag niet gevonden.");
                 }
 
-                // Werk de status en opmerkingen bij
+              
                 await _aanvraagService.UpdateAanvraagStatusAsync(id, status, request.Opmerkingen);
+                
+                _notificatieService.AddNotificatieAsync(new Notificatie
+                {
+                    KlantID = request.KlantID,
+                    Titel = "verhuuraanvraag update",
+                    Bericht = $"De status van aanvraag {id} van {aanvraag.Klant.Naam} is bijgewerkt naar {status}.",
+                    VerzondenOp = DateTime.UtcNow,
+                    Gelezen = false
+                });
+
+                if (status == "Goedgekeurd")
+                {
+                        aanvraag = await _aanvraagService.GetAanvraagByIdAsync(id);
+                        var klant = aanvraag.Klant;
+                        var voertuig = aanvraag.Voertuig;
+                        var startDatum = aanvraag.StartDatum;
+                        var eindDatum = aanvraag.EindDatum;
+                        var notificatie = new Notificatie
+                        {
+                           
+                            MedewerkerID = request.MedewerkerID,
+                            Titel = $"Verhuuraanvraag {voertuig.Merk} {voertuig.Type}",
+                            Bericht = $"Uw verhuuraanvraag voor {voertuig.Merk} {voertuig.Type} is goedgekeurd. U kunt het voertuig ophalen op {startDatum}.",
+                            VerzondenOp = DateTime.UtcNow,
+                            Gelezen = false
+                        };
+                    await _notificatieService.AddNotificatieAsync(notificatie);
+
+
+                } else if (status == "Afgekeurd")
+                {
+                    aanvraag = await _aanvraagService.GetAanvraagByIdAsync(id);
+                    var klant = aanvraag.Klant;
+                    var voertuig = aanvraag.Voertuig;
+                    var startDatum = aanvraag.StartDatum;
+                    var eindDatum = aanvraag.EindDatum;
+                    var notificatie = new Notificatie
+                    {
+                        
+                        MedewerkerID = request.MedewerkerID,
+                        Titel = $"Verhuuraanvraag {voertuig.Merk} {voertuig.Type}",
+                        Bericht = $"Uw verhuuraanvraag voor {voertuig.Merk} {voertuig.Type} is afgekeurd, reden:{request.Opmerkingen}",
+                        VerzondenOp = DateTime.UtcNow,
+                        Gelezen = false
+                    };
+                    await _notificatieService.AddNotificatieAsync(notificatie);
+                }
+
 
                 return Ok($"Status succesvol bijgewerkt naar {status}.");
             }

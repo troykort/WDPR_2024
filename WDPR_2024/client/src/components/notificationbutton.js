@@ -3,7 +3,7 @@ import axios from "axios";
 import "./NotificationButton.css";
 import bellIcon from "../assets/notificationbutton.png";
 
-const NotificationButton = ({ klantId }) => {
+const NotificationButton = ({ Id }) => {
     const [notifications, setNotifications] = useState([]);
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ const NotificationButton = ({ klantId }) => {
                 setLoading(true);
                 setError(null);
                 const response = await axios.get(
-                    `http://localhost:5000/api/notificaties/klant/${klantId}`
+                    `http://localhost:5000/api/notificaties/medewerker/${Id}`
                 );
                 setNotifications(response.data);
             } catch (err) {
@@ -26,7 +26,7 @@ const NotificationButton = ({ klantId }) => {
         };
 
         fetchNotifications();
-    }, [klantId]);
+    }, [Id]);
 
     const toggleDropdown = () => {
         setDropdownVisible(!isDropdownVisible);

@@ -45,13 +45,15 @@ namespace WDPR_2024.server.MyServerApp.Data
                 .HasOne(o => o.VerhuurAanvraag)
                 .WithMany(v => v.Opmerkingen)
                 .HasForeignKey(o => o.VerhuurAanvraagID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Relatie tussen Medewerker en ApplicationUser
             modelBuilder.Entity<Medewerker>()
                 .HasOne(m => m.User)
                 .WithMany()
                 .HasForeignKey(m => m.UserID);
+
+            
 
             // Bedrijf en Abonnement Relatie
             modelBuilder.Entity<Bedrijf>()
@@ -65,14 +67,14 @@ namespace WDPR_2024.server.MyServerApp.Data
                 .HasOne(v => v.Klant)
                 .WithMany(k => k.VerhuurAanvragen)
                 .HasForeignKey(v => v.KlantID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             // VerhuurAanvraag en Voertuig Relatie
             modelBuilder.Entity<VerhuurAanvraag>()
                 .HasOne(v => v.Voertuig)
                 .WithMany(vh => vh.VerhuurAanvragen)
                 .HasForeignKey(v => v.VoertuigID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             // VerhuurAanvraag en Bedrijf Relatie
             modelBuilder.Entity<VerhuurAanvraag>()
@@ -88,25 +90,21 @@ namespace WDPR_2024.server.MyServerApp.Data
                 .HasForeignKey(v => v.FrontofficeMedewerkerID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Schademelding Relaties
+            // Schademelding en Klant Relatie
             modelBuilder.Entity<Schademelding>()
                 .HasOne(s => s.Klant)
                 .WithMany(k => k.Schademeldingen)
                 .HasForeignKey(s => s.KlantID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
+            // Schademelding en Voertuig Relatie
             modelBuilder.Entity<Schademelding>()
                 .HasOne(s => s.Voertuig)
                 .WithMany(v => v.Schademeldingen)
                 .HasForeignKey(s => s.VoertuigID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
-            // Notificatie en Klant Relatie
-            modelBuilder.Entity<Notificatie>()
-                .HasOne(n => n.Klant)
-                .WithMany(k => k.Notificaties)
-                .HasForeignKey(n => n.KlantID)
-                .OnDelete(DeleteBehavior.Cascade);
+            
 
             // Configuratie voor unieke velden (bijvoorbeeld email)
             modelBuilder.Entity<Klant>()

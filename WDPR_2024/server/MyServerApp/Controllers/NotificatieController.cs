@@ -17,27 +17,32 @@ public class NotificatieController : ControllerBase
         _emailService = emailService;
     }
 
-    // 1. GET: Haal een specifieke notificatie op
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetNotificatie(int id)
-    {
-        var notificatie = await _notificatieService.GetNotificatieByIdAsync(id);
-        if (notificatie == null) return NotFound("Notificatie niet gevonden.");
 
-        return Ok(notificatie);
-    }
 
-    // 2. GET: Haal alle notificaties voor een specifieke klant op
-    [HttpGet("klant/{klantId}")]
-    public async Task<IActionResult> GetNotificatiesVoorKlant(int klantId)
-    {
-        var notificaties = await _notificatieService.GetNotificatiesVoorKlantAsync(klantId);
+    // 2. GET: Haal alle notificaties voor een specifieke klant of medewerker op
+    [HttpGet("klant/{Id}")]
+    public async Task<IActionResult> GetNotificatiesVoorKlant(int Id)
+    { 
+        var notificaties = await _notificatieService.GetNotificatiesVoorKlantAsync(Id);
         if (notificaties == null || notificaties.Count == 0) return NotFound("Geen notificaties gevonden voor deze klant.");
 
         return Ok(notificaties);
     }
 
-    // 3. POST: Voeg een nieuwe notificatie toe
+    // 3. GET: Haal alle notificaties voor een specifieke medewerker op
+    [HttpGet("medewerker/{Id}")]
+    public async Task<IActionResult> GetNotificatiesVoorMedewerker(int Id)
+    { 
+        var notificaties = await _notificatieService.GetNotificatiesVoorMedewerkerAsync(Id);
+        if (notificaties == null || notificaties.Count == 0) return NotFound("Geen notificaties gevonden voor deze medewerker.");
+
+        return Ok(notificaties);
+    } 
+    
+
+
+
+    // 4. POST: Voeg een nieuwe notificatie toe
     [HttpPost]
     public async Task<IActionResult> CreateNotificatie(Notificatie nieuweNotificatie)
     {
@@ -45,10 +50,10 @@ public class NotificatieController : ControllerBase
         {
             await _notificatieService.AddNotificatieAsync(nieuweNotificatie);
 
-            var klantEmail = nieuweNotificatie.Klant.Email;
-            var subject = nieuweNotificatie.Titel;
-            var body = nieuweNotificatie.Bericht;
-            await _emailService.SendEmailAsync(klantEmail, subject, body);
+            //var klantEmail = nieuweNotificatie.Klant.Email;
+            //var subject = nieuweNotificatie.Titel;
+            //var body = nieuweNotificatie.Bericht;
+            //await _emailService.SendEmailAsync(klantEmail, subject, body);
             return Ok("Notificatie succesvol aangemaakt.");
         }
         catch (Exception ex)
@@ -57,7 +62,7 @@ public class NotificatieController : ControllerBase
         }
     }
 
-    // 4. DELETE: Verwijder een notificatie
+    // 5. DELETE: Verwijder een notificatie
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteNotificatie(int id)
     {

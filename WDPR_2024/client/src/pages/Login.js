@@ -28,6 +28,7 @@ function Login() {
             }
 
             const data = await response.json();
+           
             localStorage.setItem('token', data.token);
             localStorage.setItem('userId', data.klantID);
             localStorage.setItem('medewerkerId', data.medewerkerID)

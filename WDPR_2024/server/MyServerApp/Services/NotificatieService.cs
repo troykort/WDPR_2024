@@ -17,15 +17,21 @@ namespace WDPR_2024.server.MyServerApp.Services
         public async Task<Notificatie> GetNotificatieByIdAsync(int id)
         {
             return await _context.Notificaties
-                .Include(n => n.Klant)
                 .FirstOrDefaultAsync(n => n.NotificatieID == id);
         }
 
         // Haal alle notificaties op voor een specifieke klant
-        public async Task<List<Notificatie>> GetNotificatiesVoorKlantAsync(int klantId)
+        public async Task<List<Notificatie>> GetNotificatiesVoorKlantAsync(int KlantID)
         {
             return await _context.Notificaties
-                .Where(n => n.KlantID == klantId)
+                .Where(n => n.KlantID == KlantID)
+                .ToListAsync();
+        }
+        // Haal alle notificaties op voor een specifieke medewerker
+        public async Task<List<Notificatie>> GetNotificatiesVoorMedewerkerAsync(int MedewerkerID)
+        {
+            return await _context.Notificaties
+                .Where(n => n.MedewerkerID == MedewerkerID)
                 .ToListAsync();
         }
 

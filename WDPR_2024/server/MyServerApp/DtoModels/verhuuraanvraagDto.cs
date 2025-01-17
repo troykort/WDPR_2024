@@ -8,6 +8,17 @@
         public DateTime StartDatum { get; set; }
         public DateTime EindDatum { get; set; }
         public string Status { get; set; }
+
+
     }
+
+    public class UpdateStatusRequest
+    {
+        public int MedewerkerID { get; set; }
+        public int  KlantID {get; set;}
+        public string Opmerkingen { get; set; }
+    }
+
+    
 
 }
