@@ -14,8 +14,7 @@
 
     public class UpdateStatusRequest
     {
-        public int MedewerkerID { get; set; }
-        public int  KlantID {get; set;}
+        public string userID { get; set; }
         public string Opmerkingen { get; set; }
     }
 

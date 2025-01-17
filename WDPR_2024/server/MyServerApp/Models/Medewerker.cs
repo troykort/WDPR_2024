@@ -19,7 +19,7 @@ namespace WDPR_2024.server.MyServerApp.Models
 
         // Relaties
         public ICollection<VerhuurAanvraag>? BehandeldeAanvragen { get; set; }
-        public ICollection<Notificatie>? Notificaties { get; set; }
+       
     }
 
 }

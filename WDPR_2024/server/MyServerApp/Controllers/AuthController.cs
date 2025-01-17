@@ -85,7 +85,8 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 {
                     Token = tokenString,
                     KlantID = klantId,
-                    MedewerkerID = medewerkerId
+                    MedewerkerID = medewerkerId,
+                    UserID = user.Id
                 });
             }
             return Unauthorized("Invalid credentials.");

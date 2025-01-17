@@ -39,7 +39,7 @@ namespace WDPR_2024.server.MyServerApp.Data
     .HasForeignKey<Klant>(k => k.UserID)
     .OnDelete(DeleteBehavior.Cascade);
 
-            base.OnModelCreating(modelBuilder);
+            
 
             modelBuilder.Entity<Opmerking>()
                 .HasOne(o => o.VerhuurAanvraag)
@@ -53,10 +53,18 @@ namespace WDPR_2024.server.MyServerApp.Data
                 .WithMany()
                 .HasForeignKey(m => m.UserID);
 
-            
+            // Notificatie relationship configuration
+            modelBuilder.Entity<Notificatie>()
+                .HasOne(n => n.User)
+                .WithMany()
+                .HasForeignKey(n => n.userID)
+                .OnDelete(DeleteBehavior.Cascade);
+        
 
-            // Bedrijf en Abonnement Relatie
-            modelBuilder.Entity<Bedrijf>()
+
+
+        // Bedrijf en Abonnement Relatie
+        modelBuilder.Entity<Bedrijf>()
                 .HasOne(b => b.Abonnement)
                 .WithOne(a => a.Bedrijf)
                 .HasForeignKey<Abonnement>(a => a.AbonnementID)

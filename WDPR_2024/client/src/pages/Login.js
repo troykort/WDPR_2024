@@ -32,6 +32,7 @@ function Login() {
             localStorage.setItem('token', data.token);
             localStorage.setItem('userId', data.klantID);
             localStorage.setItem('medewerkerId', data.medewerkerID)
+            localStorage.setItem('Id', data.userID)
             console.log('data:', data);
             console.log('localStorage:', localStorage); 
 

@@ -20,5 +20,5 @@ public class Klant
     public Bedrijf? Bedrijf { get; set; }
     public ICollection<VerhuurAanvraag>? VerhuurAanvragen { get; set; }
     public ICollection<Schademelding>? Schademeldingen { get; set; }
-    public ICollection<Notificatie>? Notificaties { get; set; }
+  
 }

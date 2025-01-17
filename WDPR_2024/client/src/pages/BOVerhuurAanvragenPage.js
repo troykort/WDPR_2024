@@ -31,9 +31,10 @@ const BOVerhuurAanvragenPage = () => {
             const token = localStorage.getItem("token");
             const status = "Goedgekeurd";
             const opmerkingen = "aanvraag is goedgekeurd"
+            const userID = localStorage.getItem("Id");
             await axios.put(
                 `http://localhost:5000/api/verhuur-aanvragen/${id}/${status}`,
-                { opmerkingen },
+                { userID, opmerkingen },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -59,10 +60,10 @@ const BOVerhuurAanvragenPage = () => {
         try {
             const token = localStorage.getItem("token");
             const status = "Afgewezen";
-
+            const userID = localStorage.getItem("Id");
             await axios.put(
                 `http://localhost:5000/api/verhuur-aanvragen/${selectedAanvraag}/${status}`,
-                { opmerkingen: afwijsReden },
+                { userID, opmerkingen: afwijsReden },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

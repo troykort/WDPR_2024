@@ -15,7 +15,7 @@ const NotificationButton = ({ Id }) => {
                 setLoading(true);
                 setError(null);
                 const response = await axios.get(
-                    `http://localhost:5000/api/notificaties/medewerker/${Id}`
+                    `http://localhost:5000/api/notificaties/user/${Id}`
                 );
                 setNotifications(response.data);
             } catch (err) {

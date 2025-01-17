@@ -126,6 +126,7 @@ namespace WDPR_2024.server.MyServerApp.Data
                                 Wachtwoord = userInfo.Password,
                                 Telefoonnummer = userInfo.Phone,
                                 RijbewijsNummer = userInfo.Rijbewijs,
+                                Rol = userInfo.Role,
                                 IsActief = true
                             };
                             dbContext.Klanten.Add(klant);

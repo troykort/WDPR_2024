@@ -396,12 +396,6 @@ namespace MyServerApp.Migrations
                     b.Property<bool>("Gelezen")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("KlantID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MedewerkerID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Titel")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -409,11 +403,13 @@ namespace MyServerApp.Migrations
                     b.Property<DateTime>("VerzondenOp")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("userID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("NotificatieID");
 
-                    b.HasIndex("KlantID");
-
-                    b.HasIndex("MedewerkerID");
+                    b.HasIndex("userID");
 
                     b.ToTable("Notificaties");
                 });
@@ -686,13 +682,13 @@ namespace MyServerApp.Migrations
 
             modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Notificatie", b =>
                 {
-                    b.HasOne("Klant", null)
-                        .WithMany("Notificaties")
-                        .HasForeignKey("KlantID");
+                    b.HasOne("WDPR_2024.server.MyServerApp.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("userID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("WDPR_2024.server.MyServerApp.Models.Medewerker", null)
-                        .WithMany("Notificaties")
-                        .HasForeignKey("MedewerkerID");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Opmerking", b =>
@@ -766,8 +762,6 @@ namespace MyServerApp.Migrations
 
             modelBuilder.Entity("Klant", b =>
                 {
-                    b.Navigation("Notificaties");
-
                     b.Navigation("Schademeldingen");
 
                     b.Navigation("VerhuurAanvragen");
@@ -786,8 +780,6 @@ namespace MyServerApp.Migrations
             modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Medewerker", b =>
                 {
                     b.Navigation("BehandeldeAanvragen");
-
-                    b.Navigation("Notificaties");
                 });
 
             modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.VerhuurAanvraag", b =>

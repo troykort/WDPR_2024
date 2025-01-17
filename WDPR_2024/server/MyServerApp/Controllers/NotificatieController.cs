@@ -19,61 +19,37 @@ public class NotificatieController : ControllerBase
 
 
 
-    // 2. GET: Haal alle notificaties voor een specifieke klant of medewerker op
-    [HttpGet("klant/{Id}")]
-    public async Task<IActionResult> GetNotificatiesVoorKlant(int Id)
-    { 
-        var notificaties = await _notificatieService.GetNotificatiesVoorKlantAsync(Id);
-        if (notificaties == null || notificaties.Count == 0) return NotFound("Geen notificaties gevonden voor deze klant.");
-
-        return Ok(notificaties);
-    }
-
-    // 3. GET: Haal alle notificaties voor een specifieke medewerker op
-    [HttpGet("medewerker/{Id}")]
-    public async Task<IActionResult> GetNotificatiesVoorMedewerker(int Id)
-    { 
-        var notificaties = await _notificatieService.GetNotificatiesVoorMedewerkerAsync(Id);
-        if (notificaties == null || notificaties.Count == 0) return NotFound("Geen notificaties gevonden voor deze medewerker.");
-
-        return Ok(notificaties);
-    } 
     
 
-
-
-    // 4. POST: Voeg een nieuwe notificatie toe
+    [Authorize]
     [HttpPost]
-    public async Task<IActionResult> CreateNotificatie(Notificatie nieuweNotificatie)
+    public async Task<IActionResult> AddNotificatie([FromBody] Notificatie notificatie)
     {
         try
         {
-            await _notificatieService.AddNotificatieAsync(nieuweNotificatie);
-
-            //var klantEmail = nieuweNotificatie.Klant.Email;
-            //var subject = nieuweNotificatie.Titel;
-            //var body = nieuweNotificatie.Bericht;
-            //await _emailService.SendEmailAsync(klantEmail, subject, body);
-            return Ok("Notificatie succesvol aangemaakt.");
+            await _notificatieService.AddNotificatieAsync(notificatie);
+            return Ok("Notificatie succesvol toegevoegd.");
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest($"Fout bij het toevoegen van notificatie: {ex.Message}");
         }
     }
 
-    // 5. DELETE: Verwijder een notificatie
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteNotificatie(int id)
+    [Authorize]
+    [HttpGet("{userId}")]
+    public async Task<IActionResult> GetUserNotificaties(string userId)
     {
         try
         {
-            await _notificatieService.DeleteNotificatieAsync(id);
-            return Ok("Notificatie succesvol verwijderd.");
+            var notificaties = await _notificatieService.GetUserNotificatiesAsync(userId);
+            return Ok(notificaties);
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest($"Fout bij het ophalen van notificaties: {ex.Message}");
         }
     }
+
+    
 }

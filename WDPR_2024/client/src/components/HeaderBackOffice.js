@@ -6,7 +6,7 @@ import NotificationButton from './notificationbutton';
 
 const HeaderBackOffice = () => {
     const navigate = useNavigate();
-    const id = localStorage.getItem("medewerkerId");
+    const id = localStorage.getItem("Id");
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/');

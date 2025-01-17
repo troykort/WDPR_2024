@@ -12,8 +12,8 @@ using WDPR_2024.server.MyServerApp.Data;
 namespace MyServerApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241206124227_deletebeschikbaarvanvoertuigagain")]
-    partial class deletebeschikbaarvanvoertuigagain
+    [Migration("20250117223828_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,67 @@ namespace MyServerApp.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Klant", b =>
+                {
+                    b.Property<int>("KlantID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KlantID"));
+
+                    b.Property<string>("Adres")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("BedrijfID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool?>("IsActief")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Naam")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RijbewijsFotoPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RijbewijsNummer")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Rol")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Telefoonnummer")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Wachtwoord")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("KlantID");
+
+                    b.HasIndex("BedrijfID");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("UserID")
+                        .IsUnique();
+
+                    b.ToTable("Klanten");
+                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -169,7 +230,7 @@ namespace MyServerApp.Migrations
                     b.Property<decimal>("Kosten")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("MaxVoertuigenPerMedewerker")
+                    b.Property<int?>("MaxVoertuigenPerMedewerker")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDatum")
@@ -201,7 +262,6 @@ namespace MyServerApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -238,7 +298,6 @@ namespace MyServerApp.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -294,58 +353,6 @@ namespace MyServerApp.Migrations
                     b.ToTable("Bedrijven");
                 });
 
-            modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Klant", b =>
-                {
-                    b.Property<int>("KlantID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("KlantID"));
-
-                    b.Property<string>("Adres")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("BedrijfID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<bool>("IsActief")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Naam")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RijbewijsFotoPath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RijbewijsNummer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Telefoonnummer")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Wachtwoord")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("KlantID");
-
-                    b.HasIndex("BedrijfID");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.ToTable("Klanten");
-                });
-
             modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Medewerker", b =>
                 {
                     b.Property<int>("MedewerkerID")
@@ -366,7 +373,13 @@ namespace MyServerApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("MedewerkerID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Medewerkers");
                 });
@@ -386,9 +399,6 @@ namespace MyServerApp.Migrations
                     b.Property<bool>("Gelezen")
                         .HasColumnType("bit");
 
-                    b.Property<int>("KlantID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Titel")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -396,11 +406,44 @@ namespace MyServerApp.Migrations
                     b.Property<DateTime>("VerzondenOp")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("userID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("NotificatieID");
 
-                    b.HasIndex("KlantID");
+                    b.HasIndex("userID");
 
                     b.ToTable("Notificaties");
+                });
+
+            modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Opmerking", b =>
+                {
+                    b.Property<int>("OpmerkingID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OpmerkingID"));
+
+                    b.Property<DateTime>("DatumToegevoegd")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GebruikerNaam")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tekst")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VerhuurAanvraagID")
+                        .HasColumnType("int");
+
+                    b.HasKey("OpmerkingID");
+
+                    b.HasIndex("VerhuurAanvraagID");
+
+                    b.ToTable("Opmerkingen");
                 });
 
             modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Schademelding", b =>
@@ -416,7 +459,6 @@ namespace MyServerApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FotoPath")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("KlantID")
@@ -426,12 +468,14 @@ namespace MyServerApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Opmerkingen")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("VerhuurAanvraagID")
+                        .HasColumnType("int");
 
                     b.Property<int>("VoertuigID")
                         .HasColumnType("int");
@@ -439,6 +483,8 @@ namespace MyServerApp.Migrations
                     b.HasKey("SchademeldingID");
 
                     b.HasIndex("KlantID");
+
+                    b.HasIndex("VerhuurAanvraagID");
 
                     b.HasIndex("VoertuigID");
 
@@ -459,21 +505,16 @@ namespace MyServerApp.Migrations
                     b.Property<DateTime>("EindDatum")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FrontofficeMedewerkerID")
+                    b.Property<int?>("FrontofficeMedewerkerID")
                         .HasColumnType("int");
 
                     b.Property<int>("KlantID")
                         .HasColumnType("int");
 
-                    b.Property<string>("Opmerkingen")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("StartDatum")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Uitgiftedatum")
@@ -507,6 +548,15 @@ namespace MyServerApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("HuidigeHuurderEmail")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("HuidigeHuurderID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HuidigeHuurderNaam")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Kenteken")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -516,10 +566,6 @@ namespace MyServerApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Merk")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Opmerkingen")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -538,9 +584,30 @@ namespace MyServerApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("Uitgiftedatum")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("VoertuigID");
 
                     b.ToTable("Voertuigen");
+                });
+
+            modelBuilder.Entity("Klant", b =>
+                {
+                    b.HasOne("WDPR_2024.server.MyServerApp.Models.Bedrijf", "Bedrijf")
+                        .WithMany("Medewerkers")
+                        .HasForeignKey("BedrijfID")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("WDPR_2024.server.MyServerApp.Models.ApplicationUser", "User")
+                        .WithOne()
+                        .HasForeignKey("Klant", "UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bedrijf");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -605,42 +672,60 @@ namespace MyServerApp.Migrations
                     b.Navigation("Bedrijf");
                 });
 
-            modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Klant", b =>
+            modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Medewerker", b =>
                 {
-                    b.HasOne("WDPR_2024.server.MyServerApp.Models.Bedrijf", "Bedrijf")
-                        .WithMany("Medewerkers")
-                        .HasForeignKey("BedrijfID")
-                        .OnDelete(DeleteBehavior.Restrict);
+                    b.HasOne("WDPR_2024.server.MyServerApp.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Bedrijf");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Notificatie", b =>
                 {
-                    b.HasOne("WDPR_2024.server.MyServerApp.Models.Klant", "Klant")
-                        .WithMany("Notificaties")
-                        .HasForeignKey("KlantID")
+                    b.HasOne("WDPR_2024.server.MyServerApp.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("userID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Klant");
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Opmerking", b =>
+                {
+                    b.HasOne("WDPR_2024.server.MyServerApp.Models.VerhuurAanvraag", "VerhuurAanvraag")
+                        .WithMany("Opmerkingen")
+                        .HasForeignKey("VerhuurAanvraagID")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("VerhuurAanvraag");
                 });
 
             modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Schademelding", b =>
                 {
-                    b.HasOne("WDPR_2024.server.MyServerApp.Models.Klant", "Klant")
+                    b.HasOne("Klant", "Klant")
                         .WithMany("Schademeldingen")
                         .HasForeignKey("KlantID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.HasOne("WDPR_2024.server.MyServerApp.Models.VerhuurAanvraag", "VerhuurAanvraag")
+                        .WithMany()
+                        .HasForeignKey("VerhuurAanvraagID");
 
                     b.HasOne("WDPR_2024.server.MyServerApp.Models.Voertuig", "Voertuig")
                         .WithMany("Schademeldingen")
                         .HasForeignKey("VoertuigID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Klant");
+
+                    b.Navigation("VerhuurAanvraag");
 
                     b.Navigation("Voertuig");
                 });
@@ -655,19 +740,18 @@ namespace MyServerApp.Migrations
                     b.HasOne("WDPR_2024.server.MyServerApp.Models.Medewerker", "FrontofficeMedewerker")
                         .WithMany("BehandeldeAanvragen")
                         .HasForeignKey("FrontofficeMedewerkerID")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("WDPR_2024.server.MyServerApp.Models.Klant", "Klant")
+                    b.HasOne("Klant", "Klant")
                         .WithMany("VerhuurAanvragen")
                         .HasForeignKey("KlantID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("WDPR_2024.server.MyServerApp.Models.Voertuig", "Voertuig")
                         .WithMany("VerhuurAanvragen")
                         .HasForeignKey("VoertuigID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Bedrijf");
@@ -677,6 +761,13 @@ namespace MyServerApp.Migrations
                     b.Navigation("Klant");
 
                     b.Navigation("Voertuig");
+                });
+
+            modelBuilder.Entity("Klant", b =>
+                {
+                    b.Navigation("Schademeldingen");
+
+                    b.Navigation("VerhuurAanvragen");
                 });
 
             modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Bedrijf", b =>
@@ -689,18 +780,14 @@ namespace MyServerApp.Migrations
                     b.Navigation("VerhuurAanvragen");
                 });
 
-            modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Klant", b =>
-                {
-                    b.Navigation("Notificaties");
-
-                    b.Navigation("Schademeldingen");
-
-                    b.Navigation("VerhuurAanvragen");
-                });
-
             modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Medewerker", b =>
                 {
                     b.Navigation("BehandeldeAanvragen");
+                });
+
+            modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.VerhuurAanvraag", b =>
+                {
+                    b.Navigation("Opmerkingen");
                 });
 
             modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Voertuig", b =>
