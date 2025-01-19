@@ -16,35 +16,37 @@ public class SchademeldingController : ControllerBase
 
     // 1. GET: Haal een specifieke schademelding op
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetSchademelding(int id)
+    public async Task<IActionResult> GetSchademeldingById(int id)
     {
-        var schademelding = await _schademeldingService.GetSchademeldingByIdAsync(id);
-        if (schademelding == null) return NotFound("Schademelding niet gevonden.");
-
-        return Ok(schademelding);
+        var melding = await _schademeldingService.GetSchademeldingByIdAsync(id);
+        if (melding == null)
+            return NotFound("Schademelding niet gevonden.");
+        return Ok(melding);
     }
 
     // 2. GET: Haal alle schademeldingen op
     [Authorize(Roles = "Backoffice")]
     [HttpGet]
-    public async Task<IActionResult> GetAlleSchademeldingen()
+    public async Task<IActionResult> GetAllSchademeldingen()
     {
-        var schademeldingen = await _schademeldingService.GetAlleSchademeldingenAsync();
-        return Ok(schademeldingen);
+        var meldingen = await _schademeldingService.GetAllSchademeldingenAsync();
+        return Ok(meldingen);
     }
+
+
 
     // 3. POST: Voeg een nieuwe schademelding toe
     [HttpPost]
-    public async Task<IActionResult> CreateSchademelding(Schademelding nieuweSchademelding)
+    public async Task<IActionResult> AddSchademelding([FromBody] Schademelding schademelding)
     {
         try
         {
-            await _schademeldingService.AddSchademeldingAsync(nieuweSchademelding);
-            return Ok("Schademelding succesvol toegevoegd.");
+            var newMelding = await _schademeldingService.AddSchademeldingAsync(schademelding);
+            return Ok(newMelding);
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest($"Fout bij toevoegen schademelding: {ex.Message}");
         }
     }
 
@@ -55,14 +57,19 @@ public class SchademeldingController : ControllerBase
     {
         try
         {
+            // Roep de service aan om de schademeldingstatus bij te werken
             await _schademeldingService.UpdateSchademeldingStatusAsync(id, nieuweStatus, opmerkingen);
+
+            // Retourneer een succesbericht
             return Ok($"Status succesvol bijgewerkt naar {nieuweStatus}.");
         }
         catch (Exception ex)
         {
-            return BadRequest(ex.Message);
+            // Retourneer een foutmelding bij een mislukte operatie
+            return BadRequest($"Fout bij het bijwerken van de status: {ex.Message}");
         }
     }
+
 
     // 5. DELETE: Verwijder een schademelding
     [HttpDelete("{id}")]

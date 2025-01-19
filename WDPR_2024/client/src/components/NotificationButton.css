@@ -34,29 +34,32 @@
 }
 
 .notification-dropdown {
-	position: absolute;
-	top: 50px;
-	right: 0;
-	background-color: white;
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-	width: 250px;
-	z-index: 1000;
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    
+    width: 400px;
+    z-index: 1000;
 }
 
 	.notification-dropdown ul {
 		list-style: none;
+		
 		padding: 10px;
 		margin: 0;
+		border-bottom: 2px solid #000000;
 	}
 
-	.notification-dropdown li {
-		padding: 10px;
+	.notification-dropdown div {
+		height: 100%;
 		border-bottom: 1px solid #ccc;
 	}
 
-		.notification-dropdown li:last-child {
+		.notification-dropdown div:last-child {
 			border-bottom: none;
 		}
 
