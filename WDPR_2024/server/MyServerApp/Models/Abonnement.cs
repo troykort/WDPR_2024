@@ -16,8 +16,16 @@ namespace WDPR_2024.server.MyServerApp.Models
         public string Status { get; set; } // "In Behandeling", "Actief", "Afgekeurd"
         public int? MaxVoertuigenPerMedewerker { get; set; } // Limiet per medewerker
 
-       
+        // Pay-as-you-go specific properties
+        public decimal? MaandelijkseAbonnementskosten { get; set; }
+        public decimal? KortingOpVoertuighuur { get; set; }
+        public decimal? ToeslagVoorPremiumVoertuigen { get; set; }
+
+        // Prepaid specific properties
+        public int? AantalHuurdagenPerJaar { get; set; }
+        public decimal? KostenPerJaar { get; set; }
+        public decimal? OvergebruikKostenPerDag { get; set; }
+
         public Bedrijf Bedrijf { get; set; }
     }
-
 }

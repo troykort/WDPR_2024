@@ -34,12 +34,10 @@ namespace WDPR_2024.server.MyServerApp.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Klant>()
-    .HasOne(k => k.User)
-    .WithOne()
-    .HasForeignKey<Klant>(k => k.UserID)
-    .OnDelete(DeleteBehavior.Cascade);
-
-            
+                .HasOne(k => k.User)
+                .WithOne()
+                .HasForeignKey<Klant>(k => k.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Opmerking>()
                 .HasOne(o => o.VerhuurAanvraag)
@@ -59,12 +57,9 @@ namespace WDPR_2024.server.MyServerApp.Data
                 .WithMany()
                 .HasForeignKey(n => n.userID)
                 .OnDelete(DeleteBehavior.Cascade);
-        
 
-
-
-        // Bedrijf en Abonnement Relatie
-        modelBuilder.Entity<Bedrijf>()
+            // Bedrijf en Abonnement Relatie
+            modelBuilder.Entity<Bedrijf>()
                 .HasOne(b => b.Abonnement)
                 .WithOne(a => a.Bedrijf)
                 .HasForeignKey<Abonnement>(a => a.AbonnementID)
@@ -112,8 +107,6 @@ namespace WDPR_2024.server.MyServerApp.Data
                 .HasForeignKey(s => s.VoertuigID)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            
-
             // Configuratie voor unieke velden (bijvoorbeeld email)
             modelBuilder.Entity<Klant>()
                 .HasIndex(k => k.Email)
@@ -122,6 +115,28 @@ namespace WDPR_2024.server.MyServerApp.Data
             modelBuilder.Entity<Bedrijf>()
                 .HasIndex(b => b.EmailDomein)
                 .IsUnique();
+
+            // Configuratie van de Abonnement entiteit
+            modelBuilder.Entity<Abonnement>(entity =>
+            {
+                entity.HasKey(e => e.AbonnementID);
+                entity.Property(e => e.Type).IsRequired();
+                entity.Property(e => e.Kosten).IsRequired();
+                entity.Property(e => e.StartDatum).IsRequired();
+                entity.Property(e => e.EindDatum).IsRequired();
+                entity.Property(e => e.Status).IsRequired();
+                entity.Property(e => e.MaxVoertuigenPerMedewerker);
+
+                // Pay-as-you-go specific properties
+                entity.Property(e => e.MaandelijkseAbonnementskosten);
+                entity.Property(e => e.KortingOpVoertuighuur);
+                entity.Property(e => e.ToeslagVoorPremiumVoertuigen);
+
+                // Prepaid specific properties
+                entity.Property(e => e.AantalHuurdagenPerJaar);
+                entity.Property(e => e.KostenPerJaar);
+                entity.Property(e => e.OvergebruikKostenPerDag);
+            });
         }
     }
 }
