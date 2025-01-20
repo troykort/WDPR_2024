@@ -21,8 +21,12 @@ namespace WDPR_2024.server.MyServerApp.Models
         public string? Status { get; set; } // "In Behandeling", "Goedgekeurd", "Afgekeurd", "Uitgegeven"
         public ICollection<Opmerking>? Opmerkingen { get; set; } = new List<Opmerking>();
         public DateTime? Uitgiftedatum { get; set; } 
+        public int SchademeldingID { get; set; }
+
+        public Schademelding? Schademelding { get; set; }
         public int? FrontofficeMedewerkerID { get; set; } // Medewerker die de uitgifte registreert
         public Medewerker? FrontofficeMedewerker { get; set; }
+        public ICollection<Schademelding>? Schademeldingen { get; set; }
     }
 
 

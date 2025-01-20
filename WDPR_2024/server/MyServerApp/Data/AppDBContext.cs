@@ -93,19 +93,32 @@ namespace WDPR_2024.server.MyServerApp.Data
                 .HasForeignKey(v => v.FrontofficeMedewerkerID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Schademelding en Klant Relatie
-            modelBuilder.Entity<Schademelding>()
-                .HasOne(s => s.Klant)
-                .WithMany(k => k.Schademeldingen)
-                .HasForeignKey(s => s.KlantID)
-                .OnDelete(DeleteBehavior.NoAction);
+          
 
-            // Schademelding en Voertuig Relatie
+      
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Schademelding>()
                 .HasOne(s => s.Voertuig)
                 .WithMany(v => v.Schademeldingen)
                 .HasForeignKey(s => s.VoertuigID)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Schademelding>()
+                .HasOne(s => s.Klant)
+                .WithMany(k => k.Schademeldingen)
+                .HasForeignKey(s => s.KlantID)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Schademelding>()
+     .HasOne(s => s.VerhuurAanvraag)
+     .WithMany(a => a.Schademeldingen) 
+     .HasForeignKey(s => s.VerhuurAanvraagID)
+     .OnDelete(DeleteBehavior.SetNull);
+
+
+
+
 
             // Configuratie voor unieke velden (bijvoorbeeld email)
             modelBuilder.Entity<Klant>()
