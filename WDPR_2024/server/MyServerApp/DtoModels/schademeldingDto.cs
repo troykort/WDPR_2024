@@ -16,4 +16,22 @@
         public string? Opmerkingen { get; set; }
     }
 
-}
+  
+public class SchademeldingDto
+    {
+        public int SchademeldingID { get; set; }
+        public int VoertuigID { get; set; }
+        public string VoertuigMerk { get; set; }
+        public string VoertuigType { get; set; }
+        public int? KlantID { get; set; }
+        public string KlantNaam { get; set; }
+        public string Beschrijving { get; set; }
+        public string? FotoPath { get; set; }
+        public DateTime Melddatum { get; set; }
+        public string? Opmerkingen { get; set; }
+        public string Status { get; set; }
+    }
+    }
+
+
+

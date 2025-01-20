@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace WDPR_2024.server.MyServerApp
 {
@@ -36,11 +37,17 @@ namespace WDPR_2024.server.MyServerApp
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
 
-            
-            builder.Services.AddAuthorization();
-            builder.Services.AddControllers();
+           
 
-            
+            builder.Services.AddAuthorization();
+            builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.MaxDepth = 64; 
+    });
+
+
             builder.Services.AddScoped<VoertuigService>();
             builder.Services.AddScoped<BedrijfService>();
             builder.Services.AddScoped<VerhuurAanvraagService>();

@@ -50,6 +50,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                     {
                         VoertuigID = dto.VoertuigId,
                         KlantID = dto.KlantId,
+                        
                         Beschrijving = dto.Beschrijving,
                         Opmerkingen = dto.Opmerkingen,
                         FotoPath = dto.Foto != null ? await _schademeldingService.UploadFotoAsync(dto.Foto) : null,

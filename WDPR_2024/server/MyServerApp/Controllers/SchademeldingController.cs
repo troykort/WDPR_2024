@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using WDPR_2024.server.MyServerApp.Services;
 using WDPR_2024.server.MyServerApp.Models;
+using Microsoft.EntityFrameworkCore;
+using WDPR_2024.server.MyServerApp.DtoModels;
+using System.Text.Json;
 
 [ApiController]
 [Route("api/schademeldingen")]
@@ -25,13 +28,35 @@ public class SchademeldingController : ControllerBase
     }
 
     // 2. GET: Haal alle schademeldingen op
+    // 2. GET: Haal alle schademeldingen op
     [Authorize(Roles = "Backoffice")]
     [HttpGet]
-    public async Task<IActionResult> GetAllSchademeldingen()
+    public async Task<IActionResult> GetSchademeldingen()
     {
-        var meldingen = await _schademeldingService.GetAllSchademeldingenAsync();
-        return Ok(meldingen);
+        var schademeldingen = await _schademeldingService.GetAllSchademeldingenAsync();
+        var schademeldingendto = schademeldingen.Select(s => new SchademeldingDto
+        {
+            SchademeldingID = s.SchademeldingID,
+            VoertuigID = s.VoertuigID,
+            KlantID = s.KlantID,
+            KlantNaam = s.Klant.Naam,
+            VoertuigMerk = s.Voertuig.Merk,
+            VoertuigType = s.Voertuig.Type,
+            Beschrijving = s.Beschrijving,
+            Opmerkingen = s.Opmerkingen,
+            FotoPath = s.FotoPath,
+            Melddatum = s.Melddatum,
+            Status = s.Status
+        })
+        .ToList();
+
+     
+
+        return Ok(schademeldingendto);
     }
+
+
+
 
 
 

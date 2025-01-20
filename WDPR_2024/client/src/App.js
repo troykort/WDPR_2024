@@ -28,6 +28,7 @@ import DashboardFrontoffice from './pages/DashboardFrontoffice';
 import HeaderBackOffice from './components/HeaderBackOffice';
 import FOVerhuurAanvragenPage from './pages/FOVerhuurAanvragenPage';
 import VoertuigInname from './pages/VoertuiginnamePage';
+import BOschadebeheer from './pages/BackofficeSchademeldingenPage'; // i did lalalalalalaa
 import FAQ from './pages/FAQ';
 import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden';
 import Support from './pages/Support';
@@ -85,12 +86,14 @@ const App = () => {
     const isDashboardParticulier = location.pathname.startsWith('/dashboardparticulier');
     const isVoertuigverhuur = location.pathname.startsWith('/voertuigverhuur');
     const isDashboardBackoffice = location.pathname.startsWith('/backoffice-dashboard');
+    const isSchadebeheer = location.pathname.startsWith('/BOschadebeheer');
+    const isVoertuiginname = location.pathname.startsWith('/voertuiginname');
     const isDashboardFrontoffice = location.pathname.startsWith('/frontoffice-dashboard');
     const isFrontofficeVerhuuraanvragen = location.pathname.startsWith('/FO-verhuuraanvragen');
 
     return (
         <div className="app-container">
-            {!isDashboardWPB && !isDashboardFrontoffice && !isDashboardBackoffice && !isDashboardABO && !isDashboardParticulier && !isVoertuigverhuur && !isFrontofficeVerhuuraanvragen && <Navbar />}
+            {!isDashboardWPB && !isDashboardFrontoffice && !isDashboardBackoffice && !isDashboardABO && !isDashboardParticulier && !isVoertuigverhuur && !isFrontofficeVerhuuraanvragen && !isSchadebeheer && !isVoertuiginname && <Navbar />}
             <div className="main-content">
                 <Routes>
                     <Route path="/" element={<MainPage />} />
@@ -150,6 +153,12 @@ const App = () => {
                         <ProtectedRoute allowedRoles={["Backoffice"]}>
                             <HeaderBackOffice />
                             <BOVerhuurAanvragenPage />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/BOschadebeheer" element={
+                        <ProtectedRoute allowedRoles={["Backoffice"]}>
+                            <HeaderBackOffice />
+                            <BOschadebeheer/>
                         </ProtectedRoute>
                     } />
                     <Route path="/frontoffice-dashboard" element={

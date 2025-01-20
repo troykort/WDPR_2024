@@ -45,7 +45,7 @@ namespace WDPR_2024.server.MyServerApp.Services
         public async Task<string> UploadFotoAsync(IFormFile foto)
         {
             if (foto == null) throw new Exception("Geen foto aangeleverd.");
-            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "schadefotos");
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "FeedbackSchade", "schadefotos");
             if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
 
             var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(foto.FileName);
@@ -55,9 +55,11 @@ namespace WDPR_2024.server.MyServerApp.Services
             {
                 await foto.CopyToAsync(fileStream);
             }
-
-            return $"/schadefotos/{uniqueFileName}";
+        
+            var baseUrl = "http://localhost:5000"; 
+            return $"{baseUrl}/server/MyServerApp/FeedbackSchade/schadefotos/{uniqueFileName}";
         }
+
 
         // Werk de status van een schademelding bij
         public async Task UpdateSchademeldingStatusAsync(int id, string nieuweStatus, string? opmerkingen)

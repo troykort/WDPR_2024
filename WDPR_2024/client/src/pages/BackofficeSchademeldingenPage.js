@@ -3,14 +3,16 @@ import axios from "axios";
 
 import "./BackofficeSchademeldingenPage.css";
 
+
 const BackofficeSchademeldingenPage = () => {
     const [schademeldingen, setSchademeldingen] = useState([]);
     const [selectedSchademelding, setSelectedSchademelding] = useState(null);
     const [nieuweStatus, setNieuweStatus] = useState("");
     const [opmerkingen, setOpmerkingen] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
+    const [photoPopupVisible, setPhotoPopupVisible] = useState(false);
+    const [selectedPhoto, setSelectedPhoto] = useState(null);
 
-   
     useEffect(() => {
         fetchSchademeldingen();
     }, []);
@@ -21,9 +23,17 @@ const BackofficeSchademeldingenPage = () => {
             const response = await axios.get("http://localhost:5000/api/schademeldingen", {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            setSchademeldingen(response.data);
+            if (Array.isArray(response.data)) {
+                setSchademeldingen(response.data);
+
+            } else {
+                setSchademeldingen([]);
+                console.error("Unexpected response format:", response.data);
+            }
+            console.log("Schademeldingen fetched:", response.data);
         } catch (error) {
             console.error("Error fetching schademeldingen:", error);
+            setSchademeldingen([]);
         }
     };
 
@@ -39,6 +49,16 @@ const BackofficeSchademeldingenPage = () => {
         setNieuweStatus("");
         setOpmerkingen("");
         setModalVisible(false);
+    };
+
+    const openPhotoPopup = (photoPath) => {
+        setSelectedPhoto(photoPath);
+        setPhotoPopupVisible(true);
+    };
+
+    const closePhotoPopup = () => {
+        setSelectedPhoto(null);
+        setPhotoPopupVisible(false);
     };
 
     const handleStatusUpdate = async () => {
@@ -60,7 +80,7 @@ const BackofficeSchademeldingenPage = () => {
             );
             alert("Status succesvol bijgewerkt!");
             closeModal();
-            fetchSchademeldingen(); 
+            fetchSchademeldingen();
         } catch (error) {
             console.error("Error updating status:", error);
             alert("Er is een fout opgetreden bij het bijwerken van de status.");
@@ -79,6 +99,7 @@ const BackofficeSchademeldingenPage = () => {
                         <th>Klant</th>
                         <th>Status</th>
                         <th>Datum</th>
+                        <th>Foto</th>
                         <th>Acties</th>
                     </tr>
                 </thead>
@@ -86,10 +107,27 @@ const BackofficeSchademeldingenPage = () => {
                     {schademeldingen.map((melding) => (
                         <tr key={melding.schademeldingID}>
                             <td>{melding.schademeldingID}</td>
-                            <td>{melding.voertuig?.merk} {melding.voertuig?.type}</td>
-                            <td>{melding.klant?.naam || "Onbekend"}</td>
+                            <td>{melding.voertuigMerk} {melding.voertuigType}</td>
+                            <td>{melding.klantNaam || "Onbekend"}</td>
                             <td>{melding.status}</td>
                             <td>{new Date(melding.melddatum).toLocaleDateString()}</td>
+                            <td>
+                                {melding.fotoPath && (
+                                    <>
+                                        <button
+                                            className="view-photo-button"
+                                            onClick={() => openPhotoPopup(melding.fotoPath)}
+                                        >
+                                            View Photo
+                                        </button>
+                                        <img
+                                            src={melding.fotoPath}
+                                            alt="Schade foto"
+                                            className="schade-foto"
+                                        />
+                                    </>
+                                )}
+                            </td>
                             <td>
                                 <button
                                     className="backoffice-schademeldingen-button"
@@ -107,8 +145,8 @@ const BackofficeSchademeldingenPage = () => {
                 <div className="backoffice-schademeldingen-modal">
                     <div className="backoffice-schademeldingen-modal-content">
                         <h3>Schademelding Bijwerken</h3>
-                        <p><strong>Voertuig:</strong> {selectedSchademelding?.voertuig?.merk} {selectedSchademelding?.voertuig?.type}</p>
-                        <p><strong>Klant:</strong> {selectedSchademelding?.klant?.naam}</p>
+                        <p><strong>Voertuig:</strong> {selectedSchademelding?.voertuigMerk} {selectedSchademelding?.voertuigType}</p>
+                        <p><strong>Klant:</strong> {selectedSchademelding?.klantNaam}</p>
                         <p><strong>Huidige Status:</strong> {selectedSchademelding?.status}</p>
                         <textarea
                             placeholder="Nieuwe opmerkingen (optioneel)"
@@ -129,6 +167,14 @@ const BackofficeSchademeldingenPage = () => {
                             <button onClick={handleStatusUpdate}>Bijwerken</button>
                             <button onClick={closeModal}>Annuleren</button>
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {photoPopupVisible && (
+                <div className="photo-popup" onClick={closePhotoPopup}>
+                    <div className="photo-popup-content">
+                        <img src={selectedPhoto} alt="Volledige schade foto" />
                     </div>
                 </div>
             )}

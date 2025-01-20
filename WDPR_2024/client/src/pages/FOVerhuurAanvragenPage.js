@@ -55,10 +55,10 @@ const FrontofficeVerhuurAanvragenPage = () => {
             setIsLoading(true);
             const token = localStorage.getItem("token");
             const status = "Uitgegeven";
-
+            const userID = localStorage.getItem('Id')
             await axios.put(
                 `http://localhost:5000/api/verhuur-aanvragen/${selectedAanvraag.verhuurAanvraagID}/${status}`,
-                { opmerkingen },
+                { userID, opmerkingen },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
