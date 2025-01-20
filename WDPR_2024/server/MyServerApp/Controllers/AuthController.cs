@@ -144,7 +144,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-   
+
             var user = new ApplicationUser
             {
                 UserName = model.ContactEmail,
@@ -157,13 +157,27 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             {
                 await _userManager.AddToRoleAsync(user, "Zakelijk");
 
+                var abonnement = new Abonnement
+                {
+                    Type = model.AbonnementType,
+                    MaandelijkseAbonnementskosten = model.MaandelijkseAbonnementskosten,
+                    KortingOpVoertuighuur = model.KortingOpVoertuighuur,
+                    AantalHuurdagenPerJaar = model.AantalHuurdagenPerJaar,
+                    KostenPerJaar = model.KostenPerJaar,
+                    OvergebruikKostenPerDag = model.OvergebruikKostenPerDag,
+                    StartDatum = DateTime.UtcNow,
+                    EindDatum = DateTime.UtcNow.AddYears(1),
+                    Status = "Actief"
+                };
+
                 var bedrijf = new Bedrijf
                 {
                     Bedrijfsnaam = model.Bedrijfsnaam,
                     Adres = model.Adres,
                     KVKNummer = model.KVKNummer,
                     EmailDomein = model.EmailDomein,
-                    ContactEmail = model.ContactEmail
+                    ContactEmail = model.ContactEmail,
+                    Abonnement = abonnement
                 };
 
                 try
@@ -172,16 +186,16 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 }
                 catch (Exception ex)
                 {
-                    
                     await _userManager.DeleteAsync(user);
                     return BadRequest($"Failed to save bedrijf: {ex.Message}");
                 }
 
-                return Ok(new { UserId = user.Id });
+                return Ok(new { UserId = user.Id, BedrijfID = bedrijf.BedrijfID });
             }
 
             return BadRequest(result.Errors);
         }
+
     }
 
     public class LoginModel
@@ -207,5 +221,12 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         public string EmailDomein { get; set; }
         public string ContactEmail { get; set; }
         public string Password { get; set; }
+
+        public string AbonnementType { get; set; } // "Pay-as-you-go" of "Prepaid"
+        public decimal? MaandelijkseAbonnementskosten { get; set; }
+        public decimal? KortingOpVoertuighuur { get; set; }
+        public int? AantalHuurdagenPerJaar { get; set; }
+        public decimal? KostenPerJaar { get; set; }
+        public decimal? OvergebruikKostenPerDag { get; set; }
     }
 }

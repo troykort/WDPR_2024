@@ -43,7 +43,6 @@ namespace WDPR_2024.server.MyServerApp.Services
 
             bestaandAbonnement.Type = bijgewerktAbonnement.Type;
             bestaandAbonnement.EindDatum = bijgewerktAbonnement.EindDatum;
-            bestaandAbonnement.Kosten = bijgewerktAbonnement.Kosten;
 
             await _context.SaveChangesAsync();
         }

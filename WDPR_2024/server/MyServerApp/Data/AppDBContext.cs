@@ -121,7 +121,6 @@ namespace WDPR_2024.server.MyServerApp.Data
             {
                 entity.HasKey(e => e.AbonnementID);
                 entity.Property(e => e.Type).IsRequired();
-                entity.Property(e => e.Kosten).IsRequired();
                 entity.Property(e => e.StartDatum).IsRequired();
                 entity.Property(e => e.EindDatum).IsRequired();
                 entity.Property(e => e.Status).IsRequired();
@@ -130,7 +129,6 @@ namespace WDPR_2024.server.MyServerApp.Data
                 // Pay-as-you-go specific properties
                 entity.Property(e => e.MaandelijkseAbonnementskosten);
                 entity.Property(e => e.KortingOpVoertuighuur);
-                entity.Property(e => e.ToeslagVoorPremiumVoertuigen);
 
                 // Prepaid specific properties
                 entity.Property(e => e.AantalHuurdagenPerJaar);
