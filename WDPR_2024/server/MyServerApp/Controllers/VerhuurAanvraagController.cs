@@ -5,6 +5,7 @@ using WDPR_2024.server.MyServerApp.Services;
 using System.Threading.Tasks;
 using System;
 using WDPR_2024.server.MyServerApp.DtoModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace WDPR_2024.server.MyServerApp.Controllers
 {
@@ -14,11 +15,16 @@ namespace WDPR_2024.server.MyServerApp.Controllers
     {
         private readonly VerhuurAanvraagService _aanvraagService;
         private readonly EmailService _emailService;
+        private readonly NotificatieService _notificatieService;
+        private readonly KlantService _klantService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public VerhuurAanvraagController(VerhuurAanvraagService aanvraagService, EmailService emailService)
+        public VerhuurAanvraagController(VerhuurAanvraagService aanvraagService, EmailService emailService, NotificatieService notificatieService, UserManager<ApplicationUser> userManager)
         {
             _aanvraagService = aanvraagService;
             _emailService = emailService;
+            _notificatieService = notificatieService;
+            _userManager = userManager;
         }
 
         [Authorize(Roles = "Backoffice, Frontoffice")]
@@ -97,34 +103,74 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [Authorize(Roles = "Backoffice, Frontoffice")]
         [HttpPut("{id}/{status}")]
         public async Task<IActionResult> UpdateStatus(int id, string status, [FromBody] UpdateStatusRequest request)
         {
-            if (request == null || string.IsNullOrWhiteSpace(request.Opmerkingen))
-            {
-                return BadRequest("Opmerkingen zijn verplicht.");
-            }
-
             try
             {
-                // Haal de aanvraag op
+              
                 var aanvraag = await _aanvraagService.GetAanvraagByIdAsync(id);
                 if (aanvraag == null)
                 {
                     return NotFound("Aanvraag niet gevonden.");
                 }
 
-                // Werk de status en opmerkingen bij
+                
+                if (status == "Afgekeurd" && string.IsNullOrWhiteSpace(request.Opmerkingen))
+                {
+                    return BadRequest("Opmerkingen zijn verplicht bij een afkeuring.");
+                }
+
+                
                 await _aanvraagService.UpdateAanvraagStatusAsync(id, status, request.Opmerkingen);
+
+              
+                await _notificatieService.AddNotificatieAsync(new Notificatie
+                {
+                    userID = request.userID,
+                    Titel = "Verhuuraanvraag update",
+                    Bericht = $"De status van aanvraag {id} van {aanvraag.Klant.Naam} is bijgewerkt naar {status}.",
+                    VerzondenOp = DateTime.UtcNow,
+                    Gelezen = false
+                });
+
+                
+                var klant = aanvraag.Klant;
+                var voertuig = aanvraag.Voertuig;
+                var klantUM = await _userManager.FindByEmailAsync(klant.Email);
+
+                if (status == "Goedgekeurd")
+                {
+                    await _notificatieService.AddNotificatieAsync(new Notificatie
+                    {
+                        userID = klantUM.Id,
+                        Titel = $"Verhuuraanvraag {voertuig.Merk} {voertuig.Type}",
+                        Bericht = $"Uw verhuuraanvraag voor {voertuig.Merk} {voertuig.Type} is goedgekeurd. U kunt het voertuig ophalen op {aanvraag.StartDatum}.",
+                        VerzondenOp = DateTime.UtcNow,
+                        Gelezen = false
+                    });
+                }
+                else if (status == "Afgekeurd")
+                {
+                    await _notificatieService.AddNotificatieAsync(new Notificatie
+                    {
+                        userID = klantUM.Id,
+                        Titel = $"Verhuuraanvraag {voertuig.Merk} {voertuig.Type}",
+                        Bericht = $"Uw verhuuraanvraag voor {voertuig.Merk} {voertuig.Type} is afgekeurd. Reden: {request.Opmerkingen}.",
+                        VerzondenOp = DateTime.UtcNow,
+                        Gelezen = false
+                    });
+                }
 
                 return Ok($"Status succesvol bijgewerkt naar {status}.");
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest($"Fout bij het bijwerken van de status: {ex.Message}");
             }
         }
+
 
 
 

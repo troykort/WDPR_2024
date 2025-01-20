@@ -2,10 +2,11 @@
 import { Link, useNavigate } from 'react-router-dom';
 import './HeaderBackOffice.css';
 import logo from '../assets/Logo.png';
+import NotificationButton from './notificationbutton';
 
 const HeaderBackOffice = () => {
     const navigate = useNavigate();
-
+    const id = localStorage.getItem("Id");
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/');
@@ -26,6 +27,7 @@ const HeaderBackOffice = () => {
                 <Link to="/verhuuraanvragenpage" className="headerbackoffice-button">Verhuurbeheer</Link>
                 <Link to="/backoffice-dashboard" className="headerbackoffice-button">Home</Link>
                 <Link to="/profiel" className="headerbackoffice-button">Profiel</Link>
+                <NotificationButton Id={id} />
                 <button onClick={handleLogout} className="headerbackoffice-button">Uitloggen</button>
             </div>
         </nav>

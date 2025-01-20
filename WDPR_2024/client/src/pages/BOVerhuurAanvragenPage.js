@@ -30,18 +30,20 @@ const BOVerhuurAanvragenPage = () => {
         try {
             const token = localStorage.getItem("token");
             const status = "Goedgekeurd";
-
+            const opmerkingen = "aanvraag is goedgekeurd"
+            const userID = localStorage.getItem("Id");
             await axios.put(
                 `http://localhost:5000/api/verhuur-aanvragen/${id}/${status}`,
-                { opmerkingen: null },
+                { userID, opmerkingen },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
                     },
                 }
             );
 
-            fetchAanvragen(); // Refresh de lijst
+            fetchAanvragen(); 
             alert("Aanvraag is goedgekeurd!");
         } catch (error) {
             console.error("Error approving aanvraag:", error);
@@ -58,10 +60,10 @@ const BOVerhuurAanvragenPage = () => {
         try {
             const token = localStorage.getItem("token");
             const status = "Afgewezen";
-
+            const userID = localStorage.getItem("Id");
             await axios.put(
                 `http://localhost:5000/api/verhuur-aanvragen/${selectedAanvraag}/${status}`,
-                { opmerkingen: afwijsReden },
+                { userID, opmerkingen: afwijsReden },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,

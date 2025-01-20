@@ -86,7 +86,7 @@ const App = () => {
     const isVoertuigverhuur = location.pathname.startsWith('/voertuigverhuur');
     const isDashboardBackoffice = location.pathname.startsWith('/backoffice-dashboard');
     const isDashboardFrontoffice = location.pathname.startsWith('/frontoffice-dashboard');
-    const isFrontofficeVerhuuraanvragen = location.pathname.startsWith('/frontoffice-verhuuraanvragen');
+    const isFrontofficeVerhuuraanvragen = location.pathname.startsWith('/FO-verhuuraanvragen');
 
     return (
         <div className="app-container">
@@ -158,7 +158,7 @@ const App = () => {
                             <DashboardFrontoffice />
                         </ProtectedRoute>
                     } />
-                    <Route path="/frontoffice-verhuuraanvragen" element={
+                    <Route path="/FO-verhuuraanvragen" element={
                         <ProtectedRoute allowedRoles={["Frontoffice"]}>
                             <HeaderFrontOffice />
                             <FOVerhuurAanvragenPage />

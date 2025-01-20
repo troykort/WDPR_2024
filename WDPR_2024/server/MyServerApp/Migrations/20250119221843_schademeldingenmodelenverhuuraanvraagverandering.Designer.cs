@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WDPR_2024.server.MyServerApp.Data;
 
@@ -11,9 +12,11 @@ using WDPR_2024.server.MyServerApp.Data;
 namespace MyServerApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250119221843_schademeldingenmodelenverhuuraanvraagverandering")]
+    partial class schademeldingenmodelenverhuuraanvraagverandering
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,26 +224,14 @@ namespace MyServerApp.Migrations
                     b.Property<int>("AbonnementID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AantalHuurdagenPerJaar")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("EindDatum")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("KortingOpVoertuighuur")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("KostenPerJaar")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<decimal?>("MaandelijkseAbonnementskosten")
+                    b.Property<decimal>("Kosten")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("MaxVoertuigenPerMedewerker")
                         .HasColumnType("int");
-
-                    b.Property<decimal?>("OvergebruikKostenPerDag")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("StartDatum")
                         .HasColumnType("datetime2");

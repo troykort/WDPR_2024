@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WDPR_2024.server.MyServerApp.Data;
 
@@ -11,9 +12,11 @@ using WDPR_2024.server.MyServerApp.Data;
 namespace MyServerApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250119225728_AbboAttribuutWeggehaald")]
+    partial class AbboAttribuutWeggehaald
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,6 +231,9 @@ namespace MyServerApp.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal?>("KortingOpVoertuighuur")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Kosten")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("KostenPerJaar")
@@ -470,7 +476,7 @@ namespace MyServerApp.Migrations
                     b.Property<string>("FotoPath")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("KlantID")
+                    b.Property<int>("KlantID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Melddatum")
@@ -520,12 +526,6 @@ namespace MyServerApp.Migrations
                     b.Property<int>("KlantID")
                         .HasColumnType("int");
 
-                    b.Property<int>("SchademeldingID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SchademeldingID1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("StartDatum")
                         .HasColumnType("datetime2");
 
@@ -545,8 +545,6 @@ namespace MyServerApp.Migrations
                     b.HasIndex("FrontofficeMedewerkerID");
 
                     b.HasIndex("KlantID");
-
-                    b.HasIndex("SchademeldingID1");
 
                     b.HasIndex("VoertuigID");
 
@@ -727,17 +725,17 @@ namespace MyServerApp.Migrations
                     b.HasOne("Klant", "Klant")
                         .WithMany("Schademeldingen")
                         .HasForeignKey("KlantID")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("WDPR_2024.server.MyServerApp.Models.VerhuurAanvraag", "VerhuurAanvraag")
-                        .WithMany("Schademeldingen")
-                        .HasForeignKey("VerhuurAanvraagID")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .WithMany()
+                        .HasForeignKey("VerhuurAanvraagID");
 
                     b.HasOne("WDPR_2024.server.MyServerApp.Models.Voertuig", "Voertuig")
                         .WithMany("Schademeldingen")
                         .HasForeignKey("VoertuigID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Klant");
@@ -765,10 +763,6 @@ namespace MyServerApp.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("WDPR_2024.server.MyServerApp.Models.Schademelding", "Schademelding")
-                        .WithMany()
-                        .HasForeignKey("SchademeldingID1");
-
                     b.HasOne("WDPR_2024.server.MyServerApp.Models.Voertuig", "Voertuig")
                         .WithMany("VerhuurAanvragen")
                         .HasForeignKey("VoertuigID")
@@ -780,8 +774,6 @@ namespace MyServerApp.Migrations
                     b.Navigation("FrontofficeMedewerker");
 
                     b.Navigation("Klant");
-
-                    b.Navigation("Schademelding");
 
                     b.Navigation("Voertuig");
                 });
@@ -811,8 +803,6 @@ namespace MyServerApp.Migrations
             modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.VerhuurAanvraag", b =>
                 {
                     b.Navigation("Opmerkingen");
-
-                    b.Navigation("Schademeldingen");
                 });
 
             modelBuilder.Entity("WDPR_2024.server.MyServerApp.Models.Voertuig", b =>

@@ -2,6 +2,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import './HeaderParticulier.css';
 import logo from '../assets/Logo.png';
+import Notification from './notificationbutton.js';
 
 const HeaderParticulier = () => {
     const navigate = useNavigate();
@@ -23,6 +24,7 @@ const HeaderParticulier = () => {
                 <Link to="/voertuigverhuur" className="headerparticulier-button">Voertuigen huren</Link>
                 <Link to="/dashboardparticulier" className="headerparticulier-button">Home</Link>
                 <Link to="/profiel" className="headerparticulier-button">Profiel</Link>
+                <Notification Id={localStorage.getItem('Id')} />
                 <button onClick={handleLogout} className="headerparticulier-button">Uitloggen</button>
             </div>
         </nav>

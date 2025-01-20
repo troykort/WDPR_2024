@@ -10,8 +10,10 @@ namespace WDPR_2024.server.MyServerApp.Models
     public class Notificatie
     {
         public int NotificatieID { get; set; }
-        public int KlantID { get; set; }
-        public Klant Klant { get; set; }
+
+        public string userID { get; set; }
+        public ApplicationUser User { get; set; } 
+
         public string Bericht { get; set; }
 
         public string Titel { get; set; }

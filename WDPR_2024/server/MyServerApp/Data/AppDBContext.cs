@@ -34,24 +34,29 @@ namespace WDPR_2024.server.MyServerApp.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Klant>()
-    .HasOne(k => k.User)
-    .WithOne()
-    .HasForeignKey<Klant>(k => k.UserID)
-    .OnDelete(DeleteBehavior.Cascade);
-
-            base.OnModelCreating(modelBuilder);
+                .HasOne(k => k.User)
+                .WithOne()
+                .HasForeignKey<Klant>(k => k.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Opmerking>()
                 .HasOne(o => o.VerhuurAanvraag)
                 .WithMany(v => v.Opmerkingen)
                 .HasForeignKey(o => o.VerhuurAanvraagID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             // Relatie tussen Medewerker en ApplicationUser
             modelBuilder.Entity<Medewerker>()
                 .HasOne(m => m.User)
                 .WithMany()
                 .HasForeignKey(m => m.UserID);
+
+            // Notificatie relationship configuration
+            modelBuilder.Entity<Notificatie>()
+                .HasOne(n => n.User)
+                .WithMany()
+                .HasForeignKey(n => n.userID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Bedrijf en Abonnement Relatie
             modelBuilder.Entity<Bedrijf>()
@@ -65,14 +70,14 @@ namespace WDPR_2024.server.MyServerApp.Data
                 .HasOne(v => v.Klant)
                 .WithMany(k => k.VerhuurAanvragen)
                 .HasForeignKey(v => v.KlantID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             // VerhuurAanvraag en Voertuig Relatie
             modelBuilder.Entity<VerhuurAanvraag>()
                 .HasOne(v => v.Voertuig)
                 .WithMany(vh => vh.VerhuurAanvragen)
                 .HasForeignKey(v => v.VoertuigID)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
             // VerhuurAanvraag en Bedrijf Relatie
             modelBuilder.Entity<VerhuurAanvraag>()
@@ -88,12 +93,10 @@ namespace WDPR_2024.server.MyServerApp.Data
                 .HasForeignKey(v => v.FrontofficeMedewerkerID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // Schademelding Relaties
-            modelBuilder.Entity<Schademelding>()
-                .HasOne(s => s.Klant)
-                .WithMany(k => k.Schademeldingen)
-                .HasForeignKey(s => s.KlantID)
-                .OnDelete(DeleteBehavior.Cascade);
+          
+
+      
+            base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Schademelding>()
                 .HasOne(s => s.Voertuig)
@@ -101,12 +104,21 @@ namespace WDPR_2024.server.MyServerApp.Data
                 .HasForeignKey(s => s.VoertuigID)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Notificatie en Klant Relatie
-            modelBuilder.Entity<Notificatie>()
-                .HasOne(n => n.Klant)
-                .WithMany(k => k.Notificaties)
-                .HasForeignKey(n => n.KlantID)
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Schademelding>()
+                .HasOne(s => s.Klant)
+                .WithMany(k => k.Schademeldingen)
+                .HasForeignKey(s => s.KlantID)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Schademelding>()
+     .HasOne(s => s.VerhuurAanvraag)
+     .WithMany(a => a.Schademeldingen) 
+     .HasForeignKey(s => s.VerhuurAanvraagID)
+     .OnDelete(DeleteBehavior.SetNull);
+
+
+
+
 
             // Configuratie voor unieke velden (bijvoorbeeld email)
             modelBuilder.Entity<Klant>()
@@ -116,6 +128,26 @@ namespace WDPR_2024.server.MyServerApp.Data
             modelBuilder.Entity<Bedrijf>()
                 .HasIndex(b => b.EmailDomein)
                 .IsUnique();
+
+            // Configuratie van de Abonnement entiteit
+            modelBuilder.Entity<Abonnement>(entity =>
+            {
+                entity.HasKey(e => e.AbonnementID);
+                entity.Property(e => e.Type).IsRequired();
+                entity.Property(e => e.StartDatum).IsRequired();
+                entity.Property(e => e.EindDatum).IsRequired();
+                entity.Property(e => e.Status).IsRequired();
+                entity.Property(e => e.MaxVoertuigenPerMedewerker);
+
+                // Pay-as-you-go specific properties
+                entity.Property(e => e.MaandelijkseAbonnementskosten);
+                entity.Property(e => e.KortingOpVoertuighuur);
+
+                // Prepaid specific properties
+                entity.Property(e => e.AantalHuurdagenPerJaar);
+                entity.Property(e => e.KostenPerJaar);
+                entity.Property(e => e.OvergebruikKostenPerDag);
+            });
         }
     }
 }

@@ -12,7 +12,7 @@ namespace WDPR_2024.server.MyServerApp.Models
         public int SchademeldingID { get; set; }
         public int VoertuigID { get; set; }
         public Voertuig? Voertuig { get; set; }
-        public int KlantID { get; set; }
+        public int? KlantID { get; set; }
         public Klant? Klant { get; set; }
         public string Beschrijving { get; set; }
         public string? FotoPath { get; set; } 

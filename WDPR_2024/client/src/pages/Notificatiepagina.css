@@ -1,0 +1,73 @@
+﻿.notificatie-pagina-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.notificatie-lijst {
+    list-style: none;
+    padding: 0;
+}
+
+.notificatie-item {
+    background: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    .notificatie-item:hover {
+        background: #ececec;
+    }
+
+    .notificatie-item.ongelezen {
+        font-weight: bold;
+    }
+
+.notificatie-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.notificatie-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+    .notificatie-modal-content h3 {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+
+    .notificatie-modal-content button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .notificatie-modal-content button:hover {
+            background: #45a049;
+        }

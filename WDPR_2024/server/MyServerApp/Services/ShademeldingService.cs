@@ -14,27 +14,32 @@ namespace WDPR_2024.server.MyServerApp.Services
         }
 
         // Haal een specifieke schademelding op
-        public async Task<Schademelding> GetSchademeldingByIdAsync(int id)
+        public async Task<Schademelding?> GetSchademeldingByIdAsync(int id)
         {
             return await _context.Schademeldingen
                 .Include(s => s.Voertuig)
                 .Include(s => s.Klant)
+                .Include(s => s.VerhuurAanvraag)
                 .FirstOrDefaultAsync(s => s.SchademeldingID == id);
         }
 
         // Haal alle schademeldingen op
-        public async Task<List<Schademelding>> GetAlleSchademeldingenAsync()
+        public async Task<List<Schademelding>> GetAllSchademeldingenAsync()
         {
             return await _context.Schademeldingen
                 .Include(s => s.Voertuig)
                 .Include(s => s.Klant)
+                .Include(s => s.VerhuurAanvraag)
                 .ToListAsync();
         }
 
-        public async Task AddSchademeldingAsync(Schademelding schademelding)
+        public async Task<Schademelding> AddSchademeldingAsync(Schademelding schademelding)
         {
+            schademelding.Melddatum = DateTime.UtcNow;
+            schademelding.Status = "In Behandeling";
             _context.Schademeldingen.Add(schademelding);
             await _context.SaveChangesAsync();
+            return schademelding;
         }
 
         public async Task<string> UploadFotoAsync(IFormFile foto)
@@ -55,16 +60,26 @@ namespace WDPR_2024.server.MyServerApp.Services
         }
 
         // Werk de status van een schademelding bij
-        public async Task UpdateSchademeldingStatusAsync(int id, string nieuweStatus, string opmerkingen = null)
+        public async Task UpdateSchademeldingStatusAsync(int id, string nieuweStatus, string? opmerkingen)
         {
             var schademelding = await _context.Schademeldingen.FindAsync(id);
-            if (schademelding == null) throw new Exception("Schademelding niet gevonden.");
 
+            if (schademelding == null)
+            {
+                throw new Exception("Schademelding niet gevonden.");
+            }
+
+            // Werk de status en opmerkingen bij
             schademelding.Status = nieuweStatus;
-            schademelding.Opmerkingen = opmerkingen;
+            if (!string.IsNullOrWhiteSpace(opmerkingen))
+            {
+                schademelding.Opmerkingen = opmerkingen;
+            }
 
+            // Sla de wijzigingen op in de database
             await _context.SaveChangesAsync();
         }
+
 
         // Verwijder een schademelding
         public async Task DeleteSchademeldingAsync(int id)

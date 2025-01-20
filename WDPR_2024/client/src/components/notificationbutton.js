@@ -3,7 +3,7 @@ import axios from "axios";
 import "./NotificationButton.css";
 import bellIcon from "../assets/notificationbutton.png";
 
-const NotificationButton = ({ klantId }) => {
+const NotificationButton = ({ Id }) => {
     const [notifications, setNotifications] = useState([]);
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -14,19 +14,23 @@ const NotificationButton = ({ klantId }) => {
             try {
                 setLoading(true);
                 setError(null);
+                const token = localStorage.getItem("token");
                 const response = await axios.get(
-                    `http://localhost:5000/api/notificaties/klant/${klantId}`
+                    `http://localhost:5000/api/notificaties/${Id}`
+                    , { headers: { Authorization: `Bearer ${token}` } },
+
                 );
                 setNotifications(response.data);
+                console.log(response.data);
             } catch (err) {
-                setError("Failed to fetch notifications.");
+                setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
 
         fetchNotifications();
-    }, [klantId]);
+    }, []);
 
     const toggleDropdown = () => {
         setDropdownVisible(!isDropdownVisible);
@@ -52,11 +56,15 @@ const NotificationButton = ({ klantId }) => {
                         <p>{error}</p>
                     ) : notifications.length > 0 ? (
                         <>
-                            <ul>
-                                {notifications.map((notification, index) => (
-                                    <li key={index}>{notification.titel || "New notification"}</li>
-                                ))}
-                            </ul>
+                             <ul>
+                                        {notifications.map((notification, index) => (
+                                            <li key={index}>
+                                                <div>{notification.titel || "New notification"}</div>
+                                                <div>{notification.bericht || "No details provided"}</div>
+                                            </li>
+                                        ))}
+                              </ul>
+
                             <button className="mark-read-button" onClick={markAsRead}>
                                 Mark as Read
                             </button>

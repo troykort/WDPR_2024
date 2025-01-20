@@ -104,7 +104,7 @@ return (
                         />
                     </ div >
                     < div >
-                        < label htmlFor = "emailDomein" > E - maildomein </ label >
+                        < label htmlFor = "emailDomein" > E-maildomein </ label >
                         < input
                             type = "text"
                             id = "emailDomein"
@@ -117,7 +117,7 @@ return (
                     </ div >
                     { error && < p className = "error-message" >{ error}</ p >}
                     < div >
-                        < label htmlFor = "contactEmail" > Contact e - mailadres </ label >
+                        < label htmlFor = "contactEmail" > Contact e-mailadres </ label >
                         < input
                             type = "email"
                             id = "contactEmail"

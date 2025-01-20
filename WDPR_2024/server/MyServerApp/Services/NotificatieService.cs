@@ -13,29 +13,23 @@ namespace WDPR_2024.server.MyServerApp.Services
             _context = context;
         }
 
-        // Haal een specifieke notificatie op
-        public async Task<Notificatie> GetNotificatieByIdAsync(int id)
-        {
-            return await _context.Notificaties
-                .Include(n => n.Klant)
-                .FirstOrDefaultAsync(n => n.NotificatieID == id);
-        }
+      
 
-        // Haal alle notificaties op voor een specifieke klant
-        public async Task<List<Notificatie>> GetNotificatiesVoorKlantAsync(int klantId)
+        // Haal alle notificaties voor iemand
+        public async Task<List<Notificatie>> GetUserNotificatiesAsync(string userId)
         {
             return await _context.Notificaties
-                .Where(n => n.KlantID == klantId)
+                .Where(n => n.userID == userId)
+                .OrderByDescending(n => n.VerzondenOp)
                 .ToListAsync();
         }
 
         // Voeg een nieuwe notificatie toe
-        public async Task AddNotificatieAsync(Notificatie nieuweNotificatie)
+        public async Task AddNotificatieAsync(Notificatie notificatie)
         {
-            _context.Notificaties.Add(nieuweNotificatie);
+            await _context.Notificaties.AddAsync(notificatie);
             await _context.SaveChangesAsync();
         }
-
         // Verwijder een notificatie
         public async Task DeleteNotificatieAsync(int id)
         {
