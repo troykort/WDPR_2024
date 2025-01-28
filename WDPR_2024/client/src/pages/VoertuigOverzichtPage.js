@@ -13,9 +13,9 @@ const VoertuigOverzichtPage = () => {
     });
 
     useEffect(() => {
-        // Initial fetch and polling
+        
         fetchVoertuigen();
-        const interval = setInterval(fetchVoertuigen, 30000); // Poll every 30 seconds
+        const interval = setInterval(fetchVoertuigen, 30000); 
         return () => clearInterval(interval); 
     }, []);
 

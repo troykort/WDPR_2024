@@ -12,8 +12,7 @@ namespace WDPR_2024.server.MyServerApp.Models
         public string Merk { get; set; }
         public string Type { get; set; }
 
-       
-
+   
         public string TypeVoertuig { get; set; }// Auto, Camper, Caravan
         public string Kenteken { get; set; }
         public string Kleur { get; set; }
@@ -30,8 +29,8 @@ namespace WDPR_2024.server.MyServerApp.Models
 
 
         // Relaties
-        public ICollection<VerhuurAanvraag> VerhuurAanvragen { get; set; }
-        public ICollection<Schademelding> Schademeldingen { get; set; }
+        public ICollection<VerhuurAanvraag>? VerhuurAanvragen { get; set; }
+        public ICollection<Schademelding>? Schademeldingen { get; set; }
     }
 
 }

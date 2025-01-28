@@ -23,8 +23,8 @@ const HeaderBackOffice = () => {
             <div className="headerbackoffice-right">
                 <Link to="/voertuigverhuur" className="headerbackoffice-button">Klantenbeheer</Link>
                 <Link to="/BOschadebeheer" className="headerbackoffice-button">Schadebeheer</Link>
-                <Link to="/voertuigverhuur" className="headerbackoffice-button">Voertuigbeheer</Link>
-                <Link to="/verhuuraanvragenpage" className="headerbackoffice-button">Verhuurbeheer</Link>
+                <Link to="/BOvoertuigbeheer" className="headerbackoffice-button">Voertuigbeheer</Link>
+                <Link to="/verhuuraanvragen" className="headerbackoffice-button">Verhuurbeheer</Link>
                 <Link to="/backoffice-dashboard" className="headerbackoffice-button">Home</Link>
                 <Link to="/profiel" className="headerbackoffice-button">Profiel</Link>
                 <NotificationButton Id={id} />

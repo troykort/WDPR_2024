@@ -29,7 +29,8 @@ import HeaderBackOffice from './components/HeaderBackOffice';
 import FOVerhuurAanvragenPage from './pages/FOVerhuurAanvragenPage';
 import VoertuigInname from './pages/VoertuiginnamePage';
 import NotificatiePagina from './pages/Notificatiepagina';
-import BOschadebeheer from './pages/BackofficeSchademeldingenPage'; 
+import BOschadebeheer from './pages/BackofficeSchademeldingenPage';
+import BackofficeWagenparkPage from './pages/BackofficeWagenparkPage';
 import FAQ from './pages/FAQ';
 import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden';
 import Support from './pages/Support';
@@ -85,17 +86,14 @@ const App = () => {
     const location = useLocation();
     const isDashboardWPB = location.pathname.startsWith('/dashboardwpb') || location.pathname.startsWith('/medewerkers') || location.pathname.startsWith('/voertuigoverzicht') || location.pathname.startsWith('/statistieken') || location.pathname.startsWith('/profiel');
     const isDashboardABO = location.pathname.startsWith('/dashboardabo');
-    const isDashboardParticulier = location.pathname.startsWith('/dashboardparticulier');
-    const isVoertuigverhuur = location.pathname.startsWith('/voertuigverhuur');
-    const isDashboardBackoffice = location.pathname.startsWith('/backoffice-dashboard');
-    const isSchadebeheer = location.pathname.startsWith('/BOschadebeheer');
-    const isVoertuiginname = location.pathname.startsWith('/voertuiginname');
-    const isDashboardFrontoffice = location.pathname.startsWith('/frontoffice-dashboard');
-    const isFrontofficeVerhuuraanvragen = location.pathname.startsWith('/FO-verhuuraanvragen');
+    const isDashboardParticulier = location.pathname.startsWith('/dashboardparticulier') || location.pathname.startsWith('/voertuigverhuur');
+    const isDashboardBackoffice = location.pathname.startsWith('/backoffice-dashboard') || location.pathname.startsWith('/BOvoertuigbeheer') || location.pathname.startsWith('/BOschadebeheer') || location.pathname.startsWith('/verhuuraanvragen');
+    const isDashboardFrontoffice = location.pathname.startsWith('/frontoffice-dashboard') || location.pathname.startsWith('/FO-verhuuraanvragen') || location.pathname.startsWith('/voertuiginname');
+    
 
     return (
         <div className="app-container">
-            {!isDashboardWPB && !isDashboardFrontoffice && !isDashboardBackoffice && !isDashboardABO && !isDashboardParticulier && !isVoertuigverhuur && !isFrontofficeVerhuuraanvragen && !isSchadebeheer && !isVoertuiginname && <Navbar />}
+            {!isDashboardWPB && !isDashboardFrontoffice && !isDashboardBackoffice && !isDashboardABO && !isDashboardParticulier && <Navbar />}
             <div className="main-content">
                 <Routes>
                     <Route path="/" element={<MainPage />} />
@@ -161,6 +159,16 @@ const App = () => {
                         <ProtectedRoute allowedRoles={["Backoffice"]}>
                             <HeaderBackOffice />
                             <BOschadebeheer/>
+                        </ProtectedRoute>
+                    } /><Route path="/BOvoertuigbeheer" element={
+                        <ProtectedRoute allowedRoles={["Backoffice"]}>
+                            <HeaderBackOffice />
+                            <BackofficeWagenparkPage />
+                        </ProtectedRoute>
+                    } /><Route path="/verhuuraanvragen" element={
+                        <ProtectedRoute allowedRoles={["Backoffice"]}>
+                            <HeaderBackOffice />
+                            <BOVerhuurAanvragenPage />
                         </ProtectedRoute>
                     } />
                     <Route path="/frontoffice-dashboard" element={

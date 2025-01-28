@@ -51,12 +51,12 @@
     }
 
 .bo-verhuur-aanvragen-button-approve {
-    background-color: #0072b2; /* Blue */
+    background-color: #0072b2; 
     color: white;
 }
 
 .bo-verhuur-aanvragen-button-reject {
-    background-color: #d55e00; /* Orange */
+    background-color: #d55e00; 
     color: white;
 }
 
@@ -116,24 +116,24 @@
     }
 
         .bo-verhuur-aanvragen-modal-actions button:first-of-type {
-            background-color: #d32f2f; /* Darker red for better contrast */
+            background-color: #d32f2f;
             color: white;
-            font-size: 18px; /* Increase font size for readability */
-            padding: 14px 22px; /* Increase padding for better click area */
+            font-size: 18px; 
+            padding: 14px 22px; 
         }
 
             .bo-verhuur-aanvragen-modal-actions button:first-of-type:hover {
-                background-color: #b71c1c; /* Even darker red for hover state */
+                background-color: #b71c1c; 
             }
 
         .bo-verhuur-aanvragen-modal-actions button:last-of-type {
-            background-color: #757575; /* Darker gray for better contrast */
-            color: white; /* Change text color to white for better contrast */
-            font-size: 18px; /* Increase font size for readability */
-            padding: 14px 22px; /* Increase padding for better click area */
+            background-color: #757575; 
+            color: white; 
+            font-size: 18px; 
+            padding: 14px 22px; 
         }
 
             .bo-verhuur-aanvragen-modal-actions button:last-of-type:hover {
-                background-color: #616161; /* Even darker gray for hover state */
+                background-color: #616161; 
             }
 

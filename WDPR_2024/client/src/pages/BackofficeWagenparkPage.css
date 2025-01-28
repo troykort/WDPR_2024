@@ -1,0 +1,231 @@
+﻿.backoffice-wagenpark-page-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background: #f3f4f6;
+    min-height: 100vh;
+}
+
+    .backoffice-wagenpark-page-container h2 {
+        text-align: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+.wagenpark-add-button {
+    display: block;
+    margin: 10px 0px 20px 100px;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .wagenpark-add-button:hover {
+        background: #0056b3;
+    }
+
+.wagenpark-header {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.wagenpark-search-input {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    width: 300px;
+}
+
+.wagenpark-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+    .wagenpark-table th,
+    .wagenpark-table td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .wagenpark-table th {
+        background-color: #007bff;
+        color: white;
+        font-weight: bold;
+    }
+
+    .wagenpark-table tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .wagenpark-table tbody tr:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
+    }
+
+.wagenpark-edit-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: background-color 0.3s ease;
+}
+
+    .wagenpark-edit-button:hover {
+        opacity: 0.9;
+    }
+
+.wagenpark-delete-button {
+    background: #d55e00;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+    .wagenpark-delete-button:hover {
+        opacity: 0.9;
+    }
+
+.wagenpark-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wagenpark-modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+    .wagenpark-modal-content h3 {
+        margin-bottom: 20px;
+        font-size: 20px;
+        text-align: center;
+    }
+
+    .wagenpark-modal-content form input,
+    .wagenpark-modal-content form select,
+    .wagenpark-modal-content form textarea {
+        width: 100%;
+        margin: 10px 0;
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+
+    .wagenpark-modal-content form select {
+        appearance: none;
+        background-color: white;
+    }
+
+.wagenpark-modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+    .wagenpark-modal-actions button {
+        padding: 10px 20px;
+        font-size: 14px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .wagenpark-modal-actions button:hover {
+            opacity: 0.9;
+        }
+
+.error-message {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.loading-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+    .pagination button {
+        margin: 0 5px;
+        padding: 5px 10px;
+        border: 1px solid #007bff;
+        background-color: white;
+        color: #007bff;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .pagination button.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+@media (max-width: 768px) {
+    .wagenpark-table th,
+    .wagenpark-table td {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .wagenpark-modal-content {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .wagenpark-add-button {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}

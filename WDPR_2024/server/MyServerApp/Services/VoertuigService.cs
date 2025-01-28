@@ -66,6 +66,7 @@ namespace WDPR_2024.server.MyServerApp.Services
         // Voeg een nieuw voertuig toe
         public async Task AddVoertuigAsync(Voertuig nieuwVoertuig)
         {
+            nieuwVoertuig.Status = "Beschikbaar";
             _context.Voertuigen.Add(nieuwVoertuig);
             await _context.SaveChangesAsync();
         }
@@ -78,6 +79,9 @@ namespace WDPR_2024.server.MyServerApp.Services
 
             bestaandVoertuig.Merk = bijgewerktVoertuig.Merk;
             bestaandVoertuig.Type = bijgewerktVoertuig.Type;
+            bestaandVoertuig.Aanschafjaar = bijgewerktVoertuig.Aanschafjaar;
+            bestaandVoertuig.Kleur = bijgewerktVoertuig.Kleur;
+            bestaandVoertuig.TypeVoertuig = bijgewerktVoertuig.TypeVoertuig;
             bestaandVoertuig.Kenteken = bijgewerktVoertuig.Kenteken;
             bestaandVoertuig.PrijsPerDag = bijgewerktVoertuig.PrijsPerDag;
             bestaandVoertuig.Status = bijgewerktVoertuig.Status;
