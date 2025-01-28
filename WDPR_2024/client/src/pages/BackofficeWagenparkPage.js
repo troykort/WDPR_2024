@@ -142,14 +142,18 @@ const BackofficeWagenparkPage = () => {
         <div className="backoffice-wagenpark-page-container">
             <h2>Wagenparkbeheer</h2>
             <div className="wagenpark-header">
+                <label htmlFor="merkSearch" className="sr-only">Zoek op merk</label>
                 <input
+                    id="merkSearch"
                     type="text"
                     placeholder="Zoek op merk..."
                     value={merkSearchTerm}
                     onChange={(e) => setMerkSearchTerm(e.target.value)}
                     className="wagenpark-search-input"
                 />
+                <label htmlFor="typeSearch" className="sr-only">Zoek op type</label>
                 <input
+                    id="typeSearch"
                     type="text"
                     placeholder="Zoek op type..."
                     value={typeSearchTerm}
@@ -191,12 +195,14 @@ const BackofficeWagenparkPage = () => {
                                 <button
                                     className="wagenpark-edit-button"
                                     onClick={() => openModal(voertuig)}
+                                    aria-label={`Wijzig ${voertuig.merk} ${voertuig.type}`}
                                 >
                                     Wijzigen
                                 </button>
                                 <button
                                     className="wagenpark-delete-button"
                                     onClick={() => handleDelete(voertuig.voertuigID)}
+                                    aria-label={`Verwijder ${voertuig.merk} ${voertuig.type}`}
                                 >
                                     Verwijderen
                                 </button>
@@ -207,11 +213,13 @@ const BackofficeWagenparkPage = () => {
             </table>
 
             {modalVisible && (
-                <div className="wagenpark-modal">
+                <div className="wagenpark-modal" role="dialog" aria-modal="true">
                     <div className="wagenpark-modal-content">
                         <h3>{editMode ? "Voertuig Wijzigen" : "Voertuig Toevoegen"}</h3>
                         <form onSubmit={handleFormSubmit}>
+                            <label htmlFor="merk" className="sr-only">Merk</label>
                             <input
+                                id="merk"
                                 type="text"
                                 placeholder="Merk"
                                 value={formData.merk}
@@ -220,7 +228,9 @@ const BackofficeWagenparkPage = () => {
                                 }
                                 required
                             />
+                            <label htmlFor="type" className="sr-only">Type</label>
                             <input
+                                id="type"
                                 type="text"
                                 placeholder="Type"
                                 value={formData.type}
@@ -229,7 +239,9 @@ const BackofficeWagenparkPage = () => {
                                 }
                                 required
                             />
+                            <label htmlFor="typeVoertuig" className="sr-only">Type Voertuig</label>
                             <select
+                                id="typeVoertuig"
                                 value={formData.typeVoertuig}
                                 onChange={(e) =>
                                     setFormData({ ...formData, typeVoertuig: e.target.value })
@@ -240,7 +252,9 @@ const BackofficeWagenparkPage = () => {
                                 <option value="Camper">Camper</option>
                                 <option value="Caravan">Caravan</option>
                             </select>
+                            <label htmlFor="kleur" className="sr-only">Kleur</label>
                             <input
+                                id="kleur"
                                 type="text"
                                 placeholder="Kleur"
                                 value={formData.kleur}
@@ -249,7 +263,9 @@ const BackofficeWagenparkPage = () => {
                                 }
                                 required
                             />
+                            <label htmlFor="kenteken" className="sr-only">Kenteken</label>
                             <input
+                                id="kenteken"
                                 type="text"
                                 placeholder="Kenteken"
                                 value={formData.kenteken}
@@ -258,7 +274,9 @@ const BackofficeWagenparkPage = () => {
                                 }
                                 required
                             />
+                            <label htmlFor="aanschafjaar" className="sr-only">Aanschafjaar</label>
                             <input
+                                id="aanschafjaar"
                                 type="text"
                                 placeholder="Aanschafjaar"
                                 value={formData.aanschafjaar}
@@ -267,7 +285,9 @@ const BackofficeWagenparkPage = () => {
                                 }
                                 required
                             />
+                            <label htmlFor="prijsPerDag" className="sr-only">Prijs per Dag</label>
                             <input
+                                id="prijsPerDag"
                                 type="number"
                                 placeholder="Prijs per Dag"
                                 value={formData.prijsPerDag}
@@ -276,7 +296,9 @@ const BackofficeWagenparkPage = () => {
                                 }
                                 required
                             />
+                            <label htmlFor="status" className="sr-only">Status</label>
                             <input
+                                id="status"
                                 type="text"
                                 placeholder="Status"
                                 value={formData.status}
