@@ -28,10 +28,12 @@ import DashboardFrontoffice from './pages/DashboardFrontoffice';
 import HeaderBackOffice from './components/HeaderBackOffice';
 import FOVerhuurAanvragenPage from './pages/FOVerhuurAanvragenPage';
 import VoertuigInname from './pages/VoertuiginnamePage';
-import BOschadebeheer from './pages/BackofficeSchademeldingenPage'; // i did lalalalalalaa
+import NotificatiePagina from './pages/Notificatiepagina';
+import BOschadebeheer from './pages/BackofficeSchademeldingenPage'; 
 import FAQ from './pages/FAQ';
 import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden';
 import Support from './pages/Support';
+
 
 const MainPage = () => {
     const navigate = useNavigate();
@@ -176,6 +178,10 @@ const App = () => {
                         <ProtectedRoute allowedRoles={["Frontoffice"]}>
                             <HeaderFrontOffice />
                             <VoertuigInname />
+                        </ProtectedRoute>
+                    } /><Route path="/notificaties" element={
+                        <ProtectedRoute allowedRoles={["Wagenparkbeheerder", "Backoffice", "Particulier", "Frontoffice", "Abonnementbeheerder", "Zakelijk"]}>
+                            <NotificatiePagina />
                         </ProtectedRoute>
                     } />
                     <Route path="/privacybeleid" element={<Privacybeleid />} />

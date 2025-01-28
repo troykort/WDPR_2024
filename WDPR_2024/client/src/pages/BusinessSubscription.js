@@ -6,7 +6,7 @@ const BusinessSubscription = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { formData } = location.state || {};
-    const [maandelijkseAbonnementskosten, setMaandelijkseAbonnementskosten] = useState({ type: '', monthlyCost: 0, discount: 0 });
+    const [maandelijkseAbonnementskosten] = useState({ type: '', monthlyCost: 5000, discount: 20 });
     const [abonnementType, setAbonnementType] = useState({ type: '', days: 0, cost: 0 });
     const [selectedPrepaid, setSelectedPrepaid] = useState(false);
 
@@ -14,8 +14,7 @@ const BusinessSubscription = () => {
         if (type === 'prepaid' && !selectedPrepaid) {
             alert('Selecteer een van de prepaid opties.');
             return;
-        }
-
+        } 
         const updatedFormData = {
             ...formData,
             abonnementType: type,
@@ -43,7 +42,7 @@ const BusinessSubscription = () => {
 
             const data = await response.json();
             alert(`Registratie succesvol. Welkom, ${data.bedrijfsnaam}`);
-            navigate('/login'); // Navigate to login page after successful registration
+            navigate('/login'); 
         } catch (error) {
             alert('Er is een fout opgetreden tijdens de registratie: ' + error.message);
         }
@@ -59,8 +58,8 @@ const BusinessSubscription = () => {
     };
 
 
-    const handlePayAsYouGoSubmit = (type) => {
-        setMaandelijkseAbonnementskosten({ type, monthlyCost: 5000, discount: 20 });
+    const handlePayAsYouGoSubmit = () => {
+        
         handleSubmit('pay-as-you-go');
     };
 
@@ -124,7 +123,7 @@ const BusinessSubscription = () => {
                         &#10004; Geschikt voor bedrijven met onregelmatige behoeften.
                     </div>
                     <div className="button-group">
-                        <button type="button" onClick={() => handlePayAsYouGoSubmit('pay-as-you-go')}>Kies Pay-as-you-go</button>
+                        <button type="button" onClick={() => handlePayAsYouGoSubmit()}>Kies Pay-as-you-go</button>
                     </div>
                 </div>
             </div>

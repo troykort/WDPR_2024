@@ -71,14 +71,14 @@ namespace WDPR_2024.server.MyServerApp.Services
                 throw new Exception("Schademelding niet gevonden.");
             }
 
-            // Werk de status en opmerkingen bij
+            
             schademelding.Status = nieuweStatus;
             if (!string.IsNullOrWhiteSpace(opmerkingen))
             {
                 schademelding.Opmerkingen = opmerkingen;
             }
 
-            // Sla de wijzigingen op in de database
+            
             await _context.SaveChangesAsync();
         }
 

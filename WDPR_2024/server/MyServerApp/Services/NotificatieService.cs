@@ -39,5 +39,17 @@ namespace WDPR_2024.server.MyServerApp.Services
             _context.Notificaties.Remove(notificatie);
             await _context.SaveChangesAsync();
         }
+        public async Task UpdateNotificatieGelezenStatusAsync(int id, bool gelezen)
+        {
+            
+            var notificatie = await _context.Notificaties.FirstOrDefaultAsync(n => n.NotificatieID == id);
+            if (notificatie == null)
+            {
+                throw new Exception($"Notificatie met ID {id} is niet gevonden.");
+            }
+
+            notificatie.Gelezen = gelezen;
+            await _context.SaveChangesAsync();
+        }
     }
 }

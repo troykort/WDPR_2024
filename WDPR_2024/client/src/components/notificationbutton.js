@@ -2,12 +2,14 @@
 import axios from "axios";
 import "./NotificationButton.css";
 import bellIcon from "../assets/notificationbutton.png";
+import { useNavigate } from "react-router-dom";
 
 const NotificationButton = ({ Id }) => {
     const [notifications, setNotifications] = useState([]);
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigator = useNavigate();
 
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -36,8 +38,8 @@ const NotificationButton = ({ Id }) => {
         setDropdownVisible(!isDropdownVisible);
     };
 
-    const markAsRead = () => {
-        setNotifications([]);
+    const navNotifpagina = () => {
+        navigator("/notificaties");
     };
 
     return (
@@ -60,13 +62,13 @@ const NotificationButton = ({ Id }) => {
                                         {notifications.map((notification, index) => (
                                             <li key={index}>
                                                 <div>{notification.titel || "New notification"}</div>
-                                                <div>{notification.bericht || "No details provided"}</div>
+
                                             </li>
                                         ))}
                               </ul>
 
-                            <button className="mark-read-button" onClick={markAsRead}>
-                                Mark as Read
+                             <button className="mark-read-button" onClick={navNotifpagina}>
+                               alle notificaties
                             </button>
                         </>
                     ) : (

@@ -161,7 +161,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                 {
                     Type = model.AbonnementType,
                     MaandelijkseAbonnementskosten = model.MaandelijkseAbonnementskosten,
-                    KortingOpVoertuighuur = model.KortingOpVoertuighuur,
+                    KortingOpVoertuighuur = model.KortingOpVoertuig,
                     AantalHuurdagenPerJaar = model.AantalHuurdagenPerJaar,
                     KostenPerJaar = model.KostenPerJaar,
                     OvergebruikKostenPerDag = model.OvergebruikKostenPerDag,
@@ -190,7 +190,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                     return BadRequest($"Failed to save bedrijf: {ex.Message}");
                 }
 
-                return Ok(new { UserId = user.Id, BedrijfID = bedrijf.BedrijfID });
+                return Ok(new { UserId = user.Id, BedrijfID = bedrijf.BedrijfID, Bedrijfsnaam = bedrijf.Bedrijfsnaam });
             }
 
             return BadRequest(result.Errors);
@@ -224,7 +224,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
 
         public string AbonnementType { get; set; } // "Pay-as-you-go" of "Prepaid"
         public decimal? MaandelijkseAbonnementskosten { get; set; }
-        public decimal? KortingOpVoertuighuur { get; set; }
+        public decimal? KortingOpVoertuig { get; set; }
         public int? AantalHuurdagenPerJaar { get; set; }
         public decimal? KostenPerJaar { get; set; }
         public decimal? OvergebruikKostenPerDag { get; set; }

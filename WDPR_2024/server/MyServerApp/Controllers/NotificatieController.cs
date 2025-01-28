@@ -50,6 +50,21 @@ public class NotificatieController : ControllerBase
             return BadRequest($"Fout bij het ophalen van notificaties: {ex.Message}");
         }
     }
+    [HttpPut("{id}/gelezen")]
+    public async Task<IActionResult> UpdateGelezenStatus(int id)
+    {
+        try
+        {
+            var gelezen = true;
+            await _notificatieService.UpdateNotificatieGelezenStatusAsync(id, gelezen);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
-    
+
+
 }
