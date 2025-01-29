@@ -193,9 +193,9 @@ const App = () => {
                             <NotificatiePagina />
                         </ProtectedRoute>
                     } /><Route 
-                    path="/rental-history/:klantId" 
+                    path="/rental-history" 
                     element={
-                        <ProtectedRoute allowedRoles={["Particulier", "Backoffice", "Frontoffice"]}>
+                        <ProtectedRoute allowedRoles={["Particulier", "Backoffice", "Frontoffice","Zakelijk"]}>
                             <RentalHistoryPage />
                         </ProtectedRoute>
                     }   />
