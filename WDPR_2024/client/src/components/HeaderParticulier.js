@@ -24,6 +24,7 @@ const HeaderParticulier = () => {
                 <Link to="/voertuigverhuur" className="headerparticulier-button">Voertuigen huren</Link>
                 <Link to="/dashboardparticulier" className="headerparticulier-button">Home</Link>
                 <Link to="/profiel" className="headerparticulier-button">Profiel</Link>
+                <Link to="/rental-history" className="headerparticulier-button">Verhuurgeschiedenis</Link>
                 <Notification Id={localStorage.getItem('Id')} />
                 <button onClick={handleLogout} className="headerparticulier-button">Uitloggen</button>
             </div>
