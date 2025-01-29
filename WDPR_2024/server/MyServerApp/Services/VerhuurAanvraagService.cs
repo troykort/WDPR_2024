@@ -184,5 +184,24 @@ namespace WDPR_2024.server.MyServerApp.Services
         {
             return await _context.Voertuigen.FirstOrDefaultAsync(v => v.VoertuigID == voertuigId);
         }
+         public async Task<List<VerhuurAanvraag>> GetVerhuurGeschiedenisByKlantIdAsync(int klantId)
+        {
+            var verhuurGeschiedenis = await _context.VerhuurAanvragen
+                .Where(a => a.KlantID == klantId && (a.Status == "Goedgekeurd" || a.Status == "Verhuurd"))
+                .Include(a => a.Voertuig)
+                .Include(a => a.Klant)
+                .ToListAsync();
+
+            if (verhuurGeschiedenis == null || verhuurGeschiedenis.Count == 0)
+            {
+        Console.WriteLine("No rental history found for klantId: {0}", klantId);
+            }
+            else
+            {
+        Console.WriteLine("Rental history successfully retrieved for klantId: {0}", klantId);
+            }
+
+            return verhuurGeschiedenis;
+        }
     }
 }

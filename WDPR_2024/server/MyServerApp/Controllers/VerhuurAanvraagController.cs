@@ -213,5 +213,38 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             var beschikbaar = await _aanvraagService.IsVoertuigBeschikbaarAsync(voertuigID, startDatum, eindDatum);
             return Ok(new { Beschikbaar = beschikbaar });
         }
+        [Authorize]
+[HttpGet("geschiedenis/{klantId}")]
+public async Task<IActionResult> GetVerhuurGeschiedenis(int klantId)
+{
+
+    try
+    {
+        // Haal verhuurgeschiedenis op via de service
+        var verhuurGeschiedenis = await _aanvraagService.GetVerhuurGeschiedenisByKlantIdAsync(klantId);
+
+        if (verhuurGeschiedenis == null || verhuurGeschiedenis.Count == 0)
+        {
+            return NotFound("Geen verhuurgeschiedenis gevonden voor deze klant.");
+        }
+
+        // Map naar DTO met fallback waarden
+        var geschiedenisDto = verhuurGeschiedenis.Select(g => new VerhuurGeschiedenisDto
+        {
+            VerhuurAanvraagID = g.VerhuurAanvraagID,
+            KlantNaam = g.Klant?.Naam ?? "Onbekend",  // Check if Klant is null, and provide a fallback value
+            VoertuigInfo = g.Voertuig != null ? $"{g.Voertuig.Merk} {g.Voertuig.Type}" : "Onbekend voertuig",  // Same for Voertuig
+            StartDatum = g.StartDatum,
+            EindDatum = g.EindDatum
+        }).ToList();
+
+        return Ok(geschiedenisDto);
     }
+    catch (Exception ex)
+    {
+        return BadRequest($"Fout bij het ophalen van de verhuurgeschiedenis: {ex.Message}");
+    }
+}
+  
+    } 
 }

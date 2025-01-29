@@ -34,6 +34,7 @@ import BackofficeWagenparkPage from './pages/BackofficeWagenparkPage';
 import FAQ from './pages/FAQ';
 import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden';
 import Support from './pages/Support';
+import RentalHistoryPage from './pages/RentalHistoryPage';
 
 
 const MainPage = () => {
@@ -191,7 +192,14 @@ const App = () => {
                         <ProtectedRoute allowedRoles={["Wagenparkbeheerder", "Backoffice", "Particulier", "Frontoffice", "Abonnementbeheerder", "Zakelijk"]}>
                             <NotificatiePagina />
                         </ProtectedRoute>
-                    } />
+                    } /><Route 
+                    path="/rental-history/:klantId" 
+                    element={
+                        <ProtectedRoute allowedRoles={["Particulier", "Backoffice", "Frontoffice"]}>
+                            <RentalHistoryPage />
+                        </ProtectedRoute>
+                    }   />
+                    
                     <Route path="/privacybeleid" element={<Privacybeleid />} />
                     <Route path="/FAQ" element={<FAQ/>}/>
                     <Route path="/algemene-voorwaarden" element={<AlgemeneVoorwaarden/>}/>
