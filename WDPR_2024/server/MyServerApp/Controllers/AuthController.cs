@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using WDPR_2024.server.MyServerApp.Models;
 using WDPR_2024.server.MyServerApp.Services;
+using Microsoft.EntityFrameworkCore;
+using WDPR_2024.server.MyServerApp.Data;
 
 namespace WDPR_2024.server.MyServerApp.Controllers
 {
@@ -19,19 +21,22 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         private readonly KlantService _klantService;
         private readonly MedewerkerService _medewerkerService;
         private readonly BedrijfService _bedrijfService;
+        private readonly AppDbContext _context;
 
         public AuthController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             KlantService klantService,
             MedewerkerService medewerkerService,
-            BedrijfService bedrijfService)
+            BedrijfService bedrijfService,
+            AppDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _klantService = klantService;
             _medewerkerService = medewerkerService;
             _bedrijfService = bedrijfService;
+            _context = context;
         }
 
         [HttpPost("login")]
@@ -106,10 +111,9 @@ namespace WDPR_2024.server.MyServerApp.Controllers
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
+
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "Particulier");
-
                 var nieuweKlant = new Klant
                 {
                     Naam = model.Naam,
@@ -122,13 +126,25 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                     Rol = "Particulier"
                 };
 
+                if (!string.IsNullOrEmpty(nieuweKlant.Email) && nieuweKlant.Email.Contains("@"))
+                {
+                    var emailDomein = nieuweKlant.Email.Split('@')[1];
+
+                    var bedrijf = await _context.Bedrijven.FirstOrDefaultAsync(b => b.EmailDomein == emailDomein);
+                    if (bedrijf != null)
+                    {
+                        nieuweKlant.BedrijfID = bedrijf.BedrijfID;
+                        nieuweKlant.Rol = "Zakelijk";
+                    }
+                }
+
                 try
                 {
                     await _klantService.AddKlantAsync(nieuweKlant);
+                    await _userManager.AddToRoleAsync(user, nieuweKlant.Rol);
                 }
                 catch (Exception ex)
                 {
-                   
                     await _userManager.DeleteAsync(user);
                     return BadRequest($"Failed to save klant: {ex.Message}");
                 }
@@ -177,7 +193,7 @@ namespace WDPR_2024.server.MyServerApp.Controllers
                     KVKNummer = model.KVKNummer,
                     EmailDomein = model.EmailDomein,
                     ContactEmail = model.ContactEmail,
-                    Abonnement = abonnement
+                    AbonnementID = abonnement.AbonnementID
                 };
 
                 try
@@ -230,3 +246,4 @@ namespace WDPR_2024.server.MyServerApp.Controllers
         public decimal? OvergebruikKostenPerDag { get; set; }
     }
 }
+

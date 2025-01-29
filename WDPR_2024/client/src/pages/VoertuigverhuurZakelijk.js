@@ -17,6 +17,7 @@ const Voertuigverhuur = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [klantID, setKlantID] = useState(null);
     const [displayCount, setDisplayCount] = useState(8);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         const KlantID = localStorage.getItem('userId');
@@ -49,7 +50,7 @@ const Voertuigverhuur = () => {
             .filter((voertuig) => {
                 const isMerkMatch = filters.merk ? voertuig.merk.toLowerCase().includes(filters.merk.toLowerCase()) : true;
                 const isTypeMatch = filters.type ? voertuig.type.toLowerCase().includes(filters.type.toLowerCase()) : true;
-                const isTypeVoertuigMatch = "auto"
+                const isTypeVoertuigMatch = voertuig.typeVoertuig.toLowerCase() === 'auto';
                 return isMerkMatch && isTypeMatch && isTypeVoertuigMatch;
             })
             .sort((a, b) => {
@@ -187,9 +188,6 @@ const Voertuigverhuur = () => {
                         <option value="priceDesc">Prijs: Hoog naar Laag</option>
                     </select>
                 </div>
-                {/*<button className="submit-button" onClick={handleSubmit}>*/}
-                {/*    Bevestig Huur*/}
-                {/*</button>*/}
                 <div className="voertuigen-list">
                     {applyFilters().slice(0, displayCount).map((voertuig) => (
                         <div
@@ -224,7 +222,6 @@ const Voertuigverhuur = () => {
                 <button className="submit-button" onClick={handleSubmit}>
                     Bevestig
                 </button>
-
 
                 {showPopup && (
                     <div className="popup-overlay">

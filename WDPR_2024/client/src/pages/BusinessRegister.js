@@ -28,11 +28,11 @@ setError(''); // Clear error on input change
     };
     
 const handleGoToSubscriptions = () => {
-    if (!formData.emailDomein.startsWith('@'))
-    {
-        setError('Het e-maildomein moet beginnen met een @.');
-        return;
-    }
+    //if (!formData.emailDomein.startsWith('@'))
+    //{
+    //    setError('Het e-maildomein moet beginnen met een @.');
+    //    return;
+    //}
 
     navigate('/business-register/subscriptions', { state: { formData } });
 };
@@ -111,7 +111,7 @@ return (
                             name = "emailDomein"
                             value ={ formData.emailDomein}
     onChange ={ handleChange}
-    placeholder = "Voer uw e-maildomein in"
+    placeholder = "Voer uw e-maildomein in (alles na de @)"
                             required
                         />
                     </ div >
