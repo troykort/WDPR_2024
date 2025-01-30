@@ -14,6 +14,7 @@ import HeaderParticulier from './components/HeaderParticulier';
 import HeaderFrontOffice from './components/HeaderFrontOffice';
 import ManageCompanyEmployees from './pages/ManageBedrijfsMedewerkers';
 import VoertuigOverzichtPage from './pages/VoertuigOverzichtPage';
+import VoertuigverhuurZakelijk from './pages/VoertuigverhuurZakelijk';
 import DashboardWPB from './pages/DashboardWPB';
 import DashboardABO from './pages/DashboardABO';
 import DashboardParticulier from './pages/DashboardParticulier';
@@ -162,6 +163,11 @@ const App = () => {
                         <ProtectedRoute allowedRoles={["Particulier"]}>
                             <HeaderParticulier />
                             <Voertuigverhuur />
+                        </ProtectedRoute>
+                    } /><Route path="/voertuigverhuurZakelijk" element={
+                        <ProtectedRoute allowedRoles={["Zakelijk"]}>
+
+                            <VoertuigverhuurZakelijk />
                         </ProtectedRoute>
                     } />
                     <Route path="/backoffice-dashboard" element={

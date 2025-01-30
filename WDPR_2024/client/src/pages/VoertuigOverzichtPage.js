@@ -8,15 +8,14 @@ const VoertuigOverzichtPage = () => {
         status: "",
         startDate: "",
         endDate: "",
-        merk: "", 
-        type: "", 
+        merk: "",
+        type: "",
     });
 
     useEffect(() => {
-        
         fetchVoertuigen();
-        const interval = setInterval(fetchVoertuigen, 30000); 
-        return () => clearInterval(interval); 
+        const interval = setInterval(fetchVoertuigen, 30000);
+        return () => clearInterval(interval);
     }, []);
 
     const fetchVoertuigen = async () => {
@@ -82,36 +81,45 @@ const VoertuigOverzichtPage = () => {
         <div className="voertuig-overzicht">
             <h2>Voertuig Overzicht</h2>
             <div className="filters">
-                <select name="status" value={filters.status} onChange={handleFilterChange}>
+                <label htmlFor="status" className="sr-only">Status</label>
+                <select id="status" name="status" value={filters.status} onChange={handleFilterChange}>
                     <option value="">Alle Statussen</option>
                     <option value="Beschikbaar">Beschikbaar</option>
                     <option value="Verhuurd">Verhuurd</option>
                     <option value="In reparatie">In Reparatie</option>
                     <option value="Geblokkeerd">Geblokkeerd</option>
                 </select>
+                <label htmlFor="startDate" className="sr-only">Startdatum</label>
                 <input
                     type="date"
+                    id="startDate"
                     name="startDate"
                     value={filters.startDate}
                     onChange={handleFilterChange}
                     placeholder="Startdatum"
                 />
+                <label htmlFor="endDate" className="sr-only">Einddatum</label>
                 <input
                     type="date"
+                    id="endDate"
                     name="endDate"
                     value={filters.endDate}
                     onChange={handleFilterChange}
                     placeholder="Einddatum"
                 />
+                <label htmlFor="merk" className="sr-only">Zoek op Merk</label>
                 <input
                     type="text"
+                    id="merk"
                     name="merk"
                     value={filters.merk}
                     onChange={handleFilterChange}
                     placeholder="Zoek op Merk"
                 />
+                <label htmlFor="type" className="sr-only">Zoek op Type</label>
                 <input
                     type="text"
+                    id="type"
                     name="type"
                     value={filters.type}
                     onChange={handleFilterChange}
@@ -123,7 +131,7 @@ const VoertuigOverzichtPage = () => {
             </button>
             <div className="voertuig-list">
                 {applyFilters().map((voertuig) => (
-                    <div key={voertuig.voertuigID} className="voertuig-item">
+                    <div key={voertuig.voertuigID} className="voertuig-item" role="button" tabIndex="0" onKeyPress={(e) => { if (e.key === 'Enter') exportToCSV(voertuig); }}>
                         <p>{voertuig.merk} {voertuig.type}</p>
                         <p>Status: {voertuig.status}</p>
                         <p>Huurder: {voertuig.huurderNaam}</p>
@@ -142,3 +150,4 @@ const VoertuigOverzichtPage = () => {
 };
 
 export default VoertuigOverzichtPage;
+

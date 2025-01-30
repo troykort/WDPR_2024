@@ -9,7 +9,7 @@ const NotificationButton = ({ Id }) => {
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const navigator = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchNotifications = async () => {
@@ -18,12 +18,10 @@ const NotificationButton = ({ Id }) => {
                 setError(null);
                 const token = localStorage.getItem("token");
                 const response = await axios.get(
-                    `http://localhost:5000/api/notificaties/${Id}`
-                    , { headers: { Authorization: `Bearer ${token}` } },
-
+                    `http://localhost:5000/api/notificaties/${Id}`,
+                    { headers: { Authorization: `Bearer ${token}` } }
                 );
                 setNotifications(response.data);
-                console.log(response.data);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -32,19 +30,52 @@ const NotificationButton = ({ Id }) => {
         };
 
         fetchNotifications();
-    }, []);
+    }, [Id]);
 
     const toggleDropdown = () => {
         setDropdownVisible(!isDropdownVisible);
     };
 
+    const handleNotificationClick = (notification) => {
+       
+        if (!notification.gelezen) {
+            markAsRead(notification.notificatieID);
+        }
+      
+        navigate(`/notificaties`);
+    };
+
+    const markAsRead = async (id) => {
+        try {
+            const token = localStorage.getItem("token");
+            await axios.put(
+                `http://localhost:5000/api/notificaties/${id}/gelezen`,
+                {},
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+           
+            setNotifications((prev) =>
+                prev.map((n) =>
+                    n.notificatieID === id ? { ...n, gelezen: true } : n
+                )
+            );
+        } catch (err) {
+            console.error("Error marking notification as read:", err);
+        }
+    };
+
     const navNotifpagina = () => {
-        navigator("/notificaties");
+        navigate("/notificaties");
     };
 
     return (
         <div className="notification-container">
-            <button className="notification-button" onClick={toggleDropdown}>
+            <button
+                className="notification-button"
+                onClick={toggleDropdown}
+                aria-label="Notifications"
+                aria-expanded={isDropdownVisible}
+            >
                 <img src={bellIcon} alt="Notifications" className="notification-icon" />
                 {notifications.length > 0 && (
                     <span className="notification-badge">{notifications.length}</span>
@@ -55,21 +86,33 @@ const NotificationButton = ({ Id }) => {
                     {loading ? (
                         <p>Loading notifications...</p>
                     ) : error ? (
-                        <p>{error}</p>
+                        <p>Error: {error}</p>
                     ) : notifications.length > 0 ? (
                         <>
-                             <ul>
-                                        {notifications.map((notification, index) => (
-                                            <li key={index}>
-                                                <div>{notification.titel || "New notification"}</div>
-
-                                            </li>
-                                        ))}
-                              </ul>
-
-                             <button className="mark-read-button" onClick={navNotifpagina}>
-                               alle notificaties
-                            </button>
+                            <ul>
+                                {notifications.slice(0, 5).map((notification) => (
+                                    <li
+                                        key={notification.notificatieID}
+                                        className={`notification-item ${notification.gelezen ? "gelezen" : "ongelezen"}`}
+                                        onClick={() => handleNotificationClick(notification)}
+                                    >
+                                        <div className="notification-title">
+                                            {notification.titel || "New notification"}
+                                        </div>
+                                        <div className="notification-message">
+                                            {notification.bericht.substring(0, 50)}...
+                                        </div>
+                                        <div className="notification-time">
+                                            {new Date(notification.verzondenOp).toLocaleString()}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                            {notifications.length > 5 && (
+                                <button className="view-all-button" onClick={navNotifpagina}>
+                                    View all notifications
+                                </button>
+                            )}
                         </>
                     ) : (
                         <p>No new notifications</p>

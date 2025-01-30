@@ -61,13 +61,13 @@ function RentalHistoryPage() {
             {history.length === 0 ? (
                 <p>No rental history found.</p>
             ) : (
-                <table className="rental-history-table">
+                <table className="rental-history-table" role="table">
                     <thead>
                         <tr>
-                            <th>Vehicle</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Customer</th>
+                            <th scope="col">Vehicle</th>
+                            <th scope="col">Start Date</th>
+                            <th scope="col">End Date</th>
+                            <th scope="col">Customer</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -87,3 +87,5 @@ function RentalHistoryPage() {
 }
 
 export default RentalHistoryPage;
+
+

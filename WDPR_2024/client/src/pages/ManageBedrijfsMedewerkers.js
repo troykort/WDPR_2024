@@ -130,22 +130,24 @@ const EmployeePage = () => {
         <main className="employee-page">
             <div className="add-employee">
                 <h2>Medewerkers</h2>
-                <button className="toevoegen-button" onClick={addEmployee}>
+                <button className="toevoegen-button" onClick={addEmployee} aria-label="Medewerker toevoegen">
                     Toevoegen
                 </button>
+                <label htmlFor="filter" className="sr-only">Filter medewerkers</label>
                 <input
                     type="text"
+                    id="filter"
                     placeholder="Filter medewerkers"
                     value={filter}
                     onChange={(e) => setFilter(e.target.value)}
                     className="filter-input"
                 />
             </div>
-            <div className="employee-list">
+            <div className="employee-list" role="list">
                 {filteredEmployees.map((employee) => (
-                    <div key={employee.email} className="employee-item">
+                    <div key={employee.email} className="employee-item" role="listitem">
                         <span>{employee.email}</span>
-                        <button onClick={() => removeEmployee(employee.email)}>
+                        <button onClick={() => removeEmployee(employee.email)} aria-label={`Verwijder medewerker ${employee.email}`}>
                             Verwijderen
                         </button>
                     </div>
@@ -156,3 +158,7 @@ const EmployeePage = () => {
 };
 
 export default EmployeePage;
+
+
+
+
