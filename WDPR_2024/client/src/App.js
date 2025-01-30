@@ -191,14 +191,14 @@ const App = () => {
                         <ProtectedRoute allowedRoles={["Wagenparkbeheerder", "Backoffice", "Particulier", "Frontoffice", "Abonnementbeheerder", "Zakelijk"]}>
                             <NotificatiePagina />
                         </ProtectedRoute>
-                    } /><Route
-                        path="/rental-history"
-                        element={
-                            <ProtectedRoute allowedRoles={["Particulier", "Backoffice", "Frontoffice"]}>
-                                <RentalHistoryPage />
-                            </ProtectedRoute>
-                        } />
-
+                    } /><Route 
+                    path="/rental-history" 
+                    element={
+                        <ProtectedRoute allowedRoles={["Particulier", "Backoffice", "Frontoffice","Zakelijk"]}>
+                            <RentalHistoryPage />
+                        </ProtectedRoute>
+                    }   />
+                    
                     <Route path="/privacybeleid" element={<Privacybeleid />} />
                     <Route path="/FAQ" element={<FAQ />} />
                     <Route path="/algemene-voorwaarden" element={<AlgemeneVoorwaarden />} />

@@ -74,18 +74,6 @@ namespace WDPR_2024.server.MyServerApp.Services
                 throw new Exception("E-mailadres is al geregistreerd.");
             }
 
-            
-            if (!string.IsNullOrEmpty(nieuweKlant.Email) && nieuweKlant.Email.Contains("@"))
-            {
-                var emailDomein = nieuweKlant.Email.Split('@')[1];
-                var bedrijf = await _context.Bedrijven.FirstOrDefaultAsync(b => b.EmailDomein == emailDomein);
-                if (bedrijf != null)
-                {
-                    nieuweKlant.BedrijfID = bedrijf.BedrijfID;
-                    nieuweKlant.Rol = "Zakelijk";
-                }
-            }
-
             _context.Klanten.Add(nieuweKlant);
             await _context.SaveChangesAsync();
         }
