@@ -31,7 +31,7 @@ function AccountSettings() {
                 const medewerkerIdn = Number(medewerkerId)
                 console.log(klantId);
                 console.log(medewerkerIdn);
-                
+
 
                 if (!token || !klantId) throw new Error('User not authenticated.');
 
@@ -97,7 +97,7 @@ function AccountSettings() {
                 Email: userData.email || originalData.email,
                 Wachtwoord: userData.password || originalData.password,
                 Rol: originalData.rol,
-                UserID:  originalData.userID,
+                UserID: originalData.userID,
             };
 
             // Only include password if updated
@@ -136,7 +136,7 @@ function AccountSettings() {
             <div className="account-settings-container">
                 <h1>Account Instellingen</h1>
                 <form>
-                    <div className="form-group">
+                    <div className="account-settings-form-group">
                         <label htmlFor="name">Naam:</label>
                         <input
                             type="text"
@@ -147,7 +147,7 @@ function AccountSettings() {
                             placeholder="Voer uw naam in"
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="account-settings-form-group">
                         <label htmlFor="address">Adres:</label>
                         <input
                             type="text"
@@ -158,7 +158,7 @@ function AccountSettings() {
                             placeholder="Voer uw adres in"
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="account-settings-form-group">
                         <label htmlFor="phone">Telefoonnummer:</label>
                         <input
                             type="tel"
@@ -169,7 +169,7 @@ function AccountSettings() {
                             placeholder="Voer uw telefoonnummer in"
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="account-settings-form-group">
                         <label htmlFor="email">E-mailadres:</label>
                         <input
                             type="email"
@@ -180,7 +180,7 @@ function AccountSettings() {
                             placeholder="Voer uw e-mailadres in"
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="account-settings-form-group">
                         <label htmlFor="password">Wachtwoord:</label>
                         <input
                             type="password"
@@ -191,15 +191,15 @@ function AccountSettings() {
                             placeholder="Voer uw wachtwoord in"
                         />
                     </div>
-                    <div className="button-group">
-                        <button type="button" onClick={handleSaveChanges} className="btn save-btn">
+                    <div className="account-settings-button-group">
+                        <button type="button" onClick={handleSaveChanges} className="account-settings-btn save-btn">
                             Wijzigingen Opslaan
                         </button>
                     </div>
                 </form>
             </div>
 
-            <div className="read-only-container">
+            <div className="account-settings-read-only-container">
                 <h2>Huidige Gegevens</h2>
                 <p><strong>Naam:</strong> {originalData.name}</p>
                 <p><strong>Adres:</strong> {originalData.address}</p>

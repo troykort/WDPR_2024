@@ -57,9 +57,9 @@ function RentalHistoryPage() {
 
     return (
         <div className="rental-history-page">
-            <h1>Rental History</h1>
+            <h1 className="rental-history-title">Rental History</h1>
             {history.length === 0 ? (
-                <p>No rental history found.</p>
+                <p className="rental-history-empty">No rental history found.</p>
             ) : (
                 <table className="rental-history-table" role="table">
                     <thead>
@@ -87,5 +87,3 @@ function RentalHistoryPage() {
 }
 
 export default RentalHistoryPage;
-
-

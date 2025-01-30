@@ -78,7 +78,7 @@ const ProfielPage = () => {
             {role === 'Particulier' && <HeaderParticulier />}
             {role === 'Backoffice' && <HeaderBackOffice />}
             {role === 'Wagenparkbeheerder' && <HeaderWPB />}
-            {role === 'Zakelijk' && <HeaderABO />}
+            {role === 'Zakelijk' && <HeaderZakelijk />}
             <AccountSettings />
         </>
     );
@@ -166,7 +166,7 @@ const App = () => {
                         </ProtectedRoute>
                     } /><Route path="/voertuigverhuurZakelijk" element={
                         <ProtectedRoute allowedRoles={["Zakelijk"]}>
-
+                            <HeaderZakelijk />
                             <VoertuigverhuurZakelijk />
                         </ProtectedRoute>
                     } />
