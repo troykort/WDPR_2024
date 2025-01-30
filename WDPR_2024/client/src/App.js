@@ -9,10 +9,12 @@ import Login from './pages/Login';
 import './App.css';
 import HeaderWPB from './components/HeaderWPB';
 import HeaderABO from './components/HeaderABO';
+import HeaderZakelijk from './components/HeaderZakelijk';
 import HeaderParticulier from './components/HeaderParticulier';
 import HeaderFrontOffice from './components/HeaderFrontOffice';
 import ManageCompanyEmployees from './pages/ManageBedrijfsMedewerkers';
 import VoertuigOverzichtPage from './pages/VoertuigOverzichtPage';
+import VoertuigverhuurZakelijk from './pages/VoertuigverhuurZakelijk';
 import DashboardWPB from './pages/DashboardWPB';
 import DashboardABO from './pages/DashboardABO';
 import DashboardParticulier from './pages/DashboardParticulier';
@@ -35,6 +37,7 @@ import FAQ from './pages/FAQ';
 import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden';
 import Support from './pages/Support';
 import RentalHistoryPage from './pages/RentalHistoryPage';
+import DashboardZakelijk from './pages/DashboardZakelijk'; 
 
 
 const MainPage = () => {
@@ -63,9 +66,6 @@ const MainPage = () => {
                     <p>Bekijk ons aanbod van campers.</p>
                 </div>
             </div>
-            <button onClick={handleGoToDashboardWPB} className="btn dashboardwpb-btn" style={{ marginTop: '20px', backgroundColor: '#4c1a2a', color: 'white', padding: '10px 20px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
-                Ga naar Dashboard WPB
-            </button>
         </div>
     );
 };
@@ -78,7 +78,22 @@ const ProfielPage = () => {
             {role === 'Particulier' && <HeaderParticulier />}
             {role === 'Backoffice' && <HeaderBackOffice />}
             {role === 'Wagenparkbeheerder' && <HeaderWPB />}
+            {role === 'Zakelijk' && <HeaderZakelijk />}
             <AccountSettings />
+        </>
+    );
+};
+
+const RentalHistoryPageWithHeader = () => {
+    const role = getRoleFromToken();
+
+    return (
+        <>
+            {role === 'Particulier' && <HeaderParticulier />}
+            {role === 'Backoffice' && <HeaderBackOffice />}
+            {role === 'Frontoffice' && <HeaderFrontOffice />}
+            {role === 'Zakelijk' && <HeaderZakelijk />}
+            <RentalHistoryPage />
         </>
     );
 };
@@ -87,14 +102,14 @@ const App = () => {
     const location = useLocation();
     const isDashboardWPB = location.pathname.startsWith('/dashboardwpb') || location.pathname.startsWith('/medewerkers') || location.pathname.startsWith('/voertuigoverzicht') || location.pathname.startsWith('/statistieken') || location.pathname.startsWith('/profiel');
     const isDashboardABO = location.pathname.startsWith('/dashboardabo');
-    const isDashboardParticulier = location.pathname.startsWith('/dashboardparticulier') || location.pathname.startsWith('/voertuigverhuur');
+    const isDashboardParticulier = location.pathname.startsWith('/dashboardparticulier') || location.pathname.startsWith('/voertuigverhuur') || location.pathname.startsWith('/rental-history');
     const isDashboardBackoffice = location.pathname.startsWith('/backoffice-dashboard') || location.pathname.startsWith('/BOvoertuigbeheer') || location.pathname.startsWith('/BOschadebeheer') || location.pathname.startsWith('/verhuuraanvragen');
     const isDashboardFrontoffice = location.pathname.startsWith('/frontoffice-dashboard') || location.pathname.startsWith('/FO-verhuuraanvragen') || location.pathname.startsWith('/voertuiginname');
-    
+    const isDashboardZakelijk = location.pathname.startsWith('/dashboardzakelijk'); // Voeg deze regel toe
 
     return (
         <div className="app-container">
-            {!isDashboardWPB && !isDashboardFrontoffice && !isDashboardBackoffice && !isDashboardABO && !isDashboardParticulier && <Navbar />}
+            {!isDashboardWPB && !isDashboardFrontoffice && !isDashboardBackoffice && !isDashboardABO && !isDashboardParticulier && !isDashboardZakelijk && <Navbar />} {/* Voeg isDashboardZakelijk toe */}
             <div className="main-content">
                 <Routes>
                     <Route path="/" element={<MainPage />} />
@@ -149,6 +164,11 @@ const App = () => {
                             <HeaderParticulier />
                             <Voertuigverhuur />
                         </ProtectedRoute>
+                    } /><Route path="/voertuigverhuurZakelijk" element={
+                        <ProtectedRoute allowedRoles={["Zakelijk"]}>
+                            <HeaderZakelijk />
+                            <VoertuigverhuurZakelijk />
+                        </ProtectedRoute>
                     } />
                     <Route path="/backoffice-dashboard" element={
                         <ProtectedRoute allowedRoles={["Backoffice"]}>
@@ -159,7 +179,7 @@ const App = () => {
                     <Route path="/BOschadebeheer" element={
                         <ProtectedRoute allowedRoles={["Backoffice"]}>
                             <HeaderBackOffice />
-                            <BOschadebeheer/>
+                            <BOschadebeheer />
                         </ProtectedRoute>
                     } /><Route path="/BOvoertuigbeheer" element={
                         <ProtectedRoute allowedRoles={["Backoffice"]}>
@@ -192,17 +212,22 @@ const App = () => {
                         <ProtectedRoute allowedRoles={["Wagenparkbeheerder", "Backoffice", "Particulier", "Frontoffice", "Abonnementbeheerder", "Zakelijk"]}>
                             <NotificatiePagina />
                         </ProtectedRoute>
-                    } /><Route 
-                    path="/rental-history" 
-                    element={
-                        <ProtectedRoute allowedRoles={["Particulier", "Backoffice", "Frontoffice","Zakelijk"]}>
-                            <RentalHistoryPage />
+                    } /><Route
+                        path="/rental-history"
+                        element={
+                            <ProtectedRoute allowedRoles={["Particulier", "Backoffice", "Frontoffice", "Zakelijk"]}>
+                                <RentalHistoryPageWithHeader />
+                            </ProtectedRoute>
+                        } />
+                    <Route path="/dashboardzakelijk" element={ // Voeg deze route toe
+                        <ProtectedRoute allowedRoles={["Zakelijk"]}>
+                            <HeaderZakelijk />
+                            <DashboardZakelijk />
                         </ProtectedRoute>
-                    }   />
-                    
+                    } />
                     <Route path="/privacybeleid" element={<Privacybeleid />} />
-                    <Route path="/FAQ" element={<FAQ/>}/>
-                    <Route path="/algemene-voorwaarden" element={<AlgemeneVoorwaarden/>}/>
+                    <Route path="/FAQ" element={<FAQ />} />
+                    <Route path="/algemene-voorwaarden" element={<AlgemeneVoorwaarden />} />
                     <Route path="/support" element={<Support />} />
                     <Route path="/unauthorized" element={<h2>Toegang geweigerd</h2>} />
                 </Routes>

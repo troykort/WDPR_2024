@@ -22,11 +22,11 @@ const HeaderParticulier = () => {
             <h1>Particulier Dashboard</h1>
             <div className="headerparticulier-right">
                 <Link to="/voertuigverhuur" className="headerparticulier-button">Voertuigen huren</Link>
-                <Link to="/dashboardparticulier" className="headerparticulier-button">Home</Link>
                 <Link to="/profiel" className="headerparticulier-button">Profiel</Link>
                 <Link to="/rental-history" className="headerparticulier-button">Verhuurgeschiedenis</Link>
-                <Notification Id={localStorage.getItem('Id')} />
+                <Link to="/dashboardparticulier" className="headerparticulier-button">Home</Link>
                 <button onClick={handleLogout} className="headerparticulier-button">Uitloggen</button>
+                <Notification Id={localStorage.getItem('Id')} />
             </div>
         </nav>
     );

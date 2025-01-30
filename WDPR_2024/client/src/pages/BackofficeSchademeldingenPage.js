@@ -2,7 +2,6 @@
 import axios from "axios";
 import "./BackofficeSchademeldingenPage.css";
 
-
 const BackofficeSchademeldingenPage = () => {
     const [schademeldingen, setSchademeldingen] = useState([]);
     const [selectedSchademelding, setSelectedSchademelding] = useState(null);
@@ -24,12 +23,10 @@ const BackofficeSchademeldingenPage = () => {
             });
             if (Array.isArray(response.data)) {
                 setSchademeldingen(response.data);
-
             } else {
                 setSchademeldingen([]);
                 console.error("Unexpected response format:", response.data);
             }
-            console.log("Schademeldingen fetched:", response.data);
         } catch (error) {
             console.error("Error fetching schademeldingen:", error);
             setSchademeldingen([]);
@@ -88,18 +85,18 @@ const BackofficeSchademeldingenPage = () => {
 
     return (
         <div className="backoffice-schademeldingen-page-container">
-            <h2>Backoffice Schademeldingen Beheer</h2>
+            <h1>Backoffice Schademeldingen Beheer</h1>
             <p>Beheer en werk schademeldingen bij van voertuigen. Zie details en voeg opmerkingen toe.</p>
-            <table className="backoffice-schademeldingen-table">
+            <table className="backoffice-schademeldingen-table" aria-label="Lijst van schademeldingen">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Voertuig</th>
-                        <th>Klant</th>
-                        <th>Status</th>
-                        <th>Datum</th>
-                        <th>Foto</th>
-                        <th>Acties</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Voertuig</th>
+                        <th scope="col">Klant</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Datum</th>
+                        <th scope="col">Foto</th>
+                        <th scope="col">Acties</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -116,12 +113,13 @@ const BackofficeSchademeldingenPage = () => {
                                         <button
                                             className="view-photo-button"
                                             onClick={() => openPhotoPopup(melding.fotoPath)}
+                                            aria-label={`Bekijk foto van schademelding ${melding.schademeldingID}`}
                                         >
                                             View Photo
                                         </button>
                                         <img
                                             src={melding.fotoPath}
-                                            alt="Schade foto"
+                                            alt={`Schade foto van ${melding.voertuigMerk} ${melding.voertuigType}`}
                                             className="schade-foto"
                                         />
                                     </>
@@ -131,6 +129,7 @@ const BackofficeSchademeldingenPage = () => {
                                 <button
                                     className="backoffice-schademeldingen-button"
                                     onClick={() => openModal(melding)}
+                                    aria-label={`Bewerk schademelding ${melding.schademeldingID}`}
                                 >
                                     Bewerken
                                 </button>
@@ -141,9 +140,9 @@ const BackofficeSchademeldingenPage = () => {
             </table>
 
             {modalVisible && (
-                <div className="backoffice-schademeldingen-modal">
+                <div className="backoffice-schademeldingen-modal" role="dialog" aria-labelledby="modal-title" aria-modal="true">
                     <div className="backoffice-schademeldingen-modal-content">
-                        <h3>Schademelding Bijwerken</h3>
+                        <h3 id="modal-title">Schademelding Bijwerken</h3>
                         <p><strong>Voertuig:</strong> {selectedSchademelding?.voertuigMerk} {selectedSchademelding?.voertuigType}</p>
                         <p><strong>Klant:</strong> {selectedSchademelding?.klantNaam}</p>
                         <p><strong>Huidige Status:</strong> {selectedSchademelding?.status}</p>
@@ -152,11 +151,13 @@ const BackofficeSchademeldingenPage = () => {
                             value={opmerkingen}
                             onChange={(e) => setOpmerkingen(e.target.value)}
                             className="backoffice-schademeldingen-textarea"
+                            aria-label="Opmerkingen invoeren"
                         ></textarea>
                         <select
                             value={nieuweStatus}
                             onChange={(e) => setNieuweStatus(e.target.value)}
                             className="backoffice-schademeldingen-select"
+                            aria-label="Selecteer nieuwe status"
                         >
                             <option value="">Selecteer nieuwe status</option>
                             <option value="In Behandeling">In Behandeling</option>
@@ -171,8 +172,9 @@ const BackofficeSchademeldingenPage = () => {
             )}
 
             {photoPopupVisible && (
-                <div className="photo-popup" onClick={closePhotoPopup}>
+                <div className="photo-popup" onClick={closePhotoPopup} role="dialog" aria-labelledby="photo-popup-title" aria-modal="true">
                     <div className="photo-popup-content">
+                        <h3 id="photo-popup-title">Schade Foto</h3>
                         <img src={selectedPhoto} alt="Volledige schade foto" />
                     </div>
                 </div>

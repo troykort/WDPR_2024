@@ -28,20 +28,20 @@ function Login() {
             }
 
             const data = await response.json();
-           
+
             localStorage.setItem('token', data.token);
             localStorage.setItem('userId', data.klantID);
             localStorage.setItem('medewerkerId', data.medewerkerID)
             localStorage.setItem('Id', data.userID)
             console.log('data:', data);
-            console.log('localStorage:', localStorage); 
+            console.log('localStorage:', localStorage);
 
             const decodedToken = jwtDecode(data.token);
             const userRole = decodedToken.role;
 
             alert(`Login successful`);
 
-           
+
             switch (userRole) {
                 case 'Abonnementbeheerder':
                     navigate('/dashboardabo');
@@ -50,7 +50,7 @@ function Login() {
                     navigate('/dashboardwpb');
                     break;
                 case 'Zakelijk':
-                    navigate('/dashboardzakelijk');
+                    navigate('/voertuigverhuurZakelijk');
                     break;
                 case 'Particulier':
                     navigate('/dashboardparticulier');
@@ -62,7 +62,7 @@ function Login() {
                     navigate('/backoffice-dashboard');
                     break;
                 default:
-                    navigate('/dashboard'); 
+                    navigate('/dashboard');
                     break;
             }
         } catch (error) {
@@ -71,7 +71,7 @@ function Login() {
     };
 
     const handleBack = () => {
-        navigate('/'); 
+        navigate('/');
     };
 
     const togglePasswordVisibility = () => {
@@ -104,6 +104,7 @@ function Login() {
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter your email"
                             style={{ flex: 1 }}
+                            aria-required="true"
                         />
                     </div>
                     <div className="form-group" style={{ display: 'flex', alignItems: 'center' }}>
@@ -115,11 +116,16 @@ function Login() {
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Enter your password"
                             style={{ flex: 1 }}
+                            aria-required="true"
                         />
                         <span
                             className="password-toggle-icon"
                             onClick={togglePasswordVisibility}
                             style={{ marginLeft: '10px', cursor: 'pointer' }}
+                            aria-label="Toggle password visibility"
+                            role="button"
+                            tabIndex="0"
+                            onKeyPress={(e) => { if (e.key === 'Enter') togglePasswordVisibility(); }}
                         >
                             🙈
                         </span>
@@ -141,4 +147,6 @@ function Login() {
 }
 
 export default Login;
+
+
 

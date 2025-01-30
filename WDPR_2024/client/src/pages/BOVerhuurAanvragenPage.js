@@ -1,6 +1,5 @@
 ﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
-
 import "./BOVerhuurAanvragenPage.css";
 
 const BOVerhuurAanvragenPage = () => {
@@ -8,6 +7,7 @@ const BOVerhuurAanvragenPage = () => {
     const [afwijsReden, setAfwijsReden] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedAanvraag, setSelectedAanvraag] = useState(null);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         fetchAanvragen();
@@ -22,7 +22,7 @@ const BOVerhuurAanvragenPage = () => {
             setAanvragen(response.data || []);
         } catch (error) {
             console.error("Error fetching verhuuraanvragen:", error);
-            alert("Er is een fout opgetreden bij het ophalen van de verhuuraanvragen.");
+            setError("Er is een fout opgetreden bij het ophalen van de verhuuraanvragen.");
         }
     };
 
@@ -30,7 +30,7 @@ const BOVerhuurAanvragenPage = () => {
         try {
             const token = localStorage.getItem("token");
             const status = "Goedgekeurd";
-            const opmerkingen = "aanvraag is goedgekeurd"
+            const opmerkingen = "Aanvraag is goedgekeurd";
             const userID = localStorage.getItem("Id");
             await axios.put(
                 `http://localhost:5000/api/verhuur-aanvragen/${id}/${status}`,
@@ -43,20 +43,20 @@ const BOVerhuurAanvragenPage = () => {
                 }
             );
 
-            fetchAanvragen(); 
+            fetchAanvragen(); // Refresh de lijst
             alert("Aanvraag is goedgekeurd!");
         } catch (error) {
             console.error("Error approving aanvraag:", error);
-            alert("Er is een fout opgetreden bij het goedkeuren van de aanvraag.");
+            setError("Er is een fout opgetreden bij het goedkeuren van de aanvraag.");
         }
     };
 
     const handleAfwijzen = async () => {
         if (!afwijsReden.trim()) {
-            alert("Voer een reden in voor afwijzing.");
+            setError("Voer een reden in voor afwijzing.");
             return;
         }
-        console.log("Afwijsreden:", afwijsReden);
+
         try {
             const token = localStorage.getItem("token");
             const status = "Afgewezen";
@@ -67,13 +67,10 @@ const BOVerhuurAanvragenPage = () => {
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
-                       "Content-Type": "application/json",
+                        "Content-Type": "application/json",
                     },
                 }
             );
-
-            
-
 
             setAfwijsReden("");
             setModalVisible(false);
@@ -81,13 +78,14 @@ const BOVerhuurAanvragenPage = () => {
             alert("Aanvraag is afgewezen!");
         } catch (error) {
             console.error("Error rejecting aanvraag:", error);
-            alert("Er is een fout opgetreden bij het afwijzen van de aanvraag.");
+            setError("Er is een fout opgetreden bij het afwijzen van de aanvraag.");
         }
     };
 
     const openAfwijzenModal = (id) => {
         setSelectedAanvraag(id);
         setModalVisible(true);
+        setError(""); // Reset error message when opening the modal
     };
 
     const closeAfwijzenModal = () => {
@@ -96,17 +94,18 @@ const BOVerhuurAanvragenPage = () => {
     };
 
     return (
-        <div className="bo-verhuur-aanvragen-page-container">
+        <div className="bo-verhuur-aanvragen-page-container" role="main">
             <h2>Backoffice Verhuur Aanvragen</h2>
-            <table className="bo-verhuur-aanvragen-table">
+            {error && <div role="alert" className="error-message">{error}</div>}
+            <table className="bo-verhuur-aanvragen-table" aria-label="Tabel met verhuuraanvragen">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Naam Huurder</th>
-                        <th>Voertuig</th>
-                        <th>Datum</th>
-                        <th>Status</th>
-                        <th>Acties</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Naam Huurder</th>
+                        <th scope="col">Voertuig</th>
+                        <th scope="col">Datum</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Acties</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -121,12 +120,14 @@ const BOVerhuurAanvragenPage = () => {
                                 <button
                                     className="bo-verhuur-aanvragen-button bo-verhuur-aanvragen-button-approve"
                                     onClick={() => handleGoedkeuren(aanvraag.verhuurAanvraagID)}
+                                    aria-label={`Goedkeuren aanvraag ${aanvraag.verhuurAanvraagID}`}
                                 >
                                     Goedkeuren
                                 </button>
                                 <button
                                     className="bo-verhuur-aanvragen-button bo-verhuur-aanvragen-button-reject"
                                     onClick={() => openAfwijzenModal(aanvraag.verhuurAanvraagID)}
+                                    aria-label={`Afwijzen aanvraag ${aanvraag.verhuurAanvraagID}`}
                                 >
                                     Afwijzen
                                 </button>
@@ -137,18 +138,24 @@ const BOVerhuurAanvragenPage = () => {
             </table>
 
             {modalVisible && (
-                <div className="bo-verhuur-aanvragen-modal">
+                <div className="bo-verhuur-aanvragen-modal" role="dialog" aria-labelledby="modal-heading">
                     <div className="bo-verhuur-aanvragen-modal-content">
-                        <h3>Reden voor afwijzing</h3>
+                        <h3 id="modal-heading">Reden voor afwijzing</h3>
                         <textarea
                             className="bo-verhuur-aanvragen-textarea"
                             value={afwijsReden}
                             onChange={(e) => setAfwijsReden(e.target.value)}
                             placeholder="Voer een reden in"
+                            aria-label="Reden voor afwijzing"
                         ></textarea>
+                        {error && <div role="alert" className="error-message">{error}</div>}
                         <div className="bo-verhuur-aanvragen-modal-actions">
-                            <button onClick={handleAfwijzen}>Afwijzen</button>
-                            <button onClick={closeAfwijzenModal}>Annuleren</button>
+                            <button onClick={handleAfwijzen} aria-label="Bevestig afwijzing">
+                                Afwijzen
+                            </button>
+                            <button onClick={closeAfwijzenModal} aria-label="Annuleer afwijzing">
+                                Annuleren
+                            </button>
                         </div>
                     </div>
                 </div>

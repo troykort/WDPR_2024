@@ -51,7 +51,7 @@ const VoertuiginnamePage = () => {
             const token = localStorage.getItem("token");
             const data = new FormData();
             data.append("voertuigId", selectedVoertuig.voertuigID);
-            data.append("klantId", selectedVoertuig.huidigeHuurderID); 
+            data.append("klantId", selectedVoertuig.huidigeHuurderID);
             data.append("beschrijving", schadeBeschrijving);
             data.append("opmerkingen", opmerkingen);
             if (foto) {
@@ -73,7 +73,6 @@ const VoertuiginnamePage = () => {
             alert("Er is een fout opgetreden bij het innemen van het voertuig.");
         }
     };
-
 
     return (
         <div className="voertuiginname-page-container">
@@ -99,6 +98,7 @@ const VoertuiginnamePage = () => {
                                 <button
                                     className="voertuiginname-button"
                                     onClick={() => handleOpenModal(voertuig)}
+                                    aria-label={`Neem in ${voertuig.merk} ${voertuig.type}`}
                                 >
                                     Neem in
                                 </button>
@@ -109,25 +109,31 @@ const VoertuiginnamePage = () => {
             </table>
 
             {modalVisible && (
-                <div className="voertuiginname-modal">
+                <div className="voertuiginname-modal" role="dialog" aria-modal="true">
                     <div className="voertuiginname-modal-content">
                         <h3>Inname Registreren</h3>
                         <p><strong>Voertuig:</strong> {selectedVoertuig?.merk} {selectedVoertuig?.type}</p>
                         <p><strong>Klant:</strong> {selectedVoertuig?.huidigeHuurderNaam}</p>
+                        <label htmlFor="schadeBeschrijving" className="sr-only">Beschrijving van de schade (optioneel)</label>
                         <textarea
+                            id="schadeBeschrijving"
                             placeholder="Beschrijving van de schade (optioneel)"
                             value={schadeBeschrijving}
                             onChange={(e) => setSchadeBeschrijving(e.target.value)}
                             className="voertuiginname-textarea"
                         ></textarea>
+                        <label htmlFor="opmerkingen" className="sr-only">Opmerkingen (optioneel)</label>
                         <textarea
+                            id="opmerkingen"
                             placeholder="Opmerkingen (optioneel)"
                             value={opmerkingen}
                             onChange={(e) => setOpmerkingen(e.target.value)}
                             className="voertuiginname-textarea"
                         ></textarea>
+                        <label htmlFor="foto" className="sr-only">Upload een foto</label>
                         <input
                             type="file"
+                            id="foto"
                             onChange={(e) => setFoto(e.target.files[0])}
                             className="voertuiginname-file-input"
                         />
@@ -143,3 +149,4 @@ const VoertuiginnamePage = () => {
 };
 
 export default VoertuiginnamePage;
+

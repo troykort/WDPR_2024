@@ -1,72 +1,29 @@
-/* RentalHistory.css */
-
-/* General page styling */
 .rental-history-page {
-    font-family: Arial, sans-serif;
-    margin: 20px;
-    color: #333;
-    background-color: #FAF3E0; /* Light beige background to match theme */
+    padding: 20px;
 }
 
-h1 {
-    text-align: center;
-    color: #6C4A3C; /* Dark brownish color */
-    font-size: 2rem;
+.rental-history-title {
+    font-size: 2em;
+    margin-bottom: 20px;
 }
 
-table {
+.rental-history-empty {
+    font-size: 1.2em;
+    color: #888;
+}
+
+.rental-history-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
-    border: 1px solid #D1D1D1; /* Light gray border for better separation */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-table th, table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #f1f1f1;
-}
+    .rental-history-table th,
+    .rental-history-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
 
-table th {
-    background-color: #F1E0C6; /* Light beige background for table header */
-    color: #6C4A3C; /* Dark brown text */
-    font-size: 1.1rem;
-}
-
-table tr:hover {
-    background-color: #F5F5F5; /* Light gray background on hover */
-}
-
-table td {
-    font-size: 1rem;
-    color: #555; /* Dark gray color for content */
-}
-
-table th, table td {
-    font-family: 'Arial', sans-serif;
-}
-
-/* No rental history found */
-p {
-    text-align: center;
-    color: #888;
-    font-size: 16px;
-}
-
-/* Loading and error messages */
-p.loading, p.error {
-    font-size: 18px;
-    text-align: center;
-    font-weight: bold;
-    color: #6C4A3C; /* Dark brown text for error/loading */
-}
-
-/* Styling for table rows */
-table tr:nth-child(even) {
-    background-color: #FFFFFF; /* White background for even rows */
-}
-
-table tr:nth-child(odd) {
-    background-color: #FAF3E0; /* Light beige background for odd rows */
-}
+    .rental-history-table th {
+        background-color: #f2f2f2;
+        text-align: left;
+    }
