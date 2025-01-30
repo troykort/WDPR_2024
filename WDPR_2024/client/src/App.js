@@ -36,7 +36,6 @@ import AlgemeneVoorwaarden from './pages/AlgemeneVoorwaarden';
 import Support from './pages/Support';
 import RentalHistoryPage from './pages/RentalHistoryPage';
 
-
 const MainPage = () => {
     const navigate = useNavigate();
 
@@ -90,7 +89,7 @@ const App = () => {
     const isDashboardParticulier = location.pathname.startsWith('/dashboardparticulier') || location.pathname.startsWith('/voertuigverhuur');
     const isDashboardBackoffice = location.pathname.startsWith('/backoffice-dashboard') || location.pathname.startsWith('/BOvoertuigbeheer') || location.pathname.startsWith('/BOschadebeheer') || location.pathname.startsWith('/verhuuraanvragen');
     const isDashboardFrontoffice = location.pathname.startsWith('/frontoffice-dashboard') || location.pathname.startsWith('/FO-verhuuraanvragen') || location.pathname.startsWith('/voertuiginname');
-    
+
 
     return (
         <div className="app-container">
@@ -159,7 +158,7 @@ const App = () => {
                     <Route path="/BOschadebeheer" element={
                         <ProtectedRoute allowedRoles={["Backoffice"]}>
                             <HeaderBackOffice />
-                            <BOschadebeheer/>
+                            <BOschadebeheer />
                         </ProtectedRoute>
                     } /><Route path="/BOvoertuigbeheer" element={
                         <ProtectedRoute allowedRoles={["Backoffice"]}>
@@ -192,17 +191,17 @@ const App = () => {
                         <ProtectedRoute allowedRoles={["Wagenparkbeheerder", "Backoffice", "Particulier", "Frontoffice", "Abonnementbeheerder", "Zakelijk"]}>
                             <NotificatiePagina />
                         </ProtectedRoute>
-                    } /><Route 
-                    path="/rental-history/:klantId" 
-                    element={
-                        <ProtectedRoute allowedRoles={["Particulier", "Backoffice", "Frontoffice"]}>
-                            <RentalHistoryPage />
-                        </ProtectedRoute>
-                    }   />
-                    
+                    } /><Route
+                        path="/rental-history"
+                        element={
+                            <ProtectedRoute allowedRoles={["Particulier", "Backoffice", "Frontoffice"]}>
+                                <RentalHistoryPage />
+                            </ProtectedRoute>
+                        } />
+
                     <Route path="/privacybeleid" element={<Privacybeleid />} />
-                    <Route path="/FAQ" element={<FAQ/>}/>
-                    <Route path="/algemene-voorwaarden" element={<AlgemeneVoorwaarden/>}/>
+                    <Route path="/FAQ" element={<FAQ />} />
+                    <Route path="/algemene-voorwaarden" element={<AlgemeneVoorwaarden />} />
                     <Route path="/support" element={<Support />} />
                     <Route path="/unauthorized" element={<h2>Toegang geweigerd</h2>} />
                 </Routes>
