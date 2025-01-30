@@ -14,9 +14,9 @@ const NotificatiePagina = () => {
 
     useEffect(() => {
         fetchNotificaties();
-    }, []);
+    }, [page]);
 
-    const fetchNotificaties = async (page = 1) => {
+    const fetchNotificaties = async () => {
         setLoading(true);
         setError(null);
         try {
@@ -45,7 +45,9 @@ const NotificatiePagina = () => {
             await axios.put(`http://localhost:5000/api/notificaties/${id}/gelezen`, {}, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            fetchNotificaties();
+            setNotificaties(prev => prev.map(notificatie =>
+                notificatie.notificatieID === id ? { ...notificatie, gelezen: true } : notificatie
+            ));
         } catch (error) {
             console.error("Error marking notificatie as read:", error);
         }
@@ -71,7 +73,7 @@ const NotificatiePagina = () => {
     const filteredNotificaties = notificaties.filter(notificatie => {
         if (filter === 'gelezen') return notificatie.gelezen;
         if (filter === 'ongelezen') return !notificatie.gelezen;
-        return true; // 'alle'
+        return true;
     });
 
     return (
@@ -106,19 +108,26 @@ const NotificatiePagina = () => {
                     Meer laden
                 </button>
             )}
-            <div className={`notificatie-modal ${modalVisible ? 'visible' : ''}`} role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description">
-                <div className="notificatie-modal-content">
-                    <h3 id="modal-title">{selectedNotificatie?.titel}</h3>
-                    <p id="modal-description">{selectedNotificatie?.bericht}</p>
-                    <p>
-                        <strong>Verzonden op:</strong>{" "}
-                        {new Date(selectedNotificatie?.verzondenOp).toLocaleString()}
-                    </p>
-                    <button onClick={handleCloseModal} aria-label="Sluiten">Sluiten</button>
+            {modalVisible && selectedNotificatie && (
+                <div className="notificatie-modal visible" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description">
+                    <div className="notificatie-modal-content">
+                        <h3 id="modal-title">{selectedNotificatie.titel}</h3>
+                        <p id="modal-description">{selectedNotificatie.bericht}</p>
+                        <p>
+                            <strong>Verzonden op:</strong>{" "}
+                            {new Date(selectedNotificatie.verzondenOp).toLocaleString()}
+                        </p>
+                        <button onClick={handleCloseModal} aria-label="Sluiten">Sluiten</button>
+                    </div>
                 </div>
-            </div>
+            )}
         </div>
     );
 };
 
 export default NotificatiePagina;
+
+
+
+
+

@@ -26,7 +26,7 @@ const HeaderBackOffice = () => {
                 <Link to="/BOvoertuigbeheer" className="headerbackoffice-button">Voertuigbeheer</Link>
                 <Link to="/verhuuraanvragen" className="headerbackoffice-button">Verhuurbeheer</Link>
                 <Link to="/backoffice-dashboard" className="headerbackoffice-button">Home</Link>
-                <Link to="/profiel" className="headerbackoffice-button">Profiel</Link>
+              
                 <NotificationButton Id={id} />
                 <button onClick={handleLogout} className="headerbackoffice-button">Uitloggen</button>
             </div>

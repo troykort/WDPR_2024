@@ -24,7 +24,7 @@ const HeaderFrontOffice = () => {
                 <Link to="/voertuiginname" className="headerfrontoffice-button">Voertuigbeheer</Link>
                 <Link to="/FO-verhuuraanvragen" className="headerfrontoffice-button">Verhuurbeheer</Link>
                 <Link to="/frontoffice-dashboard" className="headerfrontoffice-button">Home</Link>
-                <Link to="/profiel" className="headerfrontoffice-button">Profiel</Link>
+             
                 <button onClick={handleLogout} className="headerfrontoffice-button">Uitloggen</button>
             </div>
         </nav>

@@ -1,29 +1,67 @@
 .rental-history-page {
-    padding: 20px;
+    padding: 30px;
+    background-color: #F2EBDB;
+    border-radius: 10px;
+    max-width: 1200px;
+    margin: 150px auto auto auto;
 }
 
 .rental-history-title {
-    font-size: 2em;
-    margin-bottom: 20px;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    color: #333;
+    text-align: center;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .rental-history-empty {
     font-size: 1.2em;
-    color: #888;
+    color: #f9f9f9;
+    text-align: center;
+    margin-top: 20px;
 }
 
 .rental-history-table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
 }
 
     .rental-history-table th,
     .rental-history-table td {
         border: 1px solid #ddd;
-        padding: 8px;
+        padding: 12px;
+        text-align: left;
     }
 
     .rental-history-table th {
-        background-color: #f2f2f2;
-        text-align: left;
+        background-color: #5E0639; 
+        color: #fff;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
+
+    .rental-history-table tr:nth-child(even) {
+        background-color: #f8f9fa;
+    }
+
+    .rental-history-table tr:hover {
+        background-color: #e9ecef;
+        transition: background-color 0.3s ease;
+    }
+
+    .rental-history-table td {
+        color: #555;
+    }
+
+        .rental-history-table th:first-child,
+        .rental-history-table td:first-child {
+            padding-left: 20px;
+        }
+
+        .rental-history-table th:last-child,
+        .rental-history-table td:last-child {
+            padding-right: 20px;
+        }

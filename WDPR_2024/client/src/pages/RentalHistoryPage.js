@@ -24,21 +24,24 @@ function RentalHistoryPage() {
                     },
                 });
 
+                console.log("Fetched rental history response:", response);
+
                 if (!response.ok) {
                     throw new Error('Failed to fetch rental history.');
                 }
 
                 const data = await response.json();
-                console.log("Fetched rental history data:", data);  // Add this line to check data structure
+                console.log("Fetched rental history data:", data);  
 
                 const safeHistory = data.map(rental => ({
                     VoertuigInfo: rental.voertuigInfo || "Unknown vehicle",
+                    Status: rental.status || "Unknown status",
                     StartDatum: rental.startDatum || "Unknown start date",
                     EindDatum: rental.eindDatum || "Unknown end date",
                     KlantNaam: rental.klantNaam || "Unknown customer",
                 }));
 
-                console.log("Mapped rental history:", safeHistory);  // Check if mapped data is correct
+                console.log("Mapped rental history:", safeHistory); 
 
                 setHistory(safeHistory);
                 setLoading(false);
@@ -64,7 +67,8 @@ function RentalHistoryPage() {
                 <table className="rental-history-table" role="table">
                     <thead>
                         <tr>
-                            <th scope="col">Vehicle</th>
+                           <th scope="col">Vehicle</th>
+                            <th scope="col">Status</th>
                             <th scope="col">Start Date</th>
                             <th scope="col">End Date</th>
                             <th scope="col">Customer</th>
@@ -74,6 +78,7 @@ function RentalHistoryPage() {
                         {history.map((rental, index) => (
                             <tr key={index}>
                                 <td>{rental.VoertuigInfo}</td>
+                                <td>{rental.Status}</td>
                                 <td>{rental.StartDatum}</td>
                                 <td>{rental.EindDatum}</td>
                                 <td>{rental.KlantNaam}</td>

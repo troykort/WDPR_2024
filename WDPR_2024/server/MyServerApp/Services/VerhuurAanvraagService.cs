@@ -187,9 +187,10 @@ namespace WDPR_2024.server.MyServerApp.Services
          public async Task<List<VerhuurAanvraag>> GetVerhuurGeschiedenisByKlantIdAsync(int klantId)
         {
             var verhuurGeschiedenis = await _context.VerhuurAanvragen
-                .Where(a => a.KlantID == klantId && (a.Status == "Goedgekeurd" || a.Status == "Verhuurd"))
+                .Where(a => a.KlantID == klantId)
                 .Include(a => a.Voertuig)
                 .Include(a => a.Klant)
+        
                 .ToListAsync();
 
             if (verhuurGeschiedenis == null || verhuurGeschiedenis.Count == 0)
