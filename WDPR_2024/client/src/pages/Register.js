@@ -80,8 +80,8 @@ const Register = () => {
 
     return (
         <div className="register-page">
-            <form onSubmit={handleSubmit}>
-                <h2>Registreer</h2>
+            <form onSubmit={handleSubmit} aria-labelledby="register-heading">
+                <h2 id="register-heading">Registreer</h2>
                 <p>Registreren voor particuliere & zakelijke klanten.</p>
                 <div>
                     <label htmlFor="naam">Naam</label>
@@ -145,6 +145,10 @@ const Register = () => {
                     <span
                         className="password-toggle-icon"
                         onClick={togglePasswordVisibility}
+                        aria-label="Toggle password visibility"
+                        role="button"
+                        tabIndex="0"
+                        onKeyPress={(e) => { if (e.key === 'Enter') togglePasswordVisibility(); }}
                     >
                         🙈
                     </span>
@@ -172,3 +176,5 @@ const Register = () => {
 };
 
 export default Register;
+
+

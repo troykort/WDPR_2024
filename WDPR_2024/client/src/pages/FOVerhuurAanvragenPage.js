@@ -77,15 +77,15 @@ const FrontofficeVerhuurAanvragenPage = () => {
     return (
         <div className="frontoffice-verhuur-aanvragen-page-container">
             <h2>Verhuur Aanvragen</h2>
-            <table className="frontoffice-verhuur-aanvragen-table">
+            <table className="frontoffice-verhuur-aanvragen-table" role="table">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Naam Huurder</th>
-                        <th>Voertuig</th>
-                        <th>Datum</th>
-                        <th>Status</th>
-                        <th>Acties</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Naam Huurder</th>
+                        <th scope="col">Voertuig</th>
+                        <th scope="col">Datum</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Acties</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -100,6 +100,7 @@ const FrontofficeVerhuurAanvragenPage = () => {
                                 <button
                                     className="frontoffice-verhuur-aanvragen-button"
                                     onClick={() => handleOpenModal(aanvraag)}
+                                    aria-label={`Registreer uitgifte voor aanvraag ${aanvraag.verhuurAanvraagID}`}
                                 >
                                     Registreer Uitgifte
                                 </button>
@@ -110,7 +111,7 @@ const FrontofficeVerhuurAanvragenPage = () => {
             </table>
 
             {modalVisible && (
-                <div className="frontoffice-verhuur-aanvragen-modal">
+                <div className="frontoffice-verhuur-aanvragen-modal" role="dialog" aria-modal="true">
                     <div className="frontoffice-verhuur-aanvragen-modal-content">
                         <h3>Uitgifte Registreren</h3>
                         <p>
@@ -122,7 +123,9 @@ const FrontofficeVerhuurAanvragenPage = () => {
                         <p>
                             <strong>Datum:</strong> {selectedAanvraag?.startDatum} - {selectedAanvraag?.eindDatum}
                         </p>
+                        <label htmlFor="opmerkingen" className="sr-only">Opmerkingen</label>
                         <textarea
+                            id="opmerkingen"
                             className="frontoffice-verhuur-aanvragen-textarea"
                             value={opmerkingen}
                             onChange={(e) => setOpmerkingen(e.target.value)}
@@ -142,3 +145,7 @@ const FrontofficeVerhuurAanvragenPage = () => {
 };
 
 export default FrontofficeVerhuurAanvragenPage;
+
+
+
+

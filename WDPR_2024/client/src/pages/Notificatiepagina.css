@@ -1,16 +1,43 @@
-﻿.notificatie-pagina-container {
+﻿/* Algemene stijlen */
+.notificatie-pagina-container {
     padding: 20px;
     font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 h2 {
     font-size: 24px;
     margin-bottom: 20px;
+    color: #333;
 }
 
+/* Filter dropdown */
+select {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+    select:hover {
+        border-color: #ccc;
+    }
+
+    select:focus {
+        outline: none;
+        border-color: #4caf50;
+        box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    }
+
+/* Notificatielijst */
 .notificatie-lijst {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .notificatie-item {
@@ -20,17 +47,43 @@ h2 {
     border: 1px solid #ddd;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
     .notificatie-item:hover {
         background: #ececec;
+        transform: translateY(-2px);
     }
 
     .notificatie-item.ongelezen {
         font-weight: bold;
+        background: #e3f2fd;
+        border-color: #90caf9;
     }
 
+    .notificatie-item.gelezen {
+        background: #f0f0f0;
+        border-color: #ddd;
+    }
+
+    .notificatie-item h3 {
+        margin: 0 0 10px;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .notificatie-item p {
+        margin: 0 0 10px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    .notificatie-item span {
+        font-size: 12px;
+        color: #999;
+    }
+
+/* Modale dialoog */
 .notificatie-modal {
     position: fixed;
     top: 0;
@@ -41,33 +94,107 @@ h2 {
     display: flex;
     justify-content: center;
     align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
+
+    .notificatie-modal.visible {
+        opacity: 1;
+        visibility: visible;
+    }
 
 .notificatie-modal-content {
     background: white;
     padding: 20px;
     border-radius: 10px;
-    width: 400px;
-    text-align: center;
+    width: 90%;
+    max-width: 500px;
+    text-align: left;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
 }
 
-    .notificatie-modal-content h3 {
-        font-size: 22px;
-        margin-bottom: 15px;
+.notificatie-modal.visible .notificatie-modal-content {
+    transform: scale(1);
+}
+
+.notificatie-modal-content h3 {
+    margin: 0 0 15px;
+    font-size: 22px;
+    color: #333;
+}
+
+.notificatie-modal-content p {
+    margin: 0 0 15px;
+    font-size: 16px;
+    color: #555;
+}
+
+.notificatie-modal-content button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    .notificatie-modal-content button:hover {
+        background: #45a049;
     }
 
-    .notificatie-modal-content button {
-        margin-top: 20px;
-        padding: 10px 20px;
-        font-size: 16px;
-        background: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
+/* Laden en foutmeldingen */
+.loading-message {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+    margin: 20px 0;
+}
+
+.error-message {
+    text-align: center;
+    font-size: 16px;
+    color: #ff4444;
+    margin: 20px 0;
+}
+
+/* Meer laden knop */
+.load-more-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+    .load-more-button:hover {
+        background: #45a049;
     }
 
-        .notificatie-modal-content button:hover {
-            background: #45a049;
-        }
+    .load-more-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+/* Toegankelijkheid voor schermlezers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}

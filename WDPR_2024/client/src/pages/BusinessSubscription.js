@@ -9,12 +9,15 @@ const BusinessSubscription = () => {
     const [maandelijkseAbonnementskosten] = useState({ type: '', monthlyCost: 5000, discount: 20 });
     const [abonnementType, setAbonnementType] = useState({ type: '', days: 0, cost: 0 });
     const [selectedPrepaid, setSelectedPrepaid] = useState(false);
+    const [error, setError] = useState('');
 
     const handleSubmit = async (type) => {
         if (type === 'prepaid' && !selectedPrepaid) {
-            alert('Selecteer een van de prepaid opties.');
+            setError('Selecteer een van de prepaid opties.');
             return;
-        } 
+        }
+        setError(''); // Reset error message
+
         const updatedFormData = {
             ...formData,
             abonnementType: type,
@@ -24,7 +27,7 @@ const BusinessSubscription = () => {
             maandelijkseAbonnementskosten: type === 'pay-as-you-go' ? maandelijkseAbonnementskosten.monthlyCost : undefined,
             kortingOpVoertuig: type === 'pay-as-you-go' ? maandelijkseAbonnementskosten.discount : undefined,
         };
-        console.log(updatedFormData)
+
         try {
             const response = await fetch('http://localhost:5000/api/auth/register/zakelijk', {
                 method: 'POST',
@@ -36,15 +39,15 @@ const BusinessSubscription = () => {
 
             if (!response.ok) {
                 const errorMessage = await response.text();
-                alert(`Registratie mislukt: ${errorMessage}`);
+                setError(`Registratie mislukt: ${errorMessage}`);
                 return;
             }
 
             const data = await response.json();
             alert(`Registratie succesvol. Welkom, ${data.bedrijfsnaam}`);
-            navigate('/login'); 
+            navigate('/login');
         } catch (error) {
-            alert('Er is een fout opgetreden tijdens de registratie: ' + error.message);
+            setError('Er is een fout opgetreden tijdens de registratie: ' + error.message);
         }
     };
 
@@ -55,42 +58,63 @@ const BusinessSubscription = () => {
     const handleSubscriptionChange = (type, days, cost) => {
         setAbonnementType({ type, days, cost });
         setSelectedPrepaid(true);
+        setError(''); // Reset error message when a selection is made
     };
 
-
     const handlePayAsYouGoSubmit = () => {
-        
         handleSubmit('pay-as-you-go');
     };
 
     const textStyle = { marginBottom: '10px' };
 
     return (
-        <div className="subscription-page">
+        <div className="subscription-page" role="main">
             <h2>Abonnementen</h2>
             <p>Kies uw abonnement hier.</p>
+            {error && <div role="alert" className="error-message">{error}</div>}
             <div className="subscription-boxes">
-                <div className="subscription-box prepaid">
-                    <h3 style={{ marginBottom: '5px' }}>Prepaid</h3>
+                <div className="subscription-box prepaid" aria-labelledby="prepaid-heading">
+                    <h3 id="prepaid-heading" style={{ marginBottom: '5px' }}>Prepaid</h3>
                     <p style={{ ...textStyle, marginTop: '5px' }}>Betaal vooraf voor een bepaald aantal huurdagen per jaar.</p>
                     <p style={textStyle}><strong>Kosten</strong></p>
                     <div style={textStyle}>
                         <label>
-                            <input type="radio" name="subscription" value="30-dagen" onChange={() => handleSubscriptionChange('prepaid', 30, 1500)} />
+                            <input
+                                type="radio"
+                                name="subscription"
+                                value="30-dagen"
+                                onChange={() => handleSubscriptionChange('prepaid', 30, 1500)}
+                                aria-describedby="prepaid-30-days"
+                            />
                             30 dagen/jaar: &euro;1.500
                         </label>
+                        <span id="prepaid-30-days" className="sr-only">30 dagen per jaar voor 1500 euro</span>
                     </div>
                     <div style={textStyle}>
                         <label>
-                            <input type="radio" name="subscription" value="60-dagen" onChange={() => handleSubscriptionChange('prepaid', 60, 2800)} />
+                            <input
+                                type="radio"
+                                name="subscription"
+                                value="60-dagen"
+                                onChange={() => handleSubscriptionChange('prepaid', 60, 2800)}
+                                aria-describedby="prepaid-60-days"
+                            />
                             60 dagen/jaar: &euro;2.800
                         </label>
+                        <span id="prepaid-60-days" className="sr-only">60 dagen per jaar voor 2800 euro</span>
                     </div>
                     <div style={textStyle}>
                         <label>
-                            <input type="radio" name="subscription" value="100-dagen" onChange={() => handleSubscriptionChange('prepaid', 100, 4500)} />
+                            <input
+                                type="radio"
+                                name="subscription"
+                                value="100-dagen"
+                                onChange={() => handleSubscriptionChange('prepaid', 100, 4500)}
+                                aria-describedby="prepaid-100-days"
+                            />
                             100 dagen/jaar: &euro;4.500
                         </label>
+                        <span id="prepaid-100-days" className="sr-only">100 dagen per jaar voor 4500 euro</span>
                     </div>
                     <p style={textStyle}><strong>Overgebruik</strong></p>
                     <div style={textStyle}>&#10004; Extra dagen worden gefactureerd tegen een standaardtarief tegenover &euro;70 per dag.</div>
@@ -101,8 +125,8 @@ const BusinessSubscription = () => {
                         <button type="button" onClick={() => handleSubmit('prepaid')}>Kies Prepaid</button>
                     </div>
                 </div>
-                <div className="subscription-box pay-as-you-go">
-                    <h3 style={{ marginBottom: '5px' }}>Pay-as-you-go</h3>
+                <div className="subscription-box pay-as-you-go" aria-labelledby="pay-as-you-go-heading">
+                    <h3 id="pay-as-you-go-heading" style={{ marginBottom: '5px' }}>Pay-as-you-go</h3>
                     <p style={{ ...textStyle, marginTop: '5px' }}>Betaal een vast maandelijks bedrag voor toegang tot de dienst, met een korting op huurprijzen per voertuig.</p>
                     <p style={textStyle}><strong>Kosten</strong></p>
                     <div style={textStyle}>
@@ -123,7 +147,7 @@ const BusinessSubscription = () => {
                         &#10004; Geschikt voor bedrijven met onregelmatige behoeften.
                     </div>
                     <div className="button-group">
-                        <button type="button" onClick={() => handlePayAsYouGoSubmit()}>Kies Pay-as-you-go</button>
+                        <button type="button" onClick={handlePayAsYouGoSubmit}>Kies Pay-as-you-go</button>
                     </div>
                 </div>
             </div>

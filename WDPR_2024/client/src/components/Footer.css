@@ -1,4 +1,17 @@
-﻿.footer {
+﻿.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+
+
+.footer {
     background-color: #F2EBDB !important;
     padding: 20px;
     text-align: center;

@@ -1,6 +1,5 @@
 ﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
-
 import "./BackofficeWagenparkPage.css";
 
 const BackofficeWagenparkPage = () => {
@@ -21,6 +20,7 @@ const BackofficeWagenparkPage = () => {
     });
     const [merkSearchTerm, setMerkSearchTerm] = useState("");
     const [typeSearchTerm, setTypeSearchTerm] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
         fetchVoertuigen();
@@ -36,6 +36,7 @@ const BackofficeWagenparkPage = () => {
             setFilteredVoertuigen(response.data); // Initialize filtered list
         } catch (error) {
             console.error("Error fetching voertuigen:", error);
+            setError("Er is een fout opgetreden bij het ophalen van de voertuigen.");
         }
     };
 
@@ -119,7 +120,7 @@ const BackofficeWagenparkPage = () => {
             closeModal();
         } catch (error) {
             console.error("Error submitting form:", error);
-            alert("Er is een fout opgetreden. Controleer de ingevoerde gegevens.");
+            setError("Er is een fout opgetreden. Controleer de ingevoerde gegevens.");
         }
     };
 
@@ -134,13 +135,14 @@ const BackofficeWagenparkPage = () => {
             fetchVoertuigen();
         } catch (error) {
             console.error("Error deleting voertuig:", error);
-            alert("Er is een fout opgetreden bij het verwijderen van het voertuig.");
+            setError("Er is een fout opgetreden bij het verwijderen van het voertuig.");
         }
     };
 
     return (
-        <div className="backoffice-wagenpark-page-container">
+        <div className="backoffice-wagenpark-page-container" role="main">
             <h2>Wagenparkbeheer</h2>
+            {error && <div role="alert" className="error-message">{error}</div>}
             <div className="wagenpark-header">
                 <label htmlFor="merkSearch" className="sr-only">Zoek op merk</label>
                 <input
@@ -150,6 +152,7 @@ const BackofficeWagenparkPage = () => {
                     value={merkSearchTerm}
                     onChange={(e) => setMerkSearchTerm(e.target.value)}
                     className="wagenpark-search-input"
+                    aria-label="Zoek op merk"
                 />
                 <label htmlFor="typeSearch" className="sr-only">Zoek op type</label>
                 <input
@@ -159,24 +162,29 @@ const BackofficeWagenparkPage = () => {
                     value={typeSearchTerm}
                     onChange={(e) => setTypeSearchTerm(e.target.value)}
                     className="wagenpark-search-input"
+                    aria-label="Zoek op type"
                 />
-                <button className="wagenpark-add-button" onClick={() => openModal()}>
+                <button
+                    className="wagenpark-add-button"
+                    onClick={() => openModal()}
+                    aria-label="Voertuig toevoegen"
+                >
                     Voertuig Toevoegen
                 </button>
             </div>
-            <table className="wagenpark-table">
+            <table className="wagenpark-table" aria-label="Tabel met voertuigen">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Merk</th>
-                        <th>Type</th>
-                        <th>Type Voertuig</th>
-                        <th>Kleur</th>
-                        <th>Kenteken</th>
-                        <th>Aanschafjaar</th>
-                        <th>Prijs per Dag</th>
-                        <th>Status</th>
-                        <th>Acties</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Merk</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Type Voertuig</th>
+                        <th scope="col">Kleur</th>
+                        <th scope="col">Kenteken</th>
+                        <th scope="col">Aanschafjaar</th>
+                        <th scope="col">Prijs per Dag</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Acties</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -213,9 +221,9 @@ const BackofficeWagenparkPage = () => {
             </table>
 
             {modalVisible && (
-                <div className="wagenpark-modal" role="dialog" aria-modal="true">
+                <div className="wagenpark-modal" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
                     <div className="wagenpark-modal-content">
-                        <h3>{editMode ? "Voertuig Wijzigen" : "Voertuig Toevoegen"}</h3>
+                        <h3 id="modal-heading">{editMode ? "Voertuig Wijzigen" : "Voertuig Toevoegen"}</h3>
                         <form onSubmit={handleFormSubmit}>
                             <label htmlFor="merk" className="sr-only">Merk</label>
                             <input
@@ -227,6 +235,7 @@ const BackofficeWagenparkPage = () => {
                                     setFormData({ ...formData, merk: e.target.value })
                                 }
                                 required
+                                aria-required="true"
                             />
                             <label htmlFor="type" className="sr-only">Type</label>
                             <input
@@ -238,6 +247,7 @@ const BackofficeWagenparkPage = () => {
                                     setFormData({ ...formData, type: e.target.value })
                                 }
                                 required
+                                aria-required="true"
                             />
                             <label htmlFor="typeVoertuig" className="sr-only">Type Voertuig</label>
                             <select
@@ -247,6 +257,7 @@ const BackofficeWagenparkPage = () => {
                                     setFormData({ ...formData, typeVoertuig: e.target.value })
                                 }
                                 required
+                                aria-required="true"
                             >
                                 <option value="Auto">Auto</option>
                                 <option value="Camper">Camper</option>
@@ -262,6 +273,7 @@ const BackofficeWagenparkPage = () => {
                                     setFormData({ ...formData, kleur: e.target.value })
                                 }
                                 required
+                                aria-required="true"
                             />
                             <label htmlFor="kenteken" className="sr-only">Kenteken</label>
                             <input
@@ -273,6 +285,7 @@ const BackofficeWagenparkPage = () => {
                                     setFormData({ ...formData, kenteken: e.target.value })
                                 }
                                 required
+                                aria-required="true"
                             />
                             <label htmlFor="aanschafjaar" className="sr-only">Aanschafjaar</label>
                             <input
@@ -284,6 +297,7 @@ const BackofficeWagenparkPage = () => {
                                     setFormData({ ...formData, aanschafjaar: e.target.value })
                                 }
                                 required
+                                aria-required="true"
                             />
                             <label htmlFor="prijsPerDag" className="sr-only">Prijs per Dag</label>
                             <input
@@ -295,6 +309,7 @@ const BackofficeWagenparkPage = () => {
                                     setFormData({ ...formData, prijsPerDag: e.target.value })
                                 }
                                 required
+                                aria-required="true"
                             />
                             <label htmlFor="status" className="sr-only">Status</label>
                             <input
@@ -306,6 +321,7 @@ const BackofficeWagenparkPage = () => {
                                     setFormData({ ...formData, status: e.target.value })
                                 }
                                 required
+                                aria-required="true"
                             />
                             <div className="wagenpark-modal-actions">
                                 <button type="submit">

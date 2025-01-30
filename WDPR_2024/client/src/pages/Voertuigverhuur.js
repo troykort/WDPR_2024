@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode'; 
+import { jwtDecode } from 'jwt-decode';
 import './Voertuigverhuur.css';
 
 const Voertuigverhuur = () => {
@@ -10,13 +10,14 @@ const Voertuigverhuur = () => {
         type: '',
         typeVoertuig: '',
         sort: '',
-        startDate: '', 
-        endDate: '', 
+        startDate: '',
+        endDate: '',
     });
     const [selectedVoertuig, setSelectedVoertuig] = useState();
     const [showPopup, setShowPopup] = useState(false);
-    const [klantID, setKlantID] = useState(null); 
+    const [klantID, setKlantID] = useState(null);
     const [displayCount, setDisplayCount] = useState(8);
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         const KlantID = localStorage.getItem('userId');
@@ -141,21 +142,27 @@ const Voertuigverhuur = () => {
                 <h1>Voertuigen Selecteren</h1>
 
                 <div className="filters">
+                    <label htmlFor="merk" className="sr-only">Zoek op merk</label>
                     <input
                         type="text"
+                        id="merk"
                         name="merk"
                         value={filters.merk}
                         onChange={handleFilterChange}
                         placeholder="Zoek op merk"
                     />
+                    <label htmlFor="type" className="sr-only">Zoek op type</label>
                     <input
                         type="text"
+                        id="type"
                         name="type"
                         value={filters.type}
                         onChange={handleFilterChange}
                         placeholder="Zoek op type"
                     />
+                    <label htmlFor="typeVoertuig" className="sr-only">Type Voertuig</label>
                     <select
+                        id="typeVoertuig"
                         name="typeVoertuig"
                         value={filters.typeVoertuig}
                         onChange={handleFilterChange}
@@ -165,21 +172,27 @@ const Voertuigverhuur = () => {
                         <option value="caravan">Caravan</option>
                         <option value="camper">Camper</option>
                     </select>
+                    <label htmlFor="startDate" className="sr-only">Startdatum</label>
                     <input
                         type="date"
+                        id="startDate"
                         name="startDate"
                         value={filters.startDate}
                         onChange={handleFilterChange}
                         placeholder="Startdatum"
                     />
+                    <label htmlFor="endDate" className="sr-only">Einddatum</label>
                     <input
                         type="date"
+                        id="endDate"
                         name="endDate"
                         value={filters.endDate}
                         onChange={handleFilterChange}
                         placeholder="Einddatum"
                     />
+                    <label htmlFor="sort" className="sr-only">Sorteer op</label>
                     <select
+                        id="sort"
                         name="sort"
                         value={filters.sort}
                         onChange={handleFilterChange}
@@ -189,15 +202,16 @@ const Voertuigverhuur = () => {
                         <option value="priceDesc">Prijs: Hoog naar Laag</option>
                     </select>
                 </div>
-                {/*<button className="submit-button" onClick={handleSubmit}>*/}
-                {/*    Bevestig Huur*/}
-                {/*</button>*/}
                 <div className="voertuigen-list">
                     {applyFilters().slice(0, displayCount).map((voertuig) => (
                         <div
                             key={voertuig.VoertuigID}
                             className={`voertuig-card ${selectedVoertuig?.voertuigID === voertuig.voertuigID ? 'selected' : ''}`}
                             onClick={() => handleSelectVoertuig(voertuig)}
+                            role="button"
+                            tabIndex="0"
+                            onKeyPress={(e) => { if (e.key === 'Enter') handleSelectVoertuig(voertuig); }}
+                            aria-pressed={selectedVoertuig?.voertuigID === voertuig.voertuigID}
                         >
                             <div className="voertuig-details">
                                 <h3 style={{ marginBottom: '0px' }}>{voertuig.merk}</h3>
@@ -214,22 +228,21 @@ const Voertuigverhuur = () => {
                         </div>
                     ))}
                 </div>
-                
-                    <button className="reset-button" onClick={() => setDisplayCount(8)}>
-                        Reset
+
+                <button className="reset-button" onClick={() => setDisplayCount(8)}>
+                    Reset
+                </button>
+                {displayCount < applyFilters().length && (
+                    <button className="load-more-button" onClick={handleLoadMore}>
+                        Meer laden
                     </button>
-                    {displayCount < applyFilters().length && (
-                        <button className="load-more-button" onClick={handleLoadMore}>
-                            Meer laden
-                        </button>
-                    )}
-                    <button className="submit-button" onClick={handleSubmit}>
-                        Bevestig
-                    </button>
-                
+                )}
+                <button className="submit-button" onClick={handleSubmit}>
+                    Bevestig
+                </button>
 
                 {showPopup && (
-                    <div className="popup-overlay">
+                    <div className="popup-overlay" role="dialog" aria-modal="true">
                         <div className="popup">
                             <h2>Bevestig Huur</h2>
                             <p>Merk: {selectedVoertuig.merk}</p>

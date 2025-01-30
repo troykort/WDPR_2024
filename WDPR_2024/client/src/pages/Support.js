@@ -6,15 +6,15 @@ const Support = () => {
         <div className="support-container">
             <h1>Ondersteuning</h1>
             <p>Welkom bij de ondersteuningspagina van Rent-IT. We staan klaar om je te helpen met al je vragen of problemen.</p>
-            
+
             <h2>Hoe kunnen we je helpen?</h2>
             <p>Of je nu hulp nodig hebt bij het reserveren van een voertuig, je accountinstellingen wilt wijzigen, of technische problemen ondervindt, ons supportteam is hier om je te ondersteunen.</p>
 
             <h2>Contactinformatie</h2>
             <p>Neem contact op via de onderstaande manieren:</p>
             <ul>
-                <li><strong>E-mail:</strong> support@rentit.com</li>
-                <li><strong>Telefoon:</strong> +31 20 123 4567</li>
+                <li><strong>E-mail:</strong> <a href="mailto:support@rentit.com">support@rentit.com</a></li>
+                <li><strong>Telefoon:</strong> <a href="tel:+31201234567">+31 20 123 4567</a></li>
                 <li><strong>Adres:</strong> Rent-IT, Straatnaam 123, 1011 AB, Amsterdam</li>
             </ul>
 
@@ -34,3 +34,4 @@ const Support = () => {
 };
 
 export default Support;
+

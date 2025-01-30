@@ -5,7 +5,7 @@ const SubscriptionDetails = () => {
     return (
         <div className="subscription-details">
             <h2>Abonnementen</h2>
-            <div className="subscription">
+            <section className="subscription">
                 <h3>Pay-as-you-go-abonnement</h3>
                 <p>Omschrijving: Klanten betalen een vast maandelijks bedrag voor toegang tot de dienst, met een korting op huurprijzen per voertuig.</p>
                 <ul>
@@ -18,8 +18,8 @@ const SubscriptionDetails = () => {
                     <li>Flexibiliteit: geen vooraf bepaalde huurhoeveelheid.</li>
                     <li>Geschikt voor bedrijven met onregelmatige behoeften.</li>
                 </ul>
-            </div>
-            <div className="subscription">
+            </section>
+            <section className="subscription">
                 <h3>Prepaid-abonnement (op basis van huurdagen)</h3>
                 <p>Omschrijving: Bedrijven betalen vooraf voor een bepaald aantal huurdagen per jaar.</p>
                 <ul>
@@ -36,9 +36,11 @@ const SubscriptionDetails = () => {
                     <li>Kostenbesparing bij regelmatig gebruik.</li>
                     <li>Ideaal voor bedrijven met voorspelbare huurbehoeften.</li>
                 </ul>
-            </div>
+            </section>
         </div>
     );
 };
 
 export default SubscriptionDetails;
+
+
